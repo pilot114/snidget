@@ -38,7 +38,6 @@ plug-and-play features
 
 # roadmap
 
-- ONE operator `new` one all framework - dinamic in container
 - no incapsulate without reason (rich index file)
 - 3 hours in day, first release after 100 hours
 - RouteTemplate - attr for controller for typical route set (controller/action, rest etc)
@@ -46,3 +45,4 @@ plug-and-play features
 # worklog
 
 05.05.22 - base architecture, router with attributes, autoload
+06.05.22 - DI

@@ -21,3 +21,19 @@ function autoload($prefix, $baseDir)
         }
     });
 }
+
+function errorHandler()
+{
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+    set_error_handler(function ($code, $message, $file = null, $line = null) {
+        dump($code);
+        dump($message);
+        dump($file);
+        dump($line);
+    });
+    set_exception_handler(function ($exception) {
+        dump($exception);
+    });
+}
