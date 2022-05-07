@@ -39,10 +39,13 @@ plug-and-play features
 # roadmap
 
 - no incapsulate without reason (rich index file)
-- 3 hours in day, first release after 100 hours
+- work a bit everyday
 - RouteTemplate - attr for controller for typical route set (controller/action, rest etc)
+- < 100 line on each file
+- "enrichment" principe - set base class only if need. In him DI also must work.
 
 # worklog
 
-05.05.22 - base architecture, router with attributes, autoload
-06.05.22 - DI
+05.05.22 - base architecture, router with attributes, autoload  
+06.05.22 - DI  
+07.05.22 - DTO Config, PDO module, Tables

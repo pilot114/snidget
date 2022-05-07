@@ -1,58 +1,94 @@
 <?php
 
 namespace Wshell\Snidget;
+use ReflectionMethod;
+use ReflectionClass;
+use ReflectionParameter;
 
 class Container
 {
     protected array $pool = [];
 
-    public function actionCall(string $controllerName, string $methodName, array $params): mixed
+    public function call(object $instance, string $methodName, array $params = []): mixed
     {
-        $controller = new $controllerName();
-        $actionRef = new \ReflectionMethod($controller, $methodName);
+        $methodRef = new ReflectionMethod($instance, $methodName);
 
         $injectParams = [];
-        foreach ($actionRef->getParameters() as $parameter) {
-            $paramName = $parameter->getName();
-            if (isset($params[$paramName])) {
-                $injectParams[$paramName] = $params[$paramName];
-                continue;
+
+        foreach ($methodRef->getParameters() as $param) {
+            $paramName = $param->getName();
+            $value = $this->getValue($param, $paramName, $params);
+            if (is_null($value) && !$param->allowsNull()) {
+                throw new \LogicException(sprintf(
+                    'Нет удалось разрешить параметр %s метода %s::%s',
+                    $paramName,
+                    $instance::class,
+                    $methodName
+                ));
             }
-            $typeName = $parameter->getType()->getName();
-            if (class_exists($typeName)) {
-                $injectParams[$paramName] = $this->get($typeName);
-                continue;
-            }
-            $message = sprintf('Нет удалось разрешить параметр %s контроллера %s', $paramName, $controllerName);
-            throw new \LogicException($message);
+            $injectParams[$paramName] = $value;
         }
 
-        return $controller->{$methodName}(...$injectParams);
+        return $instance->{$methodName}(...$injectParams);
     }
 
-    public function get(string $className)
+    /**
+     * @template T
+     * @param class-string<T> $className
+     * @param array $params
+     * @return T
+     */
+    public function make(string $className, array $params = [])
     {
-        $constructorRef = (new \ReflectionClass($className))->getConstructor();
+        $constructorRef = (new ReflectionClass($className))->getConstructor();
+        if (!$constructorRef) {
+            $this->pool[$className] = new $className();
+            return $this->pool[$className];
+        }
 
         $injectParams = [];
 
-        if ($constructorRef) {
-            foreach ($constructorRef->getParameters() as $param) {
-                $paramName = $param->getName();
-                $typeName = $param->getType()->getName();
-                if (class_exists($typeName)) {
-                    $injectParams[$paramName] = $this->get($typeName);
-                    continue;
-                }
-                $message = sprintf('Нет удалось разрешить параметр %s класса %s', $paramName, $className);
-                throw new \LogicException($message);
+        foreach ($constructorRef->getParameters() as $param) {
+            $paramName = $param->getName();
+            $value = $this->getValue($param, $paramName, $params);
+            if (is_null($value) && !$param->allowsNull()) {
+                throw new \LogicException(sprintf(
+                    'Нет удалось разрешить параметр %s класса %s',
+                    $paramName,
+                    $className
+                ));
             }
+            $injectParams[$paramName] = $value;
         }
 
+        $this->pool[$className] = new $className(...$injectParams);
+        return $this->pool[$className];
+    }
+
+    /**
+     * @template T
+     * @param class-string<T> $className
+     * @param array $params
+     * @return T
+     */
+    public function get(string $className, array $params = [])
+    {
         if (isset($this->pool[$className])) {
             return $this->pool[$className];
         }
-        $this->pool[$className] = new $className(...$injectParams);
+        $this->pool[$className] = $this->make($className, $params);
         return $this->pool[$className];
+    }
+
+    protected function getValue(ReflectionParameter $param, string $paramName, array $params): mixed
+    {
+        if (isset($params[$paramName])) {
+            return $params[$paramName];
+        }
+        $typeName = $param->getType()->getName();
+        if (class_exists($typeName)) {
+            return $this->get($typeName);
+        }
+        return null;
     }
 }

@@ -22,7 +22,8 @@ if ($isCli) {
     $attributeLoader->handleRoute(fn($regex, $fqdn, $action) => $router->register($regex, $fqdn, $action));
 
     list($controller, $action, $params) = $router->match($request);
-    $data = $container->actionCall($controller, $action, $params);
+    $controller = $container->get($controller);
+    $data = $container->call($controller, $action, $params);
     $response = new Response($data);
     $response->send();
 }
