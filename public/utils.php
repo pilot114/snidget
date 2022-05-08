@@ -27,13 +27,14 @@ function errorHandler()
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
+
     set_error_handler(function ($code, $message, $file = null, $line = null) {
-        dump($code);
-        dump($message);
-        dump($file);
-        dump($line);
+        dump(sprintf('error (%s): %s', $code, $message));
+        dump($file . ':' . $line);
     });
-    set_exception_handler(function ($exception) {
-        dump($exception);
+    set_exception_handler(function (Throwable $exception) {
+        dump('Throwable: ' . $exception->getMessage());
+        dump($exception->getFile() . ':' . $exception->getLine());
+        dump($exception->getTraceAsString());
     });
 }

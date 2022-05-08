@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\DTO\People;
 use Wshell\Snidget\Attribute\Route;
 use Wshell\Snidget\Container;
 use Wshell\Snidget\Router;
@@ -18,12 +19,15 @@ class Example
     #[Route('post')]
     public function list(Container $container): string
     {
-        $table = $container->get(Table::class, ['name' => 'test']);
-        $data = $table->create();
-        dump($data);
-        die();
+        $dto = $container->get(People::class);
+        $table = $container->get(Table::class, ['name' => 'test', 'type' => $dto]);
 
-        return 'Post::list';
+//        dump($table->create());
+//        dump($table->insert($table->getType()));
+//        dump($table->insert($table->getType()));
+//        dump($table->insert($table->getType()));
+
+        return json_encode($table->findAll());
     }
 
     #[Route('post/(?<id>\d+)')]

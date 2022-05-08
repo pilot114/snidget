@@ -20,11 +20,14 @@ class PDO
 
     public function execute(string $sql): bool
     {
+//        dump('sql execute: ' . $sql);
         return $this->pdo->prepare($sql)->execute();
     }
 
     public function query(string $sql): array
     {
-        return $this->pdo->prepare($sql)->fetchAll() ?? [];
+//        dump('sql query: ' . $sql);
+        $stmt = $this->pdo->query($sql);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC) ?? [];
     }
 }

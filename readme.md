@@ -48,4 +48,6 @@ plug-and-play features
 
 05.05.22 - base architecture, router with attributes, autoload  
 06.05.22 - DI  
-07.05.22 - DTO Config, PDO module, Tables
+07.05.22 - DTO Config, PDO module, Tables  
+08.05.22 - Tables improve, Types & Collections
+09.05.22 - refactoring and tests

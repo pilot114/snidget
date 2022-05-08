@@ -50,10 +50,10 @@ class Container
 
         foreach ($constructorRef->getParameters() as $param) {
             $paramName = $param->getName();
-            $value = $this->getValue($param, $paramName, $params);
+            $value = $this->getValue($param, $paramName, $params) ?? $param->getDefaultValue();
             if (is_null($value) && !$param->allowsNull()) {
                 throw new \LogicException(sprintf(
-                    'Нет удалось разрешить параметр %s класса %s',
+                    'Нет удалось разрешить параметр %s конструктора %s',
                     $paramName,
                     $className
                 ));
