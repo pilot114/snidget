@@ -1,6 +1,6 @@
 <?php
 
-namespace Wshell\Snidget\Attribute;
+namespace Snidget\Attribute;
 use Attribute;
 
 #[Attribute(Attribute::TARGET_METHOD)]

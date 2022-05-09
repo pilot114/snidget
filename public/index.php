@@ -1,10 +1,10 @@
 <?php
 
-use Wshell\Snidget\{AttributeLoader, Container, Request, Response, Router};
+use Snidget\{AttributeLoader, Container, Request, Response, Router};
 
 include './utils.php';
 
-autoload('Wshell\\Snidget\\', __DIR__ . '/../src/');
+autoload('Snidget\\', __DIR__ . '/../src/');
 autoload('App\\', __DIR__ . '/../app/');
 errorHandler();
 

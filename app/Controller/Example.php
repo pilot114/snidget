@@ -2,18 +2,23 @@
 
 namespace App\Controller;
 
-use App\DTO\People;
-use Wshell\Snidget\Attribute\Route;
-use Wshell\Snidget\Container;
-use Wshell\Snidget\Router;
-use Wshell\Snidget\Table;
+use App\DTO\Database\People;
+use Snidget\Attribute\Route;
+use Snidget\Container;
+use Snidget\Module\PDO;
+use Snidget\Router;
+use Snidget\Table;
 
 class Example
 {
     #[Route('')]
     public function index(Router $router): string
     {
-        return json_encode($router->routes());
+        foreach ($router->routes() as $regex => $route) {
+            $link = sprintf('<a href="%s">%s::%s (%s)</a>', $regex, $route[0], $route[1], $regex);
+            dump($link);
+        }
+        return '';
     }
 
     #[Route('post')]
@@ -22,12 +27,20 @@ class Example
         $dto = $container->get(People::class);
         $table = $container->get(Table::class, ['name' => 'test', 'type' => $dto]);
 
-//        dump($table->create());
-//        dump($table->insert($table->getType()));
-//        dump($table->insert($table->getType()));
-//        dump($table->insert($table->getType()));
+        if (!$table->exist()) {
+            $table->create();
+            $table->insert($table->getType());
+            $table->insert($table->getType());
+            $table->insert($table->getType());
+            dump($container->get(PDO::class)->getLog());
+        }
 
-        return json_encode($table->findAll());
+        $data = json_encode([
+            'total' => $table->count(),
+            'items' => $table->like('TEST', 'name'),
+        ]);
+
+        return $data;
     }
 
     #[Route('post/(?<id>\d+)')]

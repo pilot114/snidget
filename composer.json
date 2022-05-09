@@ -3,6 +3,7 @@
     "description": "snidget framework",
     "type": "project",
     "require": {
-      "ext-pdo": "*"
+      "ext-pdo": "*",
+      "ext-mbstring": "*"
     }
 }

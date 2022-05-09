@@ -1,6 +1,6 @@
 <?php
 
-namespace Wshell\Snidget;
+namespace Snidget;
 
 class Router
 {

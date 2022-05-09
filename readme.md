@@ -1,53 +1,72 @@
-Snidget - idiomatic and ~~nerdy~~ smart php framework, base on php8 features.  
-Snidget realized best practices for scalable architectures (DDD and contracts)  
-and full compatible with "12-factor app" concept
+Snidget - idiomatic and ~~nerdy~~ smart php framework
 
-# "Snidget" ?
+# What is a "Snidget" ?
 
 The Golden Snidget was a small golden magical bird with fully rotational wings,  
 best known for early use in the wizarding game of Quidditch, eventually being replaced by the Golden Snitch
 
 ![The Golden Snidget](https://static.wikia.nocookie.net/harrypotter/images/4/40/Golden_Snidget_HM_Icon.png/revision/latest/scale-to-width-down/320?cb=20201129013514)
 
-# features
+# Features
 
-- use php8 features
+- php 8 features
 - transparent architecture without magic
+- best practices for scalable architectures (DDD and contracts)
+- full compatible with "12-factor app" concept
 - thoughtful api architecture from the box
 - compability with all PSR
 - advanced code generation
 - encourages the use of effective algorithms and patterns
 
-# app structure
+# App structure
 
-    app    - dir for you source code
     public - dir for public scripts
+    data - outer data project
+    app - dir for you source code
+     ┣━━ CLI - CLI handlers
+     ┣━━ Controller - HTTP handlers
+     ┣━━ Domain - own domain classes of project
+     ┣━━ DTO - data transfer objects
+     ┣━━ Middleware - addition flexible HTTP handlers
+     ┣━━ cli.php - CLI entrypoint
+     ┗━━ container.php - DI configuration
 
 # documentation
 
-Documentation is best part of Snidget.
+Documentation is best part of Snidget.  
 Most of it describes use cases from common practices web-development
 
-## classic part
+- Intro (typical framework features)
+- Principles
+- Attributes
+- Types based
+- Class descriptions
+- Advanced: plug-and-play features (patterns and use-cases)
+- Advanced: plug-and-play libs (PSR compatible and other - by decorators)
+- Example project - "Gamers!"
 
-enumeration typical framework features
-
-## smart part
-
-plug-and-play features
-
-# roadmap
+# TODO: (parts of documentation)
 
 - no incapsulate without reason (rich index file)
-- work a bit everyday
+- YAGNI first - code is written upon request
+- low level separated by php modules
+- "enrichment" principe - set base class only if need. In him DI also must work
 - RouteTemplate - attr for controller for typical route set (controller/action, rest etc)
 - < 100 line on each file
-- "enrichment" principe - set base class only if need. In him DI also must work.
+- update a bit everyday
 
 # worklog
 
 05.05.22 - base architecture, router with attributes, autoload  
 06.05.22 - DI  
 07.05.22 - DTO Config, PDO module, Tables  
-08.05.22 - Tables improve, Types & Collections
-09.05.22 - refactoring and tests
+08.05.22 - Tables improve, Types & Collections  
+09.05.22 - refactoring, architecture design  
+
+# TODO
+
+Refactoring candidates:
+- Type
+- AttributeLoader (move to Module)
+- Container
+- Table

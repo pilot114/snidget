@@ -1,11 +1,11 @@
 <?php
 
-namespace Wshell\Snidget;
+namespace Snidget;
 
-use Wshell\Snidget\Attribute\Column;
-use Wshell\Snidget\Attribute\Route;
+use Snidget\Attribute\Column;
+use Snidget\Attribute\Route;
 use ReflectionClass;
-use Wshell\Snidget\Typing\Type;
+use Snidget\Typing\Type;
 
 class AttributeLoader
 {

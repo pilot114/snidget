@@ -1,6 +1,6 @@
 <?php
 
-namespace Wshell\Snidget\Typing;
+namespace Snidget\Typing;
 
 use JsonSerializable;
 use DateTimeInterface;

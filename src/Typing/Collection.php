@@ -1,19 +1,12 @@
 <?php
 
-namespace Wshell\Snidget\Typing;
+namespace Snidget\Typing;
 
 class Collection
 {
     public function __construct(
         protected array $items = []
     ){}
-
-    public function map(callable $callback): static
-    {
-        $keys = array_keys($this->items);
-        $items = array_map($callback, $this->items, $keys);
-        return new static(array_combine($keys, $items));
-    }
 
     public function toArray(): array
     {
@@ -26,14 +19,10 @@ class Collection
         })->items;
     }
 
-    public function transpose(): static
+    public function map(callable $callback): static
     {
-        $array = [];
-        foreach ($this->items as $row => $item) {
-            foreach ($item as $col => $value) {
-                $array[$col][$row] = $value;
-            }
-        }
-        return new static($array);
+        $keys = array_keys($this->items);
+        $items = array_map($callback, $this->items, $keys);
+        return new static(array_combine($keys, $items));
     }
 }

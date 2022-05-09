@@ -1,13 +1,14 @@
 <?php
 
-namespace App\DTO;
+namespace App\DTO\Database;
 
-use Wshell\Snidget\Attribute\Column;
-use Wshell\Snidget\Typing\Type;
+use Snidget\Attribute\Column;
+use Snidget\Enum\SQLiteType;
+use Snidget\Typing\Type;
 
 class People extends Type
 {
-    #[Column(name: 'id', type: 'INTEGER', autoincrement: true)]
+    #[Column(name: 'id', type: SQLiteType::INTEGER, autoincrement: true)]
     public ?int $id;
     #[Column(name: 'name')]
     public ?string $name = 'test';

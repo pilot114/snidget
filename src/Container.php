@@ -1,6 +1,6 @@
 <?php
 
-namespace Wshell\Snidget;
+namespace Snidget;
 use ReflectionMethod;
 use ReflectionClass;
 use ReflectionParameter;
