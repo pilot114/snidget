@@ -7,9 +7,9 @@ class Router
     protected array $routes = [];
     protected array $route = [];
 
-    public function register(string $regex, string $controllerName, string $actionName)
+    public function register(string $regex, string $fqdn): void
     {
-        $this->routes[$regex] = [$controllerName, $actionName];
+        $this->routes[$regex] = $fqdn;
     }
 
     public function routes(): array
@@ -24,13 +24,12 @@ class Router
 
     public function match(Request $request): ?array
     {
-        foreach ($this->routes as $pattern => $route) {
+        foreach ($this->routes as $pattern => $fqdn) {
             if (preg_match("#^$pattern$#i", $request->getUri(), $matches)) {
                 $names = array_filter(array_keys($matches), is_string(...));
                 $matchesNamed = array_filter($matches, fn($x) => in_array($x, $names), ARRAY_FILTER_USE_KEY);
-                $route[] = $matchesNamed;
-                $this->route = $route;
-                return $route;
+                $this->route = [...explode('::', $fqdn), $matchesNamed];
+                return $this->route;
             }
         }
         return null;

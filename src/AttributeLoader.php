@@ -14,9 +14,6 @@ class AttributeLoader
         protected string $controllerNamespace
     ){}
 
-    /**
-     * TODO: how describe item array type of Generator?
-     */
     public function getRoutes(): iterable
     {
         foreach (glob($this->controllerPath . '/*') as $controller) {
@@ -24,7 +21,7 @@ class AttributeLoader
             $className = $this->controllerNamespace . $matches['className'];
             $ref = new Reflection($className);
             foreach ($ref->getAttributes(Reflection::ATTR_METHOD, Route::class) as $methodName => $refAttribute) {
-                yield $refAttribute->newInstance()->getRegex() => [$className, $methodName];
+                yield $refAttribute->newInstance()->getRegex() => $className . '::' . $methodName;
             }
         }
     }

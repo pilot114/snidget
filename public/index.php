@@ -17,8 +17,8 @@ if ($isCli) {
     $router = $container->get(Router::class);
 
     $attributeLoader = new AttributeLoader('../app/Controller', '\\App\\Controller\\');
-    foreach ($attributeLoader->getRoutes() as $regex => [$fqdn, $action]) {
-        $router->register($regex, $fqdn, $action);
+    foreach ($attributeLoader->getRoutes() as $regex => $fqdn) {
+        $router->register($regex, $fqdn);
     }
 
     list($controller, $action, $params) = $router->match($container->get(Request::class));

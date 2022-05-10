@@ -14,7 +14,7 @@ class Example
     public function index(Router $router): string
     {
         foreach ($router->routes() as $regex => $route) {
-            $link = sprintf('<a href="%s">%s::%s (%s)</a>', $regex, $route[0], $route[1], $regex);
+            $link = sprintf('<a href="%s">%s (%s)</a>', $regex, $route, $regex);
             dump($link);
         }
         return '';
