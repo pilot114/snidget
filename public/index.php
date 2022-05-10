@@ -14,14 +14,14 @@ if ($isCli) {
 
 } else {
     $container = new Container();
-
-    $request = $container->get(Request::class);
     $router = $container->get(Router::class);
 
     $attributeLoader = new AttributeLoader('../app/Controller', '\\App\\Controller\\');
-    $attributeLoader->handleRoute(fn($regex, $fqdn, $action) => $router->register($regex, $fqdn, $action));
+    foreach ($attributeLoader->getRoutes() as $regex => [$fqdn, $action]) {
+        $router->register($regex, $fqdn, $action);
+    }
 
-    list($controller, $action, $params) = $router->match($request);
+    list($controller, $action, $params) = $router->match($container->get(Request::class));
     $controller = $container->get($controller);
     $data = $container->call($controller, $action, $params);
     $response = new Response($data);

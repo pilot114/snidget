@@ -5,13 +5,12 @@ namespace App\Controller;
 use App\DTO\Database\People;
 use Snidget\Attribute\Route;
 use Snidget\Container;
-use Snidget\Module\PDO;
 use Snidget\Router;
 use Snidget\Table;
 
 class Example
 {
-    #[Route('')]
+    #[Route(regex: '')]
     public function index(Router $router): string
     {
         foreach ($router->routes() as $regex => $route) {
@@ -21,7 +20,7 @@ class Example
         return '';
     }
 
-    #[Route('post')]
+    #[Route(regex: 'post')]
     public function list(Container $container): string
     {
         $dto = $container->get(People::class);
@@ -32,7 +31,7 @@ class Example
             $table->insert($table->getType());
             $table->insert($table->getType());
             $table->insert($table->getType());
-            dump($container->get(PDO::class)->getLog());
+//            dump($container->get(\Snidget\Module\PDO::class)->getLog());
         }
 
         $data = json_encode([
@@ -43,13 +42,13 @@ class Example
         return $data;
     }
 
-    #[Route('post/(?<id>\d+)')]
+    #[Route(regex: 'post/(?<id>\d+)')]
     public function get(int $id): string
     {
         return 'Post::get #' . $id;
     }
 
-    #[Route('.*')]
+    #[Route(regex: '.*')]
     public function notFound(): string
     {
         http_response_code(404);

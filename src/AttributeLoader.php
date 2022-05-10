@@ -4,7 +4,7 @@ namespace Snidget;
 
 use Snidget\Attribute\Column;
 use Snidget\Attribute\Route;
-use ReflectionClass;
+use Snidget\Module\Reflection;
 use Snidget\Typing\Type;
 
 class AttributeLoader
@@ -14,15 +14,17 @@ class AttributeLoader
         protected string $controllerNamespace
     ){}
 
-    public function handleRoute(callable $cb): void
+    /**
+     * TODO: how describe item array type of Generator?
+     */
+    public function getRoutes(): iterable
     {
         foreach (glob($this->controllerPath . '/*') as $controller) {
             preg_match("#/(?<className>\w+)\.php#i", $controller, $matches);
-            $fqdn = $this->controllerNamespace . $matches['className'];
-            foreach ((new ReflectionClass($fqdn))->getMethods() as $method) {
-                $attribute = $method->getAttributes(Route::class)[0];
-                list($pattern) = $attribute->getArguments();
-                $cb($pattern, $fqdn, $method->getName());
+            $className = $this->controllerNamespace . $matches['className'];
+            $ref = new Reflection($className);
+            foreach ($ref->getAttributes(Reflection::ATTR_METHOD, Route::class) as $methodName => $refAttribute) {
+                yield $refAttribute->newInstance()->getRegex() => [$className, $methodName];
             }
         }
     }
@@ -30,13 +32,9 @@ class AttributeLoader
     static public function getDbTypeDefinition(string $className): string
     {
         $definitions = [];
-        foreach ((new ReflectionClass($className))->getProperties() as $prop) {
-            $attribute = $prop->getAttributes(Column::class)[0] ?? null;
-            if ($attribute) {
-                /* @var $attrClass Column */
-                $attrClass = $attribute->newInstance();
-                $definitions[] = $attrClass->getDefinition();
-            }
+        $ref = new Reflection($className);
+        foreach ($ref->getAttributes(Reflection::ATTR_PROPERTY, Column::class) as $refAttribute) {
+            $definitions[] = $refAttribute->newInstance()->getDefinition();
         }
         return implode(', ', $definitions);
     }
@@ -44,13 +42,9 @@ class AttributeLoader
     static public function getDbTypeInsertDefinition(string $className, Type $data): string
     {
         $definitions = [];
-        foreach ((new ReflectionClass($className))->getProperties() as $prop) {
-            $attribute = $prop->getAttributes(Column::class)[0] ?? null;
-            if ($attribute) {
-                /* @var $attrClass Column */
-                $attrClass = $attribute->newInstance();
-                $definitions[$prop->getName()] = $attrClass->getInsertDefinition($data);
-            }
+        $ref = new Reflection($className);
+        foreach ($ref->getAttributes(Reflection::ATTR_PROPERTY, Column::class) as $propName => $refAttribute) {
+            $definitions[$propName] = $refAttribute->newInstance()->getInsertDefinition($data);
         }
         $definitions = array_filter($definitions);
         return sprintf(

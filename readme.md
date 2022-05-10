@@ -45,7 +45,7 @@ Most of it describes use cases from common practices web-development
 - Advanced: plug-and-play libs (PSR compatible and other - by decorators)
 - Example project - "Gamers!"
 
-# TODO: (parts of documentation)
+# (move to parts of documentation)
 
 - no incapsulate without reason (rich index file)
 - YAGNI first - code is written upon request
@@ -62,11 +62,9 @@ Most of it describes use cases from common practices web-development
 07.05.22 - DTO Config, PDO module, Tables  
 08.05.22 - Tables improve, Types & Collections  
 09.05.22 - refactoring, architecture design  
+10.05.22 - refactoring
+11.05.22 - Middlewares, tests
 
-# TODO
-
-Refactoring candidates:
-- Type
-- AttributeLoader (move to Module)
-- Container
-- Table
+need improve:
+Exception
+Promices?

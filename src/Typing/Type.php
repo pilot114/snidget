@@ -2,56 +2,28 @@
 
 namespace Snidget\Typing;
 
+use Snidget\Module\Reflection;
 use JsonSerializable;
 use DateTimeInterface;
-use ReflectionProperty;
-use ReflectionClass;
 use TypeError;
 use Error;
 
 abstract class Type implements JsonSerializable
 {
-    /**
-     * Формат даты на выходе toArray
-     */
-    protected string $dateFormat = 'd.m.Y H:i:s';
-
-    /**
-     * Для перечисления полей, которые нужны на выходе toArray
-     */
-    protected array $useFields = [];
+    public string $dateFormat = 'd.m.Y H:i:s';
+    public array $useFields = [];
 
     public function __construct(array $array = [])
     {
         $this->fromArray($array);
     }
 
-    public function setDateFormat($format)
-    {
-        $this->dateFormat = $format;
-    }
-
-    public function setUseFields($useFields)
-    {
-        $this->useFields = $useFields;
-    }
-
-    /**
-     * Все поля всегда есть и доступны для чтения
-     *
-     * Поведение, если значение не передано:
-     * - если есть значение по умолчанию - ставится оно
-     * - если оно может быть null - ставится null
-     * - если Type/Collection/DateTime - пытаемся инстанцировать
-     */
     public function fromArray($array = []): self
     {
-        $fields = $this->getDefaultPublicFields();
-
-        foreach ($fields as $key => $default) {
+        foreach ($this->getDefaultPublicFields() as $key => $default) {
             $value = $array[$key] ?? $default;
 
-            $prop = new ReflectionProperty($this, $key);
+            $prop = (new Reflection($this))->getProperty($key);
             $type = $prop->getType();
 
             if ($type && !$type->isBuiltin()) {
@@ -81,35 +53,16 @@ abstract class Type implements JsonSerializable
 
     public function toArray(): array
     {
-        $rc = new ReflectionClass($this);
-
-        $fields = [];
-        foreach ($rc->getProperties() as $property) {
-            if (!$property->isPublic()) {
-                continue;
-            }
-            try {
-                $fields[$property->getName()] = $this->{$property->getName()};
-            } catch (Error $e) {
-                $message = sprintf("Не удалось прочитать поле %s::%s", static::class, $property->getName());
-                throw new TypeError($message);
-            }
-        }
-
-        if ($this->useFields) {
-            $fields = array_intersect_key($fields, array_flip($this->useFields));
-        }
-        foreach ($fields as $i => $el) {
+        $array = [];
+        foreach ($this->getUsedPublic() as $key => $el) {
             if ($el instanceof Type || $el instanceof Collection) {
-                $fields[$i] = $el->toArray();
+                $array[$key] = $el->toArray();
             }
-
             if ($el instanceof DateTimeInterface) {
-                $fields[$i] = $el->format($this->dateFormat);
+                $array[$key] = $el->format($this->dateFormat);
             }
         }
-
-        return $fields;
+        return $array;
     }
 
     public function toJson()
@@ -127,15 +80,9 @@ abstract class Type implements JsonSerializable
         return $this->toArray();
     }
 
-    /**
-     * Получаем поля со значениями по умолчанию
-     */
-    protected function getDefaultPublicFields(): array
+    protected function getDefaultPublicFields(): iterable
     {
-        $fields = [];
-        $rc = new ReflectionClass($this);
-
-        foreach ($rc->getProperties() as $property) {
+        foreach ((new Reflection($this))->getProperties() as $property) {
             if (!$property->isPublic()) {
                 continue;
             }
@@ -147,9 +94,22 @@ abstract class Type implements JsonSerializable
                     $value = [];
                 }
             }
-            $fields[$property->getName()] = $value;
+            yield $property->getName() => $value;
         }
+    }
 
-        return $fields;
+    protected function getUsedPublic(): iterable
+    {
+        foreach ((new Reflection($this))->getProperties() as $property) {
+            if (!$property->isPublic() || !in_array($property->getName(), array_flip($this->useFields))) {
+                continue;
+            }
+            try {
+                yield $property->getName() => $this->{$property->getName()};
+            } catch (Error $e) {
+                $message = sprintf("Не удалось прочитать поле %s::%s", static::class, $property->getName());
+                throw new TypeError($message);
+            }
+        }
     }
 }

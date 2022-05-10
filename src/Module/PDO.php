@@ -2,7 +2,7 @@
 
 namespace Snidget\Module;
 
-use Snidget\DTO\PdoConnect;
+use Snidget\DTO\Config\PdoConnect;
 use PDO as NativePDO;
 use PDOStatement;
 

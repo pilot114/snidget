@@ -1,74 +1,55 @@
 <?php
 
 namespace Snidget;
-use ReflectionMethod;
-use ReflectionClass;
-use ReflectionParameter;
+
+use Snidget\Module\Reflection;
+use LogicException;
 
 class Container
 {
     protected array $pool = [];
 
-    public function call(object $instance, string $methodName, array $params = []): mixed
+    protected function getParams(object|string $instance, string $methodName, array $params): iterable
     {
-        $methodRef = new ReflectionMethod($instance, $methodName);
-
-        $injectParams = [];
-
-        foreach ($methodRef->getParameters() as $param) {
+        foreach ((new Reflection($instance))->getParams($methodName) as $param) {
             $paramName = $param->getName();
-            $value = $this->getValue($param, $paramName, $params);
+
+            $value = $params[$paramName] ?? null;
+            if (!$value) {
+                $typeName = $param->getType()->getName();
+                $value = class_exists($typeName) ? $this->get($typeName) : $param->getDefaultValue();
+            }
             if (is_null($value) && !$param->allowsNull()) {
-                throw new \LogicException(sprintf(
-                    'Нет удалось разрешить параметр %s метода %s::%s',
+                throw new LogicException(sprintf(
+                    'Нет удалось разрешить параметр %s в %s::%s',
                     $paramName,
-                    $instance::class,
+                    is_object($instance) ? $instance::class : $instance,
                     $methodName
                 ));
             }
-            $injectParams[$paramName] = $value;
+            yield $paramName => $value;
         }
+    }
 
-        return $instance->{$methodName}(...$injectParams);
+    public function call(object $instance, string $methodName, array $params = []): mixed
+    {
+        return $instance->{$methodName}(...$this->getParams($instance, $methodName, $params));
     }
 
     /**
      * @template T
      * @param class-string<T> $className
-     * @param array $params
      * @return T
      */
     public function make(string $className, array $params = [])
     {
-        $constructorRef = (new ReflectionClass($className))->getConstructor();
-        if (!$constructorRef) {
-            $this->pool[$className] = new $className();
-            return $this->pool[$className];
-        }
-
-        $injectParams = [];
-
-        foreach ($constructorRef->getParameters() as $param) {
-            $paramName = $param->getName();
-            $value = $this->getValue($param, $paramName, $params) ?? $param->getDefaultValue();
-            if (is_null($value) && !$param->allowsNull()) {
-                throw new \LogicException(sprintf(
-                    'Нет удалось разрешить параметр %s конструктора %s',
-                    $paramName,
-                    $className
-                ));
-            }
-            $injectParams[$paramName] = $value;
-        }
-
-        $this->pool[$className] = new $className(...$injectParams);
+        $this->pool[$className] = new $className(...$this->getParams($className, '__construct', $params));
         return $this->pool[$className];
     }
 
     /**
      * @template T
      * @param class-string<T> $className
-     * @param array $params
      * @return T
      */
     public function get(string $className, array $params = [])
@@ -78,17 +59,5 @@ class Container
         }
         $this->pool[$className] = $this->make($className, $params);
         return $this->pool[$className];
-    }
-
-    protected function getValue(ReflectionParameter $param, string $paramName, array $params): mixed
-    {
-        if (isset($params[$paramName])) {
-            return $params[$paramName];
-        }
-        $typeName = $param->getType()->getName();
-        if (class_exists($typeName)) {
-            return $this->get($typeName);
-        }
-        return null;
     }
 }

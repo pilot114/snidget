@@ -1,6 +1,6 @@
 <?php
 
-namespace Snidget\DTO;
+namespace Snidget\DTO\Config;
 
 class PdoConnect
 {
