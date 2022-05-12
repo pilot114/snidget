@@ -55,6 +55,7 @@ class Reflection
         };
         foreach ($tmp as $item) {
             foreach ($item->getAttributes($attrName) as $attribute) {
+                /** @var ReflectionClass | ReflectionMethod | ReflectionProperty $item */
                 $fqn = isset($item->class) ? ($item->class . '::' . $item->getName()) : $item->getName();
                 yield $fqn => $attribute->newInstance();
             }
