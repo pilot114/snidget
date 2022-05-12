@@ -24,6 +24,7 @@ abstract class Type implements JsonSerializable
             $value = $array[$key] ?? $default;
 
             $prop = (new Reflection($this))->getProperty($key);
+            /** @var \ReflectionNamedType|null $type */
             $type = $prop->getType();
 
             if ($type && !$type->isBuiltin()) {

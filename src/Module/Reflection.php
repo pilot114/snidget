@@ -5,13 +5,13 @@ namespace Snidget\Module;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
-use ReflectionAttribute;
 use Attribute;
 
 class Reflection
 {
     const ATTR_PROPERTY = Attribute::TARGET_PROPERTY;
     const ATTR_METHOD = Attribute::TARGET_METHOD;
+    const ATTR_CLASS = Attribute::TARGET_CLASS;
 
     protected ReflectionClass $class;
 
@@ -25,18 +25,12 @@ class Reflection
         return $this->class->getMethod($methodName);
     }
 
-    /**
-     * @return ReflectionMethod[]
-     */
-    public function getMethods(): array
+    public function getMethods()
     {
         return $this->class->getMethods();
     }
 
-    /**
-     * @return ReflectionProperty[]
-     */
-    public function getProperties(): array
+    public function getProperties()
     {
         return $this->class->getProperties();
     }
@@ -46,15 +40,23 @@ class Reflection
         return $this->class->getProperty($propName);
     }
 
+    /**
+     * @template T
+     * @param class-string<T> $attrName
+     * @return iterable<string, T>
+     */
     public function getAttributes(int $type, string $attrName): iterable
     {
         $tmp = match ($type) {
             self::ATTR_PROPERTY => $this->getProperties(),
-            self::ATTR_METHOD => $this->getMethods(),
+            self::ATTR_METHOD   => $this->getMethods(),
+            self::ATTR_CLASS    => [$this->class],
+            default             => throw new \UnhandledMatchError()
         };
         foreach ($tmp as $item) {
             foreach ($item->getAttributes($attrName) as $attribute) {
-                yield $item->getName() => $attribute;
+                $fqn = isset($item->class) ? ($item->class . '::' . $item->getName()) : $item->getName();
+                yield $fqn => $attribute->newInstance();
             }
         }
     }
@@ -63,7 +65,7 @@ class Reflection
     {
         $params = match ($methodName) {
             '__construct' => $this->class->getConstructor()?->getParameters() ?? [],
-            default => $this->getMethod($methodName)?->getParameters() ?? [],
+            default       => $this->getMethod($methodName)->getParameters(),
         };
         foreach ($params as $param) {
             yield $param;

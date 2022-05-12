@@ -53,7 +53,6 @@ Most of it describes use cases from common practices web-development
 - "enrichment" principe - set base class only if need. In him DI also must work
 - RouteTemplate - attr for controller for typical route set (controller/action, rest etc)
 - < 100 line on each file
-- update a bit everyday
 
 # worklog
 
@@ -63,8 +62,10 @@ Most of it describes use cases from common practices web-development
 08.05.22 - Tables improve, Types & Collections  
 09.05.22 - refactoring, architecture design  
 10.05.22 - refactoring
-11.05.22 - Middlewares, tests
+12.05.22 - Middlewares, phpstan
 
 need improve:
 Exception
-Promices?
+Validation by Assert attribute
+(https://blog.jetbrains.com/ru/phpstorm/2021/12/phpstorm-2021-3-release/#new)
+Print routes and middlewares

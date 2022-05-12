@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Controller;
+namespace App\HTTP\Controller;
 
 use App\DTO\Database\People;
+use App\HTTP\Middleware\Custom;
+use Snidget\Attribute\Bind;
 use Snidget\Attribute\Route;
 use Snidget\Container;
 use Snidget\Router;
@@ -43,6 +45,7 @@ class Example
     }
 
     #[Route(regex: 'post/(?<id>\d+)')]
+    #[Bind(class: Custom::class, method: 'back')]
     public function get(int $id): string
     {
         return 'Post::get #' . $id;

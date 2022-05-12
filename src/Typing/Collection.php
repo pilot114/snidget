@@ -19,10 +19,10 @@ class Collection
         })->items;
     }
 
-    public function map(callable $callback): static
+    public function map(callable $callback): self
     {
         $keys = array_keys($this->items);
         $items = array_map($callback, $this->items, $keys);
-        return new static(array_combine($keys, $items));
+        return new self(array_combine($keys, $items));
     }
 }
