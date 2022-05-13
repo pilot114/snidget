@@ -14,7 +14,7 @@ class BuiltIn
         return $next($request);
     }
 
-    public function valid(Request $request, Closure $next)
+    public function validate(Request $request, Closure $next)
     {
         return $next($request);
     }

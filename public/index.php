@@ -1,6 +1,6 @@
 <?php
 
-use Snidget\{AttributeLoader, Container, Request, Response, Router};
+use Snidget\{AttributeLoader, MiddlewareManager, Container, Request, Response, Router};
 
 include './helpers.php';
 
@@ -14,13 +14,14 @@ $router = $container->get(Router::class);
 foreach (AttributeLoader::getRoutes('../app/HTTP/Controller', '\\App\\HTTP\\Controller\\') as $regex => $fqn) {
     $router->register($regex, $fqn);
 }
-foreach (AttributeLoader::getBinds('../app/HTTP/Middleware', '\\App\\HTTP\\Middleware\\') as $from => $to) {
-    dump($from);
-    dump([$to->getPriority(), $to->getClass(), $to->getMethod()]);
-}
+$request = $container->get(Request::class);
+list($controller, $action, $params) = $router->match($request);
 
-list($controller, $action, $params) = $router->match($container->get(Request::class));
-$controller = $container->get($controller);
-$data = $container->call($controller, $action, $params);
-$response = new Response($data);
-$response->send();
+$mwManager = new MiddlewareManager('../app/HTTP/Middleware', '\\App\\HTTP\\Middleware\\', $container);
+$data = $mwManager
+    ->match($controller, $action)
+    ->handle($request, function() use ($container, $controller, $action, $params) {
+        $controller = $container->get($controller);
+        return $container->call($controller, $action, $params);
+    });
+(new Response($data))->send();

@@ -25,6 +25,20 @@ class AttributeLoader
         }
     }
 
+    static function getBindsByAction(string $controllerName, string $actionName): iterable
+    {
+        $ref = new Reflection($controllerName);
+        foreach ($ref->getAttributes(Reflection::ATTR_CLASS, Bind::class) as $fqn => $attribute) {
+            yield $fqn => $attribute;
+        }
+        foreach ($ref->getAttributes(Reflection::ATTR_METHOD, Bind::class) as $fqn => $attribute) {
+            list($class, $method) = explode('::', $fqn);
+            if ($method === $actionName) {
+                yield $fqn => $attribute;
+            }
+        }
+    }
+
     static public function getRoutes(string $controllerPath, string $controllerNamespace): iterable
     {
         foreach (glob($controllerPath . '/*') as $controller) {
