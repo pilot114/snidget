@@ -10,8 +10,8 @@ use Error;
 
 abstract class Type implements JsonSerializable
 {
-    public string $dateFormat = 'd.m.Y H:i:s';
-    public array $useFields = [];
+    protected string $dateFormat = 'd.m.Y H:i:s';
+    protected array $useFields = [];
 
     public function __construct(array $array = [])
     {

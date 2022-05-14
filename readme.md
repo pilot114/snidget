@@ -1,4 +1,4 @@
-Snidget - idiomatic and ~~nerdy~~ smart php framework
+Snidget - idiomatic and ~~nerdy~~ smart php microframework
 
 # What is a "Snidget" ?
 
@@ -52,7 +52,6 @@ Most of it describes use cases from common practices web-development
 - low level separated by php modules
 - "enrichment" principe - set base class only if need. In him DI also must work
 - RouteTemplate - attr for controller for typical route set (controller/action, rest etc)
-- < 100 line on each file
 
 # worklog
 
@@ -64,9 +63,13 @@ Most of it describes use cases from common practices web-development
 10.05.22 - refactoring
 12.05.22 - Middlewares, phpstan
 13.05.22 - Middlewares
+14.05.22 - Validation
+15.05.22 - Tests, other code quality tools
 
 need improve:
 Exception
-Validation by Assert attribute
+Api
+Admin
+Logger
 (https://blog.jetbrains.com/ru/phpstorm/2021/12/phpstorm-2021-3-release/#new)
 Print routes and middlewares

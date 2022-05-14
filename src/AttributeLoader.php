@@ -5,23 +5,23 @@ namespace Snidget;
 use Snidget\Attribute\Bind;
 use Snidget\Attribute\Column;
 use Snidget\Attribute\Route;
+use Snidget\Attribute\Assert;
 use Snidget\Module\Reflection;
 use Snidget\Typing\Type;
 
 class AttributeLoader
 {
-    static public function getBinds(string $classPath, string $classNamespace): iterable
+    static public function getAssertions(string $className): iterable
     {
-        foreach (glob($classPath . '/*') as $class) {
-            preg_match("#/(?<className>\w+)\.php#i", $class, $matches);
-            $className = $classNamespace . $matches['className'];
+        yield from (new Reflection($className))->getAttributes(Reflection::ATTR_PROPERTY, Assert::class);
+    }
+
+    static public function getBinds(string $classPath): iterable
+    {
+        foreach (psrIterator($classPath) as $className) {
             $ref = new Reflection($className);
-            foreach ($ref->getAttributes(Reflection::ATTR_CLASS, Bind::class) as $fqn => $attribute) {
-                yield $fqn => $attribute;
-            }
-            foreach ($ref->getAttributes(Reflection::ATTR_METHOD, Bind::class) as $fqn => $attribute) {
-                yield $fqn => $attribute;
-            }
+            yield from $ref->getAttributes(Reflection::ATTR_CLASS, Bind::class);
+            yield from $ref->getAttributes(Reflection::ATTR_METHOD, Bind::class);
         }
     }
 
@@ -39,11 +39,9 @@ class AttributeLoader
         }
     }
 
-    static public function getRoutes(string $controllerPath, string $controllerNamespace): iterable
+    static public function getRoutes(string $controllerPath): iterable
     {
-        foreach (glob($controllerPath . '/*') as $controller) {
-            preg_match("#/(?<className>\w+)\.php#i", $controller, $matches);
-            $className = $controllerNamespace . $matches['className'];
+        foreach (psrIterator($controllerPath) as $className) {
             $ref = new Reflection($className);
             foreach ($ref->getAttributes(Reflection::ATTR_METHOD, Route::class) as $fqn => $attribute) {
                 yield $attribute->getRegex() => $fqn;

@@ -32,7 +32,7 @@ class Reflection
 
     public function getProperties()
     {
-        return $this->class->getProperties();
+        return $this->class->getProperties(ReflectionProperty::IS_PUBLIC);
     }
 
     public function getProperty(string $propName): ReflectionProperty

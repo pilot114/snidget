@@ -22,6 +22,16 @@ function autoload($prefix, $baseDir)
     });
 }
 
+function psrIterator(string $controllerPath): iterable
+{
+    $parts = array_filter(explode('/', trim($controllerPath, '.')));
+    $controllerNamespace = '\\' . implode('\\', array_map(ucfirst(...), $parts)) . '\\';
+    foreach (glob($controllerPath . '/*') as $controller) {
+        preg_match("#/(?<className>\w+)\.php#i", $controller, $matches);
+        yield $controllerNamespace . $matches['className'];
+    }
+}
+
 function errorHandler()
 {
     ini_set('display_errors', 1);
@@ -38,3 +48,7 @@ function errorHandler()
         dump($exception->getTraceAsString());
     });
 }
+
+autoload('Snidget\\', __DIR__ . '/../src/');
+autoload('App\\', __DIR__ . '/../app/');
+errorHandler();

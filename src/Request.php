@@ -6,7 +6,8 @@ use LogicException;
 
 class Request
 {
-    protected string $uri;
+    public string $uri;
+    public mixed $data;
 
     public function __construct()
     {
@@ -15,10 +16,6 @@ class Request
             ?? throw new LogicException('Нет строки запроса в режиме fpm');
 
         $this->uri = trim($uri, '/');
-    }
-
-    public function getUri(): string
-    {
-        return $this->uri;
+        $this->data = json_decode(file_get_contents('php://input'), true);
     }
 }

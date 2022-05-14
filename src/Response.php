@@ -8,12 +8,13 @@ class Response
         protected string $data
     ){}
 
-    public function send(): void
+    public function send(): never
     {
         if ($this->isJson($this->data)) {
             header('Content-Type: application/json; charset=utf-8');
         }
         echo $this->data;
+        die();
     }
 
     protected function isJson(string $data): bool

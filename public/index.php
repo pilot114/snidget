@@ -1,27 +1,33 @@
 <?php
 
-use Snidget\{AttributeLoader, MiddlewareManager, Container, Request, Response, Router};
+use Snidget\{AttributeLoader, MiddlewareManager, Duck, Container, Request, Response, Router};
 
-include './helpers.php';
+include_once './boot.php';
 
-autoload('Snidget\\', __DIR__ . '/../src/');
-autoload('App\\', __DIR__ . '/../app/');
-errorHandler();
-
-$container = new Container();
+$container ??= new Container();
 $router = $container->get(Router::class);
 
-foreach (AttributeLoader::getRoutes('../app/HTTP/Controller', '\\App\\HTTP\\Controller\\') as $regex => $fqn) {
+foreach (AttributeLoader::getRoutes('../app/HTTP/Controller') as $regex => $fqn) {
     $router->register($regex, $fqn);
 }
 $request = $container->get(Request::class);
+
+if ($request->data) {
+    $duck = new Duck('../app/DTO/API');
+    $messages = [];
+    foreach ($duck->layAnEgg($request->data) as $name => $errors) {
+        $messages[] = sprintf("Поле %s не прошло валидацию: %s", $name, implode('|', $errors));
+    }
+    if ($messages) {
+        dump($messages);
+        die();
+    }
+}
+
 list($controller, $action, $params) = $router->match($request);
 
-$mwManager = new MiddlewareManager('../app/HTTP/Middleware', '\\App\\HTTP\\Middleware\\', $container);
+$mwManager = new MiddlewareManager('../app/HTTP/Middleware', $container);
 $data = $mwManager
     ->match($controller, $action)
-    ->handle($request, function() use ($container, $controller, $action, $params) {
-        $controller = $container->get($controller);
-        return $container->call($controller, $action, $params);
-    });
+    ->handle($request, fn() => $container->call($container->get($controller), $action, $params));
 (new Response($data))->send();

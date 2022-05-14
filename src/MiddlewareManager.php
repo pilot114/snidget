@@ -11,14 +11,13 @@ class MiddlewareManager
 
     public function __construct(
         protected string $controllerPath,
-        protected string $controllerNamespace,
         protected Container $container
     ){}
 
     public function match(string $controller, string $action): self
     {
         $middlewares = [];
-        $attributes = AttributeLoader::getBinds($this->controllerPath, $this->controllerNamespace);
+        $attributes = AttributeLoader::getBinds($this->controllerPath);
         foreach ($attributes as $mwFqn => $attribute) {
             list($c, $m, $priority) = [$attribute->getClass(), $attribute->getMethod(), $attribute->getPriority()];
             if (!$c || (!$m && $c === $controller) || ($m === $action && $c === $controller)) {
