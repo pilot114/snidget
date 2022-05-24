@@ -21,26 +21,7 @@ abstract class Type implements JsonSerializable
     public function fromArray($array = []): self
     {
         foreach ($this->getDefaultPublicFields() as $key => $default) {
-            $value = $array[$key] ?? $default;
-
-            $prop = (new Reflection($this))->getProperty($key);
-            /** @var \ReflectionNamedType|null $type */
-            $type = $prop->getType();
-
-            if ($type && !$type->isBuiltin()) {
-                $className = $type->getName();
-
-                if ($doc = $prop->getDocComment()) {
-                    preg_match('#\$\S+ (\S+)\[]#', $doc, $match);
-                    $itemClass = $match[1] ?? null;
-                    if ($itemClass) {
-                        $value =  (new Collection($value))->map(fn($x) => new $itemClass($x));
-                    }
-                }
-                if ($value) {
-                    $value = is_object($value) ? $value : new $className($value);
-                }
-            }
+            $value = $this->getValue($key, $array[$key] ?? $default);
 
             try {
                 $this->$key = $value;
@@ -81,6 +62,29 @@ abstract class Type implements JsonSerializable
         return $this->toArray();
     }
 
+    protected function getValue($key, $value)
+    {
+        $prop = (new Reflection($this))->getProperty($key);
+        /** @var \ReflectionNamedType|null $type */
+        $type = $prop->getType();
+
+        if ($type && !$type->isBuiltin()) {
+            $className = $type->getName();
+
+            if ($doc = $prop->getDocComment()) {
+                preg_match('#\$\S+ (\S+)\[]#', $doc, $match);
+                $itemClass = $match[1] ?? null;
+                if ($itemClass) {
+                    return (new Collection($value))->map(fn($x) => new $itemClass($x));
+                }
+            }
+            if ($value) {
+                return is_object($value) ? $value : new $className($value);
+            }
+        }
+        return $value;
+    }
+
     protected function getDefaultPublicFields(): iterable
     {
         foreach ((new Reflection($this))->getProperties() as $property) {
@@ -90,10 +94,8 @@ abstract class Type implements JsonSerializable
             $value = $this->{$property->getName()} ?? null;
             $type = $property->getType();
 
-            if ($type && !$value) {
-                if ($type->getName() === 'array') {
-                    $value = [];
-                }
+            if ($type && !$value && $type->getName() === 'array') {
+                $value = [];
             }
             yield $property->getName() => $value;
         }

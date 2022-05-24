@@ -2,6 +2,7 @@
 
 namespace Snidget;
 
+use Snidget\Exception\SnidgetException;
 use Snidget\Module\Reflection;
 
 class Duck
@@ -20,7 +21,7 @@ class Duck
                 return $className;
             }
         }
-        throw new \Exception("Не найдено DTO, соответствующее хешу $hash");
+        throw new SnidgetException("Не найдено DTO, соответствующее хешу $hash");
     }
 
     /** @return iterable<string, array> */
@@ -28,7 +29,7 @@ class Duck
     {
         $type = $this->quack($data);
         foreach (AttributeLoader::getAssertions($type) as $name => $validator) {
-            list($class, $field) = explode('::', $name);
+            $field = explode('::', $name)[1];
             yield $name => $validator->check($data[$field]);
         }
     }

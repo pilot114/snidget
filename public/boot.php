@@ -43,7 +43,7 @@ function errorHandler()
         dump($file . ':' . $line);
     });
     set_exception_handler(function (Throwable $exception) {
-        dump('Throwable: ' . $exception->getMessage());
+        dump(get_class($exception) . ': ' . $exception->getMessage());
         dump($exception->getFile() . ':' . $exception->getLine());
         dump($exception->getTraceAsString());
     });

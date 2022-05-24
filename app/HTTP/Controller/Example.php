@@ -34,12 +34,10 @@ class Example
 //            dump($container->get(\Snidget\Module\PDO::class)->getLog());
         }
 
-        $data = json_encode([
+        return json_encode([
             'total' => $table->count(),
             'items' => $table->like('TEST', 'name'),
         ]);
-
-        return $data;
     }
 
     #[Route(regex: 'post/(?<id>\d+)')]

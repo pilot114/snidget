@@ -60,11 +60,11 @@ Most of it describes use cases from common practices web-development
 07.05.22 - DTO Config, PDO module, Tables  
 08.05.22 - Tables improve, Types & Collections  
 09.05.22 - refactoring, architecture design  
-10.05.22 - refactoring
-12.05.22 - Middlewares, phpstan
-13.05.22 - Middlewares
-14.05.22 - Validation
-15.05.22 - Tests, other code quality tools
+10.05.22 - refactoring  
+12.05.22 - Middlewares, phpstan  
+13.05.22 - Middlewares  
+14.05.22 - Validation  
+15.05.22 - Tests, other code quality tools  
 
 need improve:
 Exception

@@ -32,7 +32,7 @@ class AttributeLoader
             yield $fqn => $attribute;
         }
         foreach ($ref->getAttributes(Reflection::ATTR_METHOD, Bind::class) as $fqn => $attribute) {
-            list($class, $method) = explode('::', $fqn);
+            $method = explode('::', $fqn)[1];
             if ($method === $actionName) {
                 yield $fqn => $attribute;
             }
@@ -64,7 +64,7 @@ class AttributeLoader
         $definitions = [];
         $ref = new Reflection($className);
         foreach ($ref->getAttributes(Reflection::ATTR_PROPERTY, Column::class) as $fqn => $attribute) {
-            list($className, $propName) = explode('::', $fqn);
+            $propName = explode('::', $fqn)[1];
             $definitions[$propName] = $attribute->getInsertDefinition($data);
         }
         $definitions = array_filter($definitions);
