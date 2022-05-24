@@ -12,6 +12,7 @@ foreach (AttributeLoader::getRoutes('../app/HTTP/Controller') as $regex => $fqn)
 }
 $request = $container->get(Request::class);
 
+// TODO: to middleware
 if ($request->data) {
     $duck = new Duck('../app/DTO/API');
     $messages = [];
@@ -26,7 +27,7 @@ if ($request->data) {
 
 list($controller, $action, $params) = $router->match($request);
 
-$mwManager = new MiddlewareManager('../app/HTTP/Middleware', $container);
+$mwManager = $container->get(MiddlewareManager::class, ['middlewarePath' => '../app/HTTP/Middleware']);
 $data = $mwManager
     ->match($controller, $action)
     ->handle($request, fn() => $container->call($container->get($controller), $action, $params));

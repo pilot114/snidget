@@ -47,7 +47,6 @@ Most of it describes use cases from common practices web-development
 
 # (move to parts of documentation)
 
-- no incapsulate without reason (rich index file)
 - YAGNI first - code is written upon request
 - low level separated by php modules
 - "enrichment" principe - set base class only if need. In him DI also must work
@@ -63,8 +62,9 @@ Most of it describes use cases from common practices web-development
 10.05.22 - refactoring  
 12.05.22 - Middlewares, phpstan  
 13.05.22 - Middlewares  
-14.05.22 - Validation  
-15.05.22 - Tests, other code quality tools  
+14.05.22 - Middlewares  
+15.05.22 - Duck Validation  
+25.05.22 - Route prefixes, admin panel  
 
 need improve:
 Exception

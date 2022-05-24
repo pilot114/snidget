@@ -2,6 +2,7 @@
 
 namespace App\HTTP\Middleware;
 
+use App\HTTP\Controller\Admin;
 use Snidget\Attribute\Bind;
 use Snidget\Request;
 use Closure;

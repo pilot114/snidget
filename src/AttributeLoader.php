@@ -43,8 +43,11 @@ class AttributeLoader
     {
         foreach (psrIterator($controllerPath) as $className) {
             $ref = new Reflection($className);
+            $prefix = $ref->getAttributes(Reflection::ATTR_CLASS, Route::class)->current()?->getPrefix();
             foreach ($ref->getAttributes(Reflection::ATTR_METHOD, Route::class) as $fqn => $attribute) {
-                yield $attribute->getRegex() => $fqn;
+                $regex = $attribute->getRegex();
+                $regex = ($prefix && $regex) ? "$prefix/$regex" : ($prefix ?? $regex);
+                yield $regex => $fqn;
             }
         }
     }

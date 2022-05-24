@@ -14,6 +14,11 @@ class MiddlewareManager
         protected Container $container
     ){}
 
+    public function getMiddlewares(): array
+    {
+        return $this->middlewares;
+    }
+
     public function match(string $controller, string $action): self
     {
         $binds = $this->getMiddlewareBinds($controller, $action);

@@ -3,21 +3,17 @@
 namespace App\HTTP\Controller;
 
 use App\DTO\Database\People;
+use Snidget\Attribute\Bind;
 use Snidget\Attribute\Route;
 use Snidget\Container;
-use Snidget\Router;
 use Snidget\Table;
 
 class Example
 {
     #[Route(regex: '')]
-    public function index(Router $router): string
+    public function index(): string
     {
-        foreach ($router->routes() as $regex => $route) {
-            $link = sprintf('<a href="%s">%s (%s)</a>', $regex, $route, $regex);
-            dump($link);
-        }
-        return '';
+        return 'main';
     }
 
     #[Route(regex: 'post')]

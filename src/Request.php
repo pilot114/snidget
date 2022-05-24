@@ -3,6 +3,7 @@
 namespace Snidget;
 
 use LogicException;
+use Snidget\Exception\SnidgetException;
 
 class Request
 {
@@ -13,7 +14,7 @@ class Request
     {
         $uri = $_SERVER['QUERY_STRING']
             ?? $_SERVER['REQUEST_URI']
-            ?? throw new LogicException('Нет строки запроса в режиме fpm');
+            ?? throw new SnidgetException('Нет строки запроса в режиме fpm');
 
         $this->uri = trim($uri, '/');
         $this->data = json_decode(file_get_contents('php://input'), true);
