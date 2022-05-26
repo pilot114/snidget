@@ -65,11 +65,14 @@ Most of it describes use cases from common practices web-development
 14.05.22 - Middlewares  
 15.05.22 - Duck Validation  
 25.05.22 - Route prefixes, admin panel  
+26.05.22 - Internal templating (for admin)
 
 need improve:
 Exception
 Api
-Admin
+Admin - manage all enities
 Logger
 (https://blog.jetbrains.com/ru/phpstorm/2021/12/phpstorm-2021-3-release/#new)
-Print routes and middlewares
+PSR
+Migrations
+feature-centric Boxes

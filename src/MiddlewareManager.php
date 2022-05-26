@@ -36,14 +36,11 @@ class MiddlewareManager
 
     public function handle(Request $request, Closure $core): string
     {
-        $coreFunction = fn($object) => $core($object);
-        $layers = array_reverse($this->middlewares);
-        $onion = array_reduce(
-            $layers,
+        return array_reduce(
+            array_reverse($this->middlewares),
             fn($nextLayer, $layer) => $this->createLayer($nextLayer, $layer),
-            $coreFunction
-        );
-        return $onion($request);
+            fn($object) => $core($object)
+        )($request);
     }
 
     protected function getMiddlewareBinds(string $controller, string $action): array

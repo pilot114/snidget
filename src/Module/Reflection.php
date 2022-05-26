@@ -6,6 +6,7 @@ use ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
 use Attribute;
+use Generator;
 
 class Reflection
 {
@@ -43,7 +44,7 @@ class Reflection
     /**
      * @template T
      * @param class-string<T> $attrName
-     * @return iterable<string, T>
+     * @return Generator?<string, T>
      */
     public function getAttributes(int $type, string $attrName): iterable
     {

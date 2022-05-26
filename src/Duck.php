@@ -14,7 +14,7 @@ class Duck
     protected function quack(array $data): string
     {
         $hash = serialize(array_keys($data));
-        foreach (psrIterator($this->classPath) as $className) {
+        foreach (Kernel::psrIterator($this->classPath) as $className) {
             $props = (new Reflection($className))->getProperties();
             $typeHash = serialize(array_map(fn($x) => $x->getName(),$props));
             if ($typeHash === $hash) {

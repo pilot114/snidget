@@ -18,7 +18,7 @@ class AttributeLoader
 
     static public function getBinds(string $classPath): iterable
     {
-        foreach (psrIterator($classPath) as $className) {
+        foreach (Kernel::psrIterator($classPath) as $className) {
             $ref = new Reflection($className);
             yield from $ref->getAttributes(Reflection::ATTR_CLASS, Bind::class);
             yield from $ref->getAttributes(Reflection::ATTR_METHOD, Bind::class);
@@ -41,7 +41,7 @@ class AttributeLoader
 
     static public function getRoutes(string $controllerPath): iterable
     {
-        foreach (psrIterator($controllerPath) as $className) {
+        foreach (Kernel::psrIterator($controllerPath) as $className) {
             $ref = new Reflection($className);
             $prefix = $ref->getAttributes(Reflection::ATTR_CLASS, Route::class)->current()?->getPrefix();
             foreach ($ref->getAttributes(Reflection::ATTR_METHOD, Route::class) as $fqn => $attribute) {
