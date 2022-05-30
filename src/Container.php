@@ -7,7 +7,7 @@ use Snidget\Module\Reflection;
 
 class Container
 {
-    protected array $pool = [];
+    protected static array $pool = [];
 
     public function call(object $instance, string $methodName, array $params = []): mixed
     {
@@ -21,8 +21,7 @@ class Container
      */
     public function make(string $className, array $params = [])
     {
-        $this->pool[$className] = new $className(...$this->getParams($className, '__construct', $params));
-        return $this->pool[$className];
+        return self::$pool[$className] = new $className(...$this->getParams($className, '__construct', $params));
     }
 
     /**
@@ -32,11 +31,10 @@ class Container
      */
     public function get(string $className, array $params = [])
     {
-        if (isset($this->pool[$className])) {
-            return $this->pool[$className];
+        if (isset(self::$pool[$className])) {
+            return self::$pool[$className];
         }
-        $this->pool[$className] = $this->make($className, $params);
-        return $this->pool[$className];
+        return self::$pool[$className] = $this->make($className, $params);
     }
 
     protected function getParams(object|string $instance, string $methodName, array $params): iterable

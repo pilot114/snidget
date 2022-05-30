@@ -14,7 +14,7 @@ class Request
     {
         $uri = $_SERVER['QUERY_STRING']
             ?? $_SERVER['REQUEST_URI']
-            ?? throw new SnidgetException('Нет строки запроса в режиме fpm');
+            ?? throw new SnidgetException('Нет строки запроса в $_SERVER');
 
         $this->uri = trim($uri, '/');
         $this->data = json_decode(file_get_contents('php://input'), true);

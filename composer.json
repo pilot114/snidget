@@ -12,6 +12,6 @@
     },
     "scripts": {
         "check": "vendor/bin/phpstan analyse src --level 5",
-        "phploc": "vendor/bin/phploc src"
+        "phploc": "vendor/bin/phploc src | grep '(LOC)'"
     }
 }

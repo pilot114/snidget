@@ -12,31 +12,44 @@ namespace
 
 namespace Snidget
 {
+    use Snidget\DTO\Config\App;
     use Throwable;
 
     class Kernel
     {
         protected Container $container;
+        protected App $config;
+        protected static string $appPath;
 
-        public function __construct()
+        public function __construct($appPath = null)
         {
-            $this->autoload('Snidget\\', __DIR__ . '/../src/');
-            $this->autoload('App\\', __DIR__ . '/../app/');
-            $this->errorHandler();
+            self::$appPath = $appPath ?? dirname(__DIR__) . '/app';
+
+            if (!$appPath) {
+                $this->autoload('Snidget\\', __DIR__ . '/');
+                $this->autoload('App\\', self::$appPath . '/');
+            }
+
             $this->container = new Container();
+            $this->config = $this->container->get(App::class, ['appPath' => self::$appPath]);
+
+            if ($this->config->displayAllErrors) {
+                $this->errorHandler();
+            }
         }
 
         public function run(): never
         {
             $router = $this->container->get(Router::class);
 
-            foreach (AttributeLoader::getRoutes('../app/HTTP/Controller') as $regex => $fqn) {
+            foreach (AttributeLoader::getRoutes($this->config->getControllerPath()) as $regex => $fqn) {
                 $router->register($regex, $fqn);
             }
             $request = $this->container->get(Request::class);
             list($controller, $action, $params) = $router->match($request);
 
-            $mwManager = $this->container->get(MiddlewareManager::class, ['middlewarePath' => '../app/HTTP/Middleware']);
+            $mwManager = $this->container
+                ->get(MiddlewareManager::class, ['middlewarePath' => $this->config->getMiddlewarePath()]);
             $data = $mwManager
                 ->match($controller, $action)
                 ->handle($request, fn() => $this->container->call($this->container->get($controller), $action, $params));
@@ -51,13 +64,14 @@ namespace Snidget
             return $this;
         }
 
-        static public function psrIterator(string $controllerPath): iterable
+        static public function psrIterator(string $classPath): iterable
         {
-            $parts = array_filter(explode('/', trim($controllerPath, '.')));
-            $controllerNamespace = '\\' . implode('\\', array_map(ucfirst(...), $parts)) . '\\';
-            foreach (glob($controllerPath . '/*') as $controller) {
-                preg_match("#/(?<className>\w+)\.php#i", $controller, $matches);
-                yield $controllerNamespace . $matches['className'];
+            $relPath = str_replace(self::$appPath, 'app', $classPath);
+            $parts = array_filter(explode('/', trim($relPath, '.')));
+            $classNamespace = '\\' . implode('\\', array_map(ucfirst(...), $parts)) . '\\';
+            foreach (glob($classPath . '/*') as $class) {
+                preg_match("#/(?<className>\w+)\.php#i", $class, $matches);
+                yield $classNamespace . $matches['className'];
             }
         }
 

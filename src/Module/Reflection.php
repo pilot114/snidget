@@ -21,11 +21,6 @@ class Reflection
         $this->class = new ReflectionClass(is_object($class) ? $class::class : $class);
     }
 
-    public function getMethod(string $methodName): ReflectionMethod
-    {
-        return $this->class->getMethod($methodName);
-    }
-
     public function getMethods()
     {
         return $this->class->getMethods();
@@ -67,7 +62,7 @@ class Reflection
     {
         $params = match ($methodName) {
             '__construct' => $this->class->getConstructor()?->getParameters() ?? [],
-            default       => $this->getMethod($methodName)->getParameters(),
+            default       => $this->class->getMethod($methodName)->getParameters(),
         };
         foreach ($params as $param) {
             yield $param;

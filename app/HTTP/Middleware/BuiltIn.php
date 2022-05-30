@@ -3,7 +3,7 @@
 namespace App\HTTP\Middleware;
 
 use Snidget\Attribute\Bind;
-use Snidget\{Duck, Request};
+use Snidget\{DTO\Config\App, Duck, Request};
 use Closure;
 
 #[Bind(priority: PHP_INT_MAX)]
@@ -14,10 +14,10 @@ class BuiltIn
         return $next($request);
     }
 
-    public function validate(Request $request, Closure $next)
+    public function duckValidate(Request $request, Closure $next, App $config)
     {
         if ($request->data) {
-            $duck = new Duck('../app/DTO/API');
+            $duck = new Duck($config->getDtoPath());
             $messages = [];
             foreach ($duck->layAnEgg($request->data) as $name => $errors) {
                 $messages[] = sprintf("Поле %s не прошло валидацию: %s", $name, implode('|', $errors));

@@ -23,13 +23,21 @@ best known for early use in the wizarding game of Quidditch, eventually being re
     public - dir for public scripts
     data - outer data project
     app - dir for you source code
-     ┣━━ CLI - CLI handlers
+     ┣━━ Command - CLI handlers
      ┣━━ Controller - HTTP handlers
      ┣━━ Domain - own domain classes of project
      ┣━━ DTO - data transfer objects
      ┣━━ Middleware - addition flexible HTTP handlers
-     ┣━━ cli.php - CLI entrypoint
+     ┣━━ app - CLI entrypoint (can be renamed)
      ┗━━ container.php - DI configuration
+
+# App design
+
+https://en.wikipedia.org/wiki/Multitier_architecture
+App design base on classic 3 tier architecture: Presentation layer (API), Logic layer (Domain) and Data Layer.
+
+Tekhnologii_proektirovania_baz_dannykh_2019_Osipov
+chapters 4-9 (~ 100 pages) - base
 
 # documentation
 
@@ -66,6 +74,8 @@ Most of it describes use cases from common practices web-development
 15.05.22 - Duck Validation  
 25.05.22 - Route prefixes, admin panel  
 26.05.22 - Internal templating (for admin)
+27.05.22 - Base design data layer
+30.05.22 - duck upgrade, refactoring config load
 
 need improve:
 Exception
@@ -75,4 +85,4 @@ Logger
 (https://blog.jetbrains.com/ru/phpstorm/2021/12/phpstorm-2021-3-release/#new)
 PSR
 Migrations
-feature-centric Boxes
+feature-centric Boxes (one file - copy to App struct, more complex - copy to app/feature dir)

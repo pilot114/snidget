@@ -9,6 +9,13 @@ use Snidget\Router;
 #[Route(prefix: 'admin')]
 class Admin
 {
+    protected array $links = [
+        '/admin' => 'Dashboard',
+        '/admin/routes' => 'Routing',
+        '/admin/domain' => 'Domain',
+        '/admin/database' => 'Database',
+    ];
+
     #[Route(regex: '')]
     public function index(): string
     {
@@ -23,12 +30,12 @@ class Admin
             $routeMw = $mw->match(...explode('::', $route))->getMiddlewares();
             $routeMw = array_map(fn($x) => implode('::', $x), $routeMw);
             $data[] = [
-                'url' => sprintf('<a href="/%s">/%s</a>', $regex, htmlentities($regex)),
-                'fqn' => $route,
-                'middlewares' => implode('<br>', $routeMw),
+                'URI' => sprintf('<a href="/%s">/%s</a>', $regex, htmlentities($regex)),
+                'Action' => $route,
+                'Middlewares' => implode('<br>', $routeMw),
             ];
         }
-        return $this->template($this->links(), $this->table('All register routes', $data));
+        return $this->template($this->links(), $this->table('All register routes in load order', $data));
     }
 
     #[Route(regex: 'domain')]
@@ -72,15 +79,8 @@ class Admin
 
     protected function links(): string
     {
-        $links = [
-            '/admin' => 'Dashboard',
-            '/admin/routes' => 'Routing',
-            '/admin/domain' => 'Domain',
-            '/admin/database' => 'Database',
-        ];
-
         $out = '<ul>';
-        foreach ($links as $url => $name) {
+        foreach ($this->links as $url => $name) {
             $out .= "<li><a href='$url'>$name</a></li>";
         }
         $out .= '</ul>';
