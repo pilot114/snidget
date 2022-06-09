@@ -64,6 +64,9 @@ namespace Snidget
             return $this;
         }
 
+        /**
+         * @return iterable<string>
+         */
         static public function psrIterator(string $classPath): iterable
         {
             $relPath = str_replace(self::$appPath, 'app', $classPath);

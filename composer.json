@@ -8,10 +8,30 @@
     },
     "require-dev": {
         "phpstan/phpstan": "^1.6",
-        "phploc/phploc": "^7.0"
+        "phploc/phploc": "^7.0",
+        "vimeo/psalm": "^4.23",
+        "brainmaestro/composer-git-hooks": "^2.8"
     },
     "scripts": {
-        "check": "vendor/bin/phpstan analyse src --level 5",
-        "phploc": "vendor/bin/phploc src | grep '(LOC)'"
+        "phpstan": "vendor/bin/phpstan analyse src --level 5",
+        "phploc": "vendor/bin/phploc src | grep '(LOC)'",
+        "psalm": "vendor/bin/psalm src"
+    },
+    "extra": {
+        "hooks": {
+            "config": {
+                "stop-on-failure": ["pre-commit"]
+            },
+            "pre-commit": [
+                "echo committing as $(git config user.name)",
+                "composer phpstan",
+                "composer psalm"
+            ]
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "brainmaestro/composer-git-hooks": true
+        }
     }
 }

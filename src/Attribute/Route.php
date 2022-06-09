@@ -8,8 +8,8 @@ use Snidget\Exception\SnidgetException;
 class Route
 {
     public function __construct(
-        protected ?string $regex = null,
-        protected ?string $prefix = null,
+        protected string $regex = '',
+        protected string $prefix = '',
     ){
         if ($this->prefix && $this->regex) {
             throw new SnidgetException('Для аттрибута Route нельзя задать вместе prefix и regex');

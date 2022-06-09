@@ -54,9 +54,13 @@ class Container
         }
     }
 
-    protected function getValue(\ReflectionParameter $param)
+    protected function getValue(\ReflectionParameter $param): mixed
     {
-        $typeName = $param->getType()->getName();
+        /**
+         * @var \ReflectionNamedType $type
+         */
+        $type = $param->getType();
+        $typeName = $type->getName();
         if (class_exists($typeName)) {
             return $this->get($typeName);
         }
