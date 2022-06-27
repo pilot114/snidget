@@ -109,6 +109,7 @@ namespace Snidget
                 dump($exception->getFile() . ':' . $exception->getLine());
                 dump($exception->getTraceAsString());
             });
+            register_shutdown_function(fn() => dump(sprintf('Fatal: %s %s', error_get_last(), E_CORE_ERROR)));
         }
     }
 }
