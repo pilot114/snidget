@@ -100,7 +100,7 @@ namespace Snidget
             error_reporting(E_ALL);
 
             set_error_handler(function (int $code, string $message, string $file, int $line): bool {
-                dump(sprintf('error (%s): %s', $code, $message));
+                dump(sprintf('error %s: %s', $code, $message));
                 dump($file . ':' . $line);
                 return true;
             });
@@ -109,7 +109,13 @@ namespace Snidget
                 dump($exception->getFile() . ':' . $exception->getLine());
                 dump($exception->getTraceAsString());
             });
-            register_shutdown_function(fn() => dump(sprintf('Fatal: %s %s', error_get_last(), E_CORE_ERROR)));
+            register_shutdown_function(function() {
+                $error = error_get_last();
+                if ($error) {
+                    dump(sprintf('Fatal %s: %s', $error['type'], $error['message']));
+                    dump($error['file'] . ':' . $error['line']);
+                }
+            });
         }
     }
 }
