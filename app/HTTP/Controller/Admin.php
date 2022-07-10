@@ -11,7 +11,7 @@ class Admin
 {
     protected array $links = [
         '/admin' => 'Dashboard',
-        '/admin/routes' => 'Routing',
+        '/admin/routes' => 'Endpoints',
         '/admin/domain' => 'Domain',
         '/admin/database' => 'Database',
     ];
@@ -25,17 +25,26 @@ class Admin
     #[Route(regex: 'routes')]
     public function routes(Router $router, MiddlewareManager $mw): string
     {
-        $data = [];
+        $hidePrefixes = true;
+        $actions = [];
         foreach ($router->routes() as $regex => $route) {
             $routeMw = $mw->match(...explode('::', $route))->getMiddlewares();
             $routeMw = array_map(fn($x) => implode('::', $x), $routeMw);
-            $data[] = [
+            if ($hidePrefixes) {
+                $routeMw = array_map(fn($x) => str_replace('App\HTTP\Middleware\\', '', $x), $routeMw);
+                $route = str_replace('App\HTTP\Controller\\', '', $route);
+            }
+            $actions[] = [
                 'URI' => sprintf('<a href="/%s">/%s</a>', $regex, htmlentities($regex)),
                 'Action' => $route,
                 'Middlewares' => implode('<br>', $routeMw),
             ];
         }
-        return $this->template($this->links(), $this->table('All register routes in load order', $data));
+        return $this->template(
+            $this->links(),
+            $this->table('All register routes in load order', $actions)
+            . $this->table('All register commands in load order', [])
+        );
     }
 
     #[Route(regex: 'domain')]
@@ -60,16 +69,20 @@ class Admin
     <style>
         body {
             font-size: 14px;
+            padding-top: 1em !important;
         }
         td,th {
             padding: 0.5rem;
+        }
+        .menu {
+            padding-top: 0.5em !important;
         }
     </style>
 </head>
 <body>
     <div class='container'>
         <div class='row'>
-            <div class='column column-10'>$links</div>
+            <div class='column column-10 menu'>$links</div>
             <div class='column column-offset-0'>$content</div>
         </div>
     </div>
@@ -91,7 +104,7 @@ class Admin
     {
         $out = "<h3>$name</h3>";
         $out .= '<table><thead><tr>';
-        foreach (array_keys($data[0]) as $header) {
+        foreach (array_keys($data[0] ?? []) as $header) {
             $out .= "<th>$header</th>";
         }
         $out .= '</tr></thead><tbody>';

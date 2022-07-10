@@ -73,16 +73,18 @@ Most of it describes use cases from common practices web-development
 14.05.22 - Middlewares  
 15.05.22 - Duck Validation  
 25.05.22 - Route prefixes, admin panel  
-26.05.22 - Internal templating (for admin)
-27.05.22 - Base design data layer
-30.05.22 - duck upgrade, refactoring config load
+26.05.22 - Internal templating (for admin)  
+27.05.22 - Base design data layer  
+30.05.22 - duck upgrade, refactoring config load  
+09.06.22 - Add psalm and composer-git-hooks  
+09.07.22 - Events  
 
-need improve:
-Exception
-Api
-Admin - manage all enities
-Logger
-(https://blog.jetbrains.com/ru/phpstorm/2021/12/phpstorm-2021-3-release/#new)
-PSR
-Migrations
-feature-centric Boxes (one file - copy to App struct, more complex - copy to app/feature dir)
+# need improve:
+- feature-centric Boxes (one file - copy to App struct, more complex - copy to app/feature dir)
+- Exception
+- Api
+- Admin - manage all enities
+- Logger
+- PSR
+- Migrations
+- (https://blog.jetbrains.com/ru/phpstorm/2021/12/phpstorm-2021-3-release/#new)

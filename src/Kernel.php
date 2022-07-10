@@ -48,9 +48,9 @@ namespace Snidget
             $request = $this->container->get(Request::class);
             list($controller, $action, $params) = $router->match($request);
 
-            $mwManager = $this->container
+            $middlewareManager = $this->container
                 ->get(MiddlewareManager::class, ['middlewarePath' => $this->config->getMiddlewarePath()]);
-            $data = $mwManager
+            $data = $middlewareManager
                 ->match($controller, $action)
                 ->handle($request, fn() => $this->container->call($this->container->get($controller), $action, $params));
             (new Response($data))->send();

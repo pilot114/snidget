@@ -8,14 +8,9 @@ use Snidget\Attribute\Route;
 use Snidget\Container;
 use Snidget\Table;
 
-class Example
+#[Route(prefix: 'api/v1')]
+class Api
 {
-    #[Route(regex: '')]
-    public function index(): string
-    {
-        return 'main';
-    }
-
     #[Route(regex: 'post')]
     public function list(Container $container): string
     {
@@ -40,12 +35,5 @@ class Example
     public function get(int $id): string
     {
         return 'Post::get #' . $id;
-    }
-
-    #[Route(regex: '.*')]
-    public function notFound(): string
-    {
-        http_response_code(404);
-        return '404 Not Found';
     }
 }

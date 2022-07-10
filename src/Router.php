@@ -2,6 +2,8 @@
 
 namespace Snidget;
 
+use Snidget\Exception\SnidgetException;
+
 class Router
 {
     protected array $routes = [];
@@ -22,16 +24,15 @@ class Router
         return $this->route;
     }
 
-    public function match(Request $request): ?array
+    public function match(Request $request): array
     {
         foreach ($this->routes as $pattern => $fqn) {
             if (preg_match("#^$pattern$#i", $request->uri, $matches)) {
                 $names = array_filter(array_keys($matches), is_string(...));
                 $matchesNamed = array_filter($matches, fn($x) => in_array($x, $names), ARRAY_FILTER_USE_KEY);
-                $this->route = [...explode('::', $fqn), $matchesNamed];
-                return $this->route;
+                return $this->route = [...explode('::', $fqn), $matchesNamed];
             }
         }
-        return null;
+        throw new SnidgetException('Не найден роут для URI: ' . $request->uri);
     }
 }
