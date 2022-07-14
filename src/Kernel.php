@@ -41,6 +41,11 @@ namespace Snidget
         public function run(): never
         {
             $router = $this->container->get(Router::class);
+            $eventManager = $this->container->get(EventManager::class);
+
+            $eventManager->register(self::$appPath);
+            dump($eventManager);
+            die();
 
             foreach (AttributeLoader::getRoutes($this->config->getControllerPath()) as $regex => $fqn) {
                 $router->register($regex, $fqn);
@@ -67,14 +72,20 @@ namespace Snidget
         /**
          * @return iterable<string>
          */
-        static public function psrIterator(string $classPath): iterable
+        static public function psrIterator(string $classPath, bool $recursive = false): iterable
         {
             $relPath = str_replace(self::$appPath, 'app', $classPath);
             $parts = array_filter(explode('/', trim($relPath, '.')));
             $classNamespace = '\\' . implode('\\', array_map(ucfirst(...), $parts)) . '\\';
             foreach (glob($classPath . '/*') as $class) {
+                if ($recursive && is_dir($class)) {
+                    yield from self::psrIterator($class, true);
+                    continue;
+                }
                 preg_match("#/(?<className>\w+)\.php#i", $class, $matches);
-                yield $classNamespace . $matches['className'];
+                if (!empty($matches['className'])) {
+                    yield $classNamespace . $matches['className'];
+                }
             }
         }
 

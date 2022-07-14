@@ -21,12 +21,12 @@ class Reflection
         $this->class = new ReflectionClass(is_object($class) ? $class::class : $class);
     }
 
-    public function getMethods()
+    public function getMethods(): array
     {
         return $this->class->getMethods();
     }
 
-    public function getProperties()
+    public function getProperties(): array
     {
         return $this->class->getProperties(ReflectionProperty::IS_PUBLIC);
     }

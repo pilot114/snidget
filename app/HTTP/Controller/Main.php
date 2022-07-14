@@ -3,6 +3,7 @@
 namespace App\HTTP\Controller;
 
 use Snidget\Attribute\Route;
+use Snidget\Attribute\Listen;
 
 class Main
 {
@@ -17,5 +18,11 @@ class Main
     {
         http_response_code(404);
         return '404 Not Found';
+    }
+
+    #[Listen('test')]
+    public function listener()
+    {
+        return 123;
     }
 }
