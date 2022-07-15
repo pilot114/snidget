@@ -4,10 +4,12 @@ namespace Snidget\Enum;
 
 enum SystemEvent
 {
+    // вызывается так рано, насколько это возможно
     case START;
-    case HANDLE_REQUEST;
-    case MATCH_ROUTE;
-    case CALL_ACTION;
-    case SEND_RESPONSE;
+    // вызывается перед отправкой ответа
+    case SEND;
+    // вызывается так поздно, насколько это возможно
     case FINISH;
+    // вызывается при необработанном исключении
+    case EXCEPTION;
 }

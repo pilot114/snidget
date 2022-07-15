@@ -20,6 +20,7 @@ namespace Snidget
     {
         protected Container $container;
         protected App $config;
+        protected EventManager $eventManager;
         protected static string $appPath;
 
         public function __construct($appPath = null)
@@ -32,21 +33,19 @@ namespace Snidget
             }
 
             $this->container = new Container();
+            $eventManager = $this->container->get(EventManager::class);
+            $eventManager->register(self::$appPath);
+            $eventManager->emit(SystemEvent::START);
+            $this->eventManager = $eventManager;
+
             $this->config = $this->container->get(App::class, ['appPath' => self::$appPath]);
 
-            if ($this->config->displayAllErrors) {
-                $this->errorHandler();
-            }
+            $this->unexpectedHandler();
         }
 
         public function run(): never
         {
             $router = $this->container->get(Router::class);
-            $eventManager = $this->container->get(EventManager::class);
-
-            $eventManager->register(self::$appPath);
-            $eventManager->emit(SystemEvent::START, 123);
-            die();
 
             foreach (AttributeLoader::getRoutes($this->config->getControllerPath()) as $regex => $fqn) {
                 $router->register($regex, $fqn);
@@ -59,7 +58,9 @@ namespace Snidget
             $data = $middlewareManager
                 ->match($controller, $action)
                 ->handle($request, fn() => $this->container->call($this->container->get($controller), $action, $params));
+            $this->eventManager->emit(SystemEvent::SEND, $data);
             (new Response($data))->send();
+            exit;
         }
 
         public function overrideRequest(string $uri, array $data): self
@@ -105,8 +106,29 @@ namespace Snidget
             });
         }
 
-        protected function errorHandler(): void
+        protected function unexpectedHandler(): void
         {
+            register_shutdown_function(function() {
+                if ($this->config->displayAllErrors && $error = error_get_last()) {
+                    dump(sprintf('Fatal %s: %s', $error['type'], $error['message']));
+                    dump($error['file'] . ':' . $error['line']);
+                }
+                $this->eventManager->emit(SystemEvent::FINISH);
+            });
+            set_exception_handler(function (Throwable $exception) {
+                $this->eventManager->emit(SystemEvent::EXCEPTION, $exception);
+
+                if ($this->config->displayAllErrors) {
+                    dump(get_class($exception) . ': ' . $exception->getMessage());
+                    dump($exception->getFile() . ':' . $exception->getLine());
+                    dump($exception->getTraceAsString());
+                }
+            });
+
+            if (!$this->config->displayAllErrors) {
+                return;
+            }
+
             ini_set('display_errors', 1);
             ini_set('display_startup_errors', 1);
             error_reporting(E_ALL);
@@ -115,18 +137,6 @@ namespace Snidget
                 dump(sprintf('error %s: %s', $code, $message));
                 dump($file . ':' . $line);
                 return true;
-            });
-            set_exception_handler(function (Throwable $exception) {
-                dump(get_class($exception) . ': ' . $exception->getMessage());
-                dump($exception->getFile() . ':' . $exception->getLine());
-                dump($exception->getTraceAsString());
-            });
-            register_shutdown_function(function() {
-                $error = error_get_last();
-                if ($error) {
-                    dump(sprintf('Fatal %s: %s', $error['type'], $error['message']));
-                    dump($error['file'] . ':' . $error['line']);
-                }
             });
         }
     }

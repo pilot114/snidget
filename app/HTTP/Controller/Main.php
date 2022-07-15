@@ -21,10 +21,8 @@ class Main
         return '404 Not Found';
     }
 
-    #[Listen(SystemEvent::START)]
-    public function listener($eventData): void
+    public function listener($test): void
     {
-        dump($eventData);
         dump('listener run!');
     }
 }

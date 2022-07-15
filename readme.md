@@ -78,6 +78,7 @@ Most of it describes use cases from common practices web-development
 30.05.22 - duck upgrade, refactoring config load  
 09.06.22 - Add psalm and composer-git-hooks  
 09.07.22 - Events  
+15.07.22 - Events improve
 
 # need improve:
 - feature-centric Boxes (one file - copy to App struct, more complex - copy to app/feature dir)

@@ -18,11 +18,11 @@ class EventManager
         }
     }
 
-    public function emit(SystemEvent $event, mixed $data): void
+    public function emit(SystemEvent $event, mixed $data = null): void
     {
-        foreach ($this->listeners[$event->name] as $listener) {
-//            $this->container->call()
-//            $listener($data);
+        foreach ($this->listeners[$event->name] ?? [] as $listener) {
+            [$class, $method] = explode('::', $listener);
+            $this->container->call($class, $method, ['data' => $data]);
         }
     }
 }

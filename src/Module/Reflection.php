@@ -21,6 +21,11 @@ class Reflection
         $this->class = new ReflectionClass(is_object($class) ? $class::class : $class);
     }
 
+    public function getMethod(string $name): ReflectionMethod
+    {
+        return $this->class->getMethod($name);
+    }
+
     public function getMethods(): array
     {
         return $this->class->getMethods();
