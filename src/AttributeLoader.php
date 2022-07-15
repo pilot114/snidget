@@ -4,6 +4,7 @@ namespace Snidget;
 
 use Snidget\Attribute\Bind;
 use Snidget\Attribute\Column;
+use Snidget\Attribute\Listen;
 use Snidget\Attribute\Route;
 use Snidget\Attribute\Assert;
 use Snidget\Module\Reflection;
@@ -11,6 +12,17 @@ use Snidget\Typing\Type;
 
 class AttributeLoader
 {
+    static public function getListeners(string $appPath): iterable
+    {
+        foreach (Kernel::psrIterator($appPath, true) as $className) {
+            if (!class_exists($className)) {
+                continue;
+            }
+            $ref = new Reflection($className);
+            yield from $ref->getAttributes(Reflection::ATTR_METHOD, Listen::class);
+        }
+    }
+
     static public function getAssertions(string $className): iterable
     {
         yield from (new Reflection($className))->getAttributes(Reflection::ATTR_PROPERTY, Assert::class);

@@ -3,7 +3,6 @@
 namespace App\HTTP\Controller;
 
 use App\DTO\Database\People;
-use Snidget\Attribute\Bind;
 use Snidget\Attribute\Route;
 use Snidget\Container;
 use Snidget\Table;

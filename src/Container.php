@@ -9,9 +9,17 @@ class Container
 {
     protected static array $pool = [];
 
-    public function call(object $instance, string $methodName, array $params = []): mixed
+    public function call(object|string $instance, string $methodName, array $params = []): mixed
     {
-        return $instance->{$methodName}(...$this->getParams($instance, $methodName, $params));
+        $realParams = $this->getParams($instance, $methodName, $params);
+
+        if ((new Reflection($instance))->getMethod($methodName)->isStatic()) {
+            return $instance::{$methodName}(...$realParams);
+        }
+        if (is_string($instance)) {
+            $instance = $this->get($instance);
+        }
+        return $instance->{$methodName}(...$realParams);
     }
 
     /**
@@ -57,10 +65,10 @@ class Container
     protected function getValue(\ReflectionParameter $param): mixed
     {
         /**
-         * @var \ReflectionNamedType $type
+         * @var ?\ReflectionNamedType $type
          */
         $type = $param->getType();
-        $typeName = $type->getName();
+        $typeName = $type ? $type->getName() : 'mixed';
         if (class_exists($typeName)) {
             return $this->get($typeName);
         }

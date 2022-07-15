@@ -3,6 +3,8 @@
 namespace App\HTTP\Controller;
 
 use Snidget\Attribute\Route;
+use Snidget\Attribute\Listen;
+use Snidget\Enum\SystemEvent;
 
 class Main
 {
@@ -17,5 +19,10 @@ class Main
     {
         http_response_code(404);
         return '404 Not Found';
+    }
+
+    public function listener($test): void
+    {
+        dump('listener run!');
     }
 }
