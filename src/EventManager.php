@@ -2,27 +2,27 @@
 
 namespace Snidget;
 
+use Snidget\Enum\SystemEvent;
+
 class EventManager
 {
-    protected array $listeners = [];
+    public function __construct(
+        protected Container $container,
+        protected array $listeners = [],
+    ){}
 
     public function register(string $appPath): void
     {
-        foreach (AttributeLoader::getListeners($appPath) as $listener) {
-//            dump($listener);
-        }
-        die();
-    }
-
-    public function emit(string $eventName, mixed $data): void
-    {
-        foreach ($this->listeners[$eventName] as $listener) {
-            $listener($data);
+        foreach (AttributeLoader::getListeners($appPath) as $fqn => $listener) {
+            $this->listeners[$listener->getEvent()->name][] = $fqn;
         }
     }
 
-    protected function subscribe(callable $listener, ?string $eventName = null): void
+    public function emit(SystemEvent $event, mixed $data): void
     {
-        $this->listeners[$eventName][] = $listener;
+        foreach ($this->listeners[$event->name] as $listener) {
+//            $this->container->call()
+//            $listener($data);
+        }
     }
 }

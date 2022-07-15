@@ -4,6 +4,7 @@ namespace App\HTTP\Controller;
 
 use Snidget\Attribute\Route;
 use Snidget\Attribute\Listen;
+use Snidget\Enum\SystemEvent;
 
 class Main
 {
@@ -20,9 +21,10 @@ class Main
         return '404 Not Found';
     }
 
-    #[Listen('test')]
-    public function listener()
+    #[Listen(SystemEvent::START)]
+    public function listener($eventData): void
     {
-        return 123;
+        dump($eventData);
+        dump('listener run!');
     }
 }

@@ -3,12 +3,17 @@
 namespace Snidget\Attribute;
 
 use Attribute;
-use Snidget\Exception\SnidgetException;
+use Snidget\Enum\SystemEvent;
 
-#[Attribute(Attribute::TARGET_METHOD | Attribute::TARGET_CLASS | Attribute::IS_REPEATABLE)]
+#[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 class Listen
 {
     public function __construct(
-        protected string $eventName = '',
+        protected SystemEvent $event,
     ){}
+
+    public function getEvent(): SystemEvent
+    {
+        return $this->event;
+    }
 }
