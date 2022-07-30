@@ -47,11 +47,6 @@ abstract class Type implements JsonSerializable
         return $array;
     }
 
-    public function toJson()
-    {
-        return json_encode($this->toArray());
-    }
-
     public function jsonSerialize(): array
     {
         return $this->toArray();
