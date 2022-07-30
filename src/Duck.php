@@ -10,14 +10,14 @@ class Duck
     static protected array $cache = [];
 
     public function __construct(
-        protected string $dtoPath
+        protected array $dtoPaths
     ){}
 
     // TODO: handle nested DTO
     protected function quack(array $data): string
     {
         $hash = serialize(array_keys($data));
-        foreach (Kernel::psrIterator($this->dtoPath) as $className) {
+        foreach (Kernel::psrIterator($this->dtoPaths) as $className) {
             $props = (new Reflection($className))->getProperties();
             $typeHash = serialize(array_map(fn($x) => $x->getName(), $props));
             if (isset(self::$cache[$typeHash])) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\HTTP\Controller;
+namespace App\Box\Core\HTTP\Controller;
 
 use Snidget\Attribute\Route;
 use Snidget\MiddlewareManager;

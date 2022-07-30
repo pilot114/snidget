@@ -38,6 +38,7 @@ Most of it describes use cases from common practices web-development
 09.06.22 - Add psalm and composer-git-hooks  
 09.07.22 - Events  
 15.07.22 - Events improve  
+30.07.22 - modules (Boxes)  
 
 # need improve:
 - feature-centric Boxes (one file - copy to App struct, more complex - copy to app/feature dir)

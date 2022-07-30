@@ -47,14 +47,14 @@ namespace Snidget
         {
             $router = $this->container->get(Router::class);
 
-            foreach (AttributeLoader::getRoutes($this->config->getControllerPath()) as $regex => $fqn) {
+            foreach (AttributeLoader::getRoutes($this->config->getControllerPaths()) as $regex => $fqn) {
                 $router->register($regex, $fqn);
             }
             $request = $this->container->get(Request::class);
             list($controller, $action, $params) = $router->match($request);
 
             $middlewareManager = $this->container
-                ->get(MiddlewareManager::class, ['middlewarePath' => $this->config->getMiddlewarePath()]);
+                ->get(MiddlewareManager::class, ['middlewarePaths' => $this->config->getMiddlewarePaths()]);
             $data = $middlewareManager
                 ->match($controller, $action)
                 ->handle($request, fn() => $this->container->call($this->container->get($controller), $action, $params));
@@ -74,19 +74,21 @@ namespace Snidget
         /**
          * @return iterable<string>
          */
-        static public function psrIterator(string $classPath, bool $recursive = false): iterable
+        static public function psrIterator(array $classPaths, bool $recursive = false): iterable
         {
-            $relPath = str_replace(self::$appPath, 'app', $classPath);
-            $parts = array_filter(explode('/', trim($relPath, '.')));
-            $classNamespace = '\\' . implode('\\', array_map(ucfirst(...), $parts)) . '\\';
-            foreach (glob($classPath . '/*') as $file) {
-                if ($recursive && is_dir($file)) {
-                    yield from self::psrIterator($file, true);
-                    continue;
-                }
-                preg_match("#/(?<className>\w+)\.php#i", $file, $matches);
-                if (!empty($matches['className'])) {
-                    yield $classNamespace . $matches['className'];
+            foreach ($classPaths as $classPath) {
+                $relPath = str_replace(self::$appPath, 'app', $classPath);
+                $parts = array_filter(explode('/', trim($relPath, '.')));
+                $classNamespace = '\\' . implode('\\', array_map(ucfirst(...), $parts)) . '\\';
+                foreach (glob($classPath . '/*') as $file) {
+                    if ($recursive && is_dir($file)) {
+                        yield from self::psrIterator([$file], true);
+                        continue;
+                    }
+                    preg_match("#/(?<className>\w+)\.php#i", $file, $matches);
+                    if (!empty($matches['className'])) {
+                        yield $classNamespace . $matches['className'];
+                    }
                 }
             }
         }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\HTTP\Controller;
+namespace App\Box\Core\HTTP\Controller;
 
 use Snidget\Attribute\Route;
 use Snidget\Attribute\Listen;
@@ -19,10 +19,5 @@ class Main
     {
         http_response_code(404);
         return '404 Not Found';
-    }
-
-    public function listener($test): void
-    {
-        dump('listener run!');
     }
 }

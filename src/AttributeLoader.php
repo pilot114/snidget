@@ -14,7 +14,7 @@ class AttributeLoader
 {
     static public function getListeners(string $appPath): iterable
     {
-        foreach (Kernel::psrIterator($appPath, true) as $className) {
+        foreach (Kernel::psrIterator([$appPath], true) as $className) {
             if (!class_exists($className)) {
                 continue;
             }
@@ -28,9 +28,9 @@ class AttributeLoader
         yield from (new Reflection($className))->getAttributes(Reflection::ATTR_PROPERTY, Assert::class);
     }
 
-    static public function getBinds(string $classPath): iterable
+    static public function getBinds(array $classPaths): iterable
     {
-        foreach (Kernel::psrIterator($classPath) as $className) {
+        foreach (Kernel::psrIterator($classPaths) as $className) {
             $ref = new Reflection($className);
             yield from $ref->getAttributes(Reflection::ATTR_CLASS, Bind::class);
             yield from $ref->getAttributes(Reflection::ATTR_METHOD, Bind::class);
@@ -51,9 +51,9 @@ class AttributeLoader
         }
     }
 
-    static public function getRoutes(string $controllerPath): iterable
+    static public function getRoutes(array $controllerPaths): iterable
     {
-        foreach (Kernel::psrIterator($controllerPath) as $className) {
+        foreach (Kernel::psrIterator($controllerPaths) as $className) {
             $ref = new Reflection($className);
             $prefix = $ref->getAttributes(Reflection::ATTR_CLASS, Route::class)->current()?->getPrefix();
             foreach ($ref->getAttributes(Reflection::ATTR_METHOD, Route::class) as $fqn => $attribute) {
