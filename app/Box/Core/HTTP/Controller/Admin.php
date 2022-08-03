@@ -19,7 +19,7 @@ class Admin
     #[Route(regex: '')]
     public function index(): string
     {
-        return $this->template($this->links(), '<h3>Common info</h3>');
+        return $this->template($this->links(), '<b>Common counts by other admin pages + quality code info + project and repo info</b>');
     }
 
     #[Route(regex: 'routes')]
@@ -31,12 +31,19 @@ class Admin
             $routeMw = $mw->match(...explode('::', $route))->getMiddlewares();
             $routeMw = array_map(fn($x) => implode('::', $x), $routeMw);
             if ($hidePrefixes) {
-                $routeMw = array_map(fn($x) => str_replace('App\HTTP\Middleware\\', '', $x), $routeMw);
-                $route = str_replace('App\HTTP\Controller\\', '', $route);
+                $routeMw = str_replace('App\\', '', $routeMw);
+                $routeMw = str_replace('Box\\', '', $routeMw);
+                $routeMw = str_replace('HTTP\Middleware\\', '', $routeMw);
+                $routeMw = str_replace('\\', ':', $routeMw);
+
+                $route = str_replace('App\\', '', $route);
+                $route = str_replace('Box\\', '', $route);
+                $route = str_replace('HTTP\Controller\\', '', $route);
+                $route = str_replace('\\', ':', $route);
             }
             $actions[] = [
                 'URI' => sprintf('<a href="/%s">/%s</a>', $regex, htmlentities($regex)),
-                'Action' => $route,
+                'Controllers' => $route,
                 'Middlewares' => implode('<br>', $routeMw),
             ];
         }

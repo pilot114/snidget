@@ -1,7 +1,8 @@
 <?php
 
-namespace Snidget;
+namespace Snidget\SQL;
 
+use Snidget\AttributeLoader;
 use Snidget\Module\PDO;
 use Snidget\Typing\Type;
 
@@ -62,7 +63,7 @@ class Table
         return $this->db->query(
             "select * from {$this->name} where $field = :id limit 1",
             ['id' => $id]
-        );
+        )[0] ?? [];
     }
 
     public function getType(): Type

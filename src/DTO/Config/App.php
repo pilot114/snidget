@@ -16,24 +16,24 @@ class App
     public function getControllerPaths(): array
     {
         return [
-            ...glob($this->appPath . '/Box/*/' . $this->controllerPath),
             $this->appPath . '/' . $this->controllerPath,
+            ...glob($this->appPath . '/Box/*/' . $this->controllerPath),
         ];
     }
 
     public function getMiddlewarePaths(): array
     {
         return [
-            ...glob($this->appPath . '/Box/*/' . $this->middlewarePath),
             $this->appPath . '/' . $this->middlewarePath,
+            ...glob($this->appPath . '/Box/*/' . $this->middlewarePath),
         ];
     }
 
     public function getDtoPaths(): array
     {
         return [
-            ...glob($this->appPath . '/Box/*/' . $this->dtoPath),
             $this->appPath . '/' . $this->dtoPath,
+            ...glob($this->appPath . '/Box/*/' . $this->dtoPath),
         ];
     }
 }

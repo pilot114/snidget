@@ -26,5 +26,4 @@ class Bind
     {
         return $this->priority;
     }
-
 }

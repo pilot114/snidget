@@ -5,7 +5,7 @@ namespace App\HTTP\Controller;
 use App\DTO\Database\People;
 use Snidget\Attribute\Route;
 use Snidget\Container;
-use Snidget\Table;
+use Snidget\SQL\Table;
 
 #[Route(prefix: 'api/v1')]
 class Api
@@ -31,8 +31,13 @@ class Api
     }
 
     #[Route(regex: 'post/(?<id>\d+)')]
-    public function get(int $id): string
+    public function get(int $id, Container $container): string
     {
-        return 'Post::get #' . $id;
+        $dto = $container->get(People::class);
+        $table = $container->get(Table::class, ['name' => 'test', 'type' => $dto]);
+
+        $data = $table->read($id);
+
+        return json_encode($data);
     }
 }
