@@ -3,29 +3,35 @@
     "description": "snidget framework",
     "type": "project",
     "require": {
-      "ext-pdo": "*",
-      "ext-mbstring": "*"
+        "ext-pdo": "*",
+        "ext-mbstring": "*"
     },
     "require-dev": {
+        "ext-xdebug": "*",
         "phpstan/phpstan": "^1.6",
         "phploc/phploc": "^7.0",
         "vimeo/psalm": "^4.23",
-        "brainmaestro/composer-git-hooks": "^2.8"
+        "brainmaestro/composer-git-hooks": "^2.8",
+        "phpunit/phpunit": "^9.5"
     },
     "scripts": {
         "phpstan": "vendor/bin/phpstan analyse src --level 5",
         "phploc": "vendor/bin/phploc src | grep '(LOC)'",
-        "psalm": "vendor/bin/psalm src"
+        "psalm": "vendor/bin/psalm src",
+        "tests": "XDEBUG_MODE=coverage vendor/bin/phpunit tests --testdox --coverage-html tests/coverage --coverage-filter src --process-isolation --order-by random -v --bootstrap tests/bootstrap.php"
     },
     "extra": {
         "hooks": {
             "config": {
-                "stop-on-failure": ["pre-commit"]
+                "stop-on-failure": [
+                    "pre-commit"
+                ]
             },
             "pre-commit": [
                 "echo committing as $(git config user.name)",
                 "composer phpstan",
-                "composer psalm"
+                "composer psalm",
+                "composer tests"
             ]
         }
     },

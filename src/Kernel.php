@@ -46,15 +46,15 @@ namespace Snidget
         public function run(): never
         {
             $router = $this->container->get(Router::class);
-
             foreach (AttributeLoader::getRoutes($this->config->getControllerPaths()) as $regex => $fqn) {
                 $router->register($regex, $fqn);
             }
+            $middlewareManager = $this->container
+                ->get(MiddlewareManager::class, ['middlewarePaths' => $this->config->getMiddlewarePaths()]);
+
             $request = $this->container->get(Request::class);
             list($controller, $action, $params) = $router->match($request);
 
-            $middlewareManager = $this->container
-                ->get(MiddlewareManager::class, ['middlewarePaths' => $this->config->getMiddlewarePaths()]);
             $data = $middlewareManager
                 ->match($controller, $action)
                 ->handle($request, fn() => $this->container->call($this->container->get($controller), $action, $params));

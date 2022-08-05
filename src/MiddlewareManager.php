@@ -19,6 +19,11 @@ class MiddlewareManager
         return $this->middlewares;
     }
 
+    public function register(): self
+    {
+        // TODO: предварительная регистрация может облегчить match (актуально в асинхронном режиме)
+    }
+
     public function match(string $controller, string $action): self
     {
         $binds = iterator_to_array($this->getMiddlewareBinds($controller, $action));
