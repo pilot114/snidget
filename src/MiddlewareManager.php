@@ -22,6 +22,7 @@ class MiddlewareManager
     public function register(): self
     {
         // TODO: предварительная регистрация может облегчить match (актуально в асинхронном режиме)
+        return $this;
     }
 
     public function match(string $controller, string $action): self
