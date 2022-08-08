@@ -41,12 +41,12 @@ Most of it describes use cases from common practices web-development
 30.07.22 - modules (Boxes)  
 
 # need improve:
-- feature-centric Boxes (one file - copy to App struct, more complex - copy to app/feature dir)
+- Async mode base on parallel
 - Exception
 - Api
 - Admin - manage all enities
 - Logger
-- PSR
+- PSR?
 - Migrations
 - (https://blog.jetbrains.com/ru/phpstorm/2021/12/phpstorm-2021-3-release/#new)
 
