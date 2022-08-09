@@ -347,15 +347,51 @@ final class StreamSelectLoop
 
 $loop = new StreamSelectLoop();
 
-$hasRun = false;
-$stopped = false;
+// pair
 
-$loop->futureTick(function () use (&$hasRun) {
-    $hasRun = true;
+[$reader, $writer] = createSocketPair();
+$timeout = $loop->addTimer(0.1, fn() => $loop->removeReadStream($reader));
+
+$loop->addReadStream($reader, function () use ($loop, $reader, $timeout) {
+    echo fread($reader, 1024);
+    $loop->removeReadStream($reader);
+    $loop->cancelTimer($timeout);
 });
 
-register_shutdown_function(function () use ($loop, &$hasRun, &$stopped) {
-    if (!$hasRun && !$stopped) {
-        $loop->run();
-    }
+fwrite($writer, "foo\n");
+
+// server
+$server = stream_socket_server('127.0.0.1:0');
+
+$errno = $errstr = null;
+$connecting = stream_socket_client(
+    stream_socket_get_name($server, false),
+    $errno,
+    $errstr,
+    0,
+    STREAM_CLIENT_CONNECT | STREAM_CLIENT_ASYNC_CONNECT
+);
+
+$timeout = $loop->addTimer(0.1, fn() => $loop->removeWriteStream($connecting));
+
+$loop->addWriteStream($connecting, function () use ($loop, $connecting, $timeout) {
+    $loop->removeWriteStream($connecting);
+    $loop->cancelTimer($timeout);
 });
+
+$loop->run();
+
+function tickLoop($loop)
+{
+    $loop->futureTick(fn() => $loop->stop());
+    $loop->run();
+}
+
+function createSocketPair(): array
+{
+    [$reader, $writer] = stream_socket_pair(STREAM_PF_UNIX, STREAM_SOCK_STREAM, STREAM_IPPROTO_IP);
+    stream_set_read_buffer($reader, 0);
+    stream_set_read_buffer($writer, 0);
+
+    return [$reader, $writer];
+}
