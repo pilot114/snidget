@@ -4,7 +4,8 @@
     "type": "project",
     "require": {
         "ext-pdo": "*",
-        "ext-mbstring": "*"
+        "ext-mbstring": "*",
+        "ext-pcntl": "*"
     },
     "require-dev": {
         "ext-xdebug": "*",
