@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e72a0f3b4dea41179498c0283a50c9f5",
+    "content-hash": "976b670e06efb79d1ac32b4c11b4a43d",
     "packages": [],
     "packages-dev": [
         {
@@ -1742,16 +1742,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.5.21",
+            "version": "9.5.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "0e32b76be457de00e83213528f6bb37e2a38fcb1"
+                "reference": "e329ac6e8744f461518272612a479fde958752fe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/0e32b76be457de00e83213528f6bb37e2a38fcb1",
-                "reference": "0e32b76be457de00e83213528f6bb37e2a38fcb1",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/e329ac6e8744f461518272612a479fde958752fe",
+                "reference": "e329ac6e8744f461518272612a479fde958752fe",
                 "shasum": ""
             },
             "require": {
@@ -1828,7 +1828,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.21"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.22"
             },
             "funding": [
                 {
@@ -1840,7 +1840,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-06-19T12:14:25+00:00"
+            "time": "2022-08-20T08:25:46+00:00"
         },
         {
             "name": "psr/container",
@@ -4011,8 +4011,11 @@
     "prefer-lowest": false,
     "platform": {
         "ext-pdo": "*",
-        "ext-mbstring": "*"
+        "ext-mbstring": "*",
+        "ext-pcntl": "*"
     },
-    "platform-dev": [],
+    "platform-dev": {
+        "ext-xdebug": "*"
+    },
     "plugin-api-version": "2.2.0"
 }

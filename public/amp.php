@@ -23,17 +23,15 @@ use Amp\Loop;
 
 Loop::run(function () {
     $sockets = [
-        Server::listen("127.0.0.1:1337"),
+        Server::listen("127.0.0.1:8000"),
     ];
 
     $server = new HttpServer($sockets, new CallableRequestHandler(
         function (Request $request) {
-            var_dump($request->getBody()->read()->onResolve(fn($x) => var_dump($x)));
-
-            echo sprintf("\n%s %s %s\n\n", $request->getMethod(), $request->getUri(), $request->getProtocolVersion());
-            foreach ($request->getHeaders() as $name => $header) {
-                echo sprintf("%s: %s\n", $name, implode(',', $header));
-            }
+//            echo sprintf("\n%s %s %s\n\n", $request->getMethod(), $request->getUri(), $request->getProtocolVersion());
+//            foreach ($request->getHeaders() as $name => $header) {
+//                echo sprintf("%s: %s\n", $name, implode(',', $header));
+//            }
 
             return new Response(Status::OK, [
                 "content-type" => "text/plain; charset=utf-8"
