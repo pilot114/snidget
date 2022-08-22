@@ -19,11 +19,6 @@ class Router
         return $this->routes;
     }
 
-    public function route(): array
-    {
-        return $this->route;
-    }
-
     public function match(Request $request): array
     {
         foreach ($this->routes as $pattern => $fqn) {

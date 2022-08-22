@@ -3,20 +3,26 @@
 namespace Snidget\Async;
 
 use Snidget\Enum\Wait;
+use Snidget\Request;
 
-class Http
+class Server
 {
+    const HOST = 'localhost';
+    const PORT = 8000;
+
+    static public $kernelHandler;
+    static public Request $request;
+
     /**
      * http server
      * current stable performance: ab -n 100000 -c 40 localhost:8000/
      * RPS ~ 1650, median - 20 ms
-     * TODO: without usleep: RPS ~ 12600, median - 3 ms
+     * TODO: without usleep in scheduler: RPS ~ 12600, median - 3 ms
      */
-    static public function server($port = 8000): void
+    static public function http(): void
     {
-        echo "Starting server at port $port...\n";
-
-        $socket = stream_socket_server("tcp://localhost:$port");
+        echo sprintf("Starting server at %s:%s...\n", self::HOST, self::PORT);
+        $socket = stream_socket_server( sprintf('tcp://%s:%s', self::HOST, self::PORT));
         stream_set_blocking($socket, false);
 
         /** @phpstan-ignore-next-line */
@@ -27,7 +33,7 @@ class Http
             Scheduler::fork(function() use ($clientSocket) {
                 Scheduler::suspend(Wait::READ, $clientSocket);
                 $request = fread($clientSocket, 8192);
-                $response = self::handle($request);
+                $response = self::httpHandle($request);
 
                 Scheduler::suspend(Wait::WRITE, $clientSocket);
                 fwrite($clientSocket, $response);
@@ -36,22 +42,28 @@ class Http
         }
     }
 
-    static protected function handle(string $request): string
+    static protected function httpHandle(string $request): string
     {
         $start = hrtime(true);
-//    $msg = "Received following request:\n\n$request";
-        $msg = "my.php_" . strlen($request);
-        $msgLength = strlen($msg);
+
+        $responseString = (self::$kernelHandler)(self::$request->buildFromString($request, $start));
+        $msgLength = strlen($responseString);
+
         // https://web.dev/custom-metrics/?utm_source=devtools#server-timing-api
         $duration = round((hrtime(true) - $start) / 1_000_000, 2);
+
+        json_decode($responseString);
+        $isJson = json_last_error() === JSON_ERROR_NONE;
+        $contentType = $isJson ? 'json' : 'html';
+
         return <<<RES
 HTTP/1.1 200 OK\r
-Content-Type: text/plain\r
+Content-Type: text/$contentType; charset=utf-8\r
 Content-Length: $msgLength\r
 Connection: close\r
 Server-Timing: miss, app;dur=$duration\r
 \r
-$msg
+$responseString
 RES;
     }
 }

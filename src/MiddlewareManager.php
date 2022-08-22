@@ -29,7 +29,7 @@ class MiddlewareManager
     {
         $binds = iterator_to_array($this->getMiddlewareBinds($controller, $action));
         foreach (AttributeLoader::getBindsByAction($controller, $action) as $attribute) {
-            list($c, $m, $priority) = [$attribute->getClass(), $attribute->getMethod(), $attribute->getPriority()];
+            [$c, $m, $priority] = [$attribute->getClass(), $attribute->getMethod(), $attribute->getPriority()];
             $mwFqn = $m ? ($c . '::' . $m) : $c;
             $binds[$mwFqn] = $priority;
         }
@@ -51,7 +51,7 @@ class MiddlewareManager
     protected function getMiddlewareBinds(string $controller, string $action): iterable
     {
         foreach (AttributeLoader::getBinds($this->middlewarePaths) as $mwFqn => $attribute) {
-            list($c, $m, $priority) = [$attribute->getClass(), $attribute->getMethod(), $attribute->getPriority()];
+            [$c, $m, $priority] = [$attribute->getClass(), $attribute->getMethod(), $attribute->getPriority()];
             if (!$c || (!$m && $c === $controller) || ($m === $action && $c === $controller)) {
                 if (str_contains($mwFqn, '::')) {
                     yield $mwFqn => $priority;
@@ -66,7 +66,7 @@ class MiddlewareManager
 
     protected function createLayer($nextLayer, $layer): Closure
     {
-        list($class, $method) = $layer;
+        [$class, $method] = $layer;
         $class = $this->container->get($class);
         return fn($x) => $this->container->call($class, $method, ['request' => $x, 'next' => $nextLayer]);
     }

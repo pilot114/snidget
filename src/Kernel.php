@@ -12,6 +12,9 @@ namespace
 
 namespace Snidget
 {
+    use Snidget\Async\Debug;
+    use Snidget\Async\Scheduler;
+    use Snidget\Async\Server;
     use Snidget\DTO\Config\App;
     use Snidget\Enum\SystemEvent;
     use Throwable;
@@ -40,10 +43,10 @@ namespace Snidget
 
             $this->config = $this->container->get(App::class, ['appPath' => self::$appPath]);
 
-            $this->unexpectedHandler();
+            $this->unexpectedErrorHandler();
         }
 
-        public function run(): never
+        public function run($asyncMode = false): never
         {
             $router = $this->container->get(Router::class);
             foreach (AttributeLoader::getRoutes($this->config->getControllerPaths()) as $regex => $fqn) {
@@ -51,21 +54,41 @@ namespace Snidget
             }
             $middlewareManager = $this->container
                 ->get(MiddlewareManager::class, ['middlewarePaths' => $this->config->getMiddlewarePaths()]);
+            $request = $this->container->make(Request::class);
 
-            $request = $this->container->get(Request::class);
-            list($controller, $action, $params) = $router->match($request);
+            if ($asyncMode) {
+                $this->async(fn($request) => $this->handle($router, $middlewareManager, $request), $request);
+                exit;
+            }
 
-            $data = $middlewareManager
-                ->match($controller, $action)
-                ->handle($request, fn() => $this->container->call($this->container->get($controller), $action, $params));
-            $this->eventManager->emit(SystemEvent::SEND, $data);
+            $data = $this->handle($router, $middlewareManager, $request->buildFromGlobal());
             (new Response($data))->send();
             exit;
         }
 
+        protected function handle(Router $router, MiddlewareManager $middlewareManager, Request $request): string
+        {
+            [$controller, $action, $params] = $router->match($request);
+            $data = $middlewareManager
+                ->match($controller, $action)
+                ->handle($request, fn() => $this->container->call($this->container->get($controller), $action, $params));
+            $this->eventManager->emit(SystemEvent::SEND, $data);
+            return $data;
+        }
+
+        protected function async(callable $kernelHandler, Request $request): void
+        {
+            Server::$kernelHandler = $kernelHandler;
+            Server::$request = $request;
+            $scheduler = new Scheduler([
+                Server::http(...),
+            ], new Debug());
+            $scheduler->run();
+        }
+
         public function overrideRequest(string $uri, array $data): self
         {
-            $request = $this->container->get(Request::class);
+            $request = $this->container->make(Request::class);
             $request->uri = $uri;
             $request->data = $data;
             return $this;
@@ -108,7 +131,7 @@ namespace Snidget
             });
         }
 
-        protected function unexpectedHandler(): void
+        protected function unexpectedErrorHandler(): void
         {
             register_shutdown_function(function() {
                 if ($this->config->displayAllErrors && $error = error_get_last()) {

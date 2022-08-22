@@ -42,17 +42,22 @@ class Debug
             $prevIteration = $currentIteration;
             $skipCount = 0;
 
-            echo round($ns / 1_000_000, 2) . " ms\n";
+            echo sprintf("Event-loop iteration: %s ms\n", round($ns / 1_000_000, 2));
+
+            $totalTime = round((hrtime(true) - $this->start) / 1_000_000, 2);
+            $fibersTime = round(array_sum($this->impactPersent) / 1_000_000, 2);
+
             echo sprintf(
-                "count: %s, total time: %s ms, fibers time: %s ms\n",
+                "FIBERS> count: %s, time: %s ms (%s%% of total %s ms)\n",
                 count($this->fiberIds),
-                round((hrtime(true) - $this->start) / 1_000_000, 2),
-                round(array_sum($this->impactPersent) / 1_000_000, 2),
+                $fibersTime,
+                round($fibersTime / ($totalTime / 100), 2),
+                $totalTime,
             );
         }
     }
 
-    public function beforeFiber(int $tsNs, SplQueue $fibers, Fiber $fiber)
+    public function beforeFiber(int $tsNs, SplQueue $fibers, Fiber $fiber): void
     {
         $fiberId = spl_object_hash($fiber);
         $this->fiberIds = [ $fiberId ];
@@ -67,7 +72,7 @@ class Debug
         }
     }
 
-    public function afterFiber(int $tsNs)
+    public function afterFiber(int $tsNs): void
     {
         $this->impactPersent[$this->currentFiberId] += $tsNs - $this->startFiberTs;
     }

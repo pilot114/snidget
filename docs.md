@@ -39,6 +39,7 @@ Most of it describes use cases from common practices web-development
 09.07.22 - Events  
 15.07.22 - Events improve  
 30.07.22 - modules (Boxes)  
+15-21.08.22 - async mode
 
 # need improve:
 - Async mode base on parallel
