@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  php:
+    build: ./php_image
+    working_dir: /app/public
+    volumes:
+      - "./:/app"
+    ports:
+      - "80:8000"
+    command: ['php', 'index.php']

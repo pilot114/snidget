@@ -7,7 +7,7 @@ use Snidget\Request;
 
 class Server
 {
-    const HOST = 'localhost';
+    const HOST = '0.0.0.0';
     const PORT = 8000;
 
     static public $kernelHandler;

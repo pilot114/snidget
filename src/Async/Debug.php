@@ -44,14 +44,14 @@ class Debug
 
             echo sprintf("Event-loop iteration: %s ms\n", round($ns / 1_000_000, 2));
 
-            $totalTime = round((hrtime(true) - $this->start) / 1_000_000, 2);
-            $fibersTime = round(array_sum($this->impactPersent) / 1_000_000, 2);
+            $totalTime = round((hrtime(true) - $this->start) / 1_000_000);
+            $fibersTime = round(array_sum($this->impactPersent) / 1_000_000);
 
             echo sprintf(
                 "FIBERS> count: %s, time: %s ms (%s%% of total %s ms)\n",
                 count($this->fiberIds),
                 $fibersTime,
-                round($fibersTime / ($totalTime / 100), 2),
+                round($fibersTime / ($totalTime / 100)),
                 $totalTime,
             );
         }

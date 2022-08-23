@@ -36,7 +36,7 @@ class Request
         $this->data = $body ? json_decode($body, true) : $body;
         return $this;
 
-        // TODO
+        // TODO: заголовки и прочая информация, обычно выставляемая в SERVER, может быть полезна в Request
 
 //        $_SERVER['DOCUMENT_ROOT']      = $_SERVER['PWD'];
 //        $_SERVER['SERVER_PROTOCOL']    = $protocol;
@@ -45,7 +45,6 @@ class Request
 //        $_SERVER['SERVER_NAME']        = self::HOST;
 //        $_SERVER['SERVER_PORT']        = self::PORT;
 //        $_SERVER['REQUEST_TIME_FLOAT'] = round($startTimeNs / 1_000_000, 3);
-//        $_SERVER['REQUEST_TIME']       = (int)$_SERVER['REQUEST_TIME_FLOAT'];
 
         /*
     [HTTP_HOST] => localhost:8000

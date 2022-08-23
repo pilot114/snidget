@@ -31,7 +31,13 @@ class Scheduler
 
     public function run(): void
     {
-        while (!$this->fibers->isEmpty()) {
+        pcntl_async_signals(true);
+        $isTerminate = false;
+        pcntl_signal(SIGTERM, function() use (&$isTerminate) {
+            $isTerminate = true;
+        });
+
+        while (!$this->fibers->isEmpty() && !$isTerminate) {
             usleep(0);
             $fiber = $this->fibers->dequeue();
 
