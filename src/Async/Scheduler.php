@@ -142,7 +142,7 @@ class Scheduler
             if (!$this->waitingDelay) {
                 continue;
             }
-            $now = floor(microtime(true) * 1000);
+            $now = (int)floor(microtime(true) * 1000);
             foreach ($this->waitingDelay as $i => $delay) {
                 [$timeout, $ts] = $delay[0];
                 if ($now > ($ts + $timeout)) {
