@@ -5,7 +5,8 @@ namespace
     function dump(...$vars): void
     {
         foreach ($vars as $var) {
-            echo '<pre>' . print_r($var, true) . '</pre>';
+            $dump = print_r($var, true);
+            echo php_sapi_name() === 'cli' ? "$dump\n" : "<pre>$dump</pre>";
         }
     }
 }
@@ -17,6 +18,7 @@ namespace Snidget
     use Snidget\Async\Server;
     use Snidget\DTO\Config\App;
     use Snidget\Enum\SystemEvent;
+    use Snidget\Enum\Wait;
     use Throwable;
 
     class Kernel
@@ -83,7 +85,13 @@ namespace Snidget
             Server::$request = $request;
             $scheduler = new Scheduler([
                 Server::http(...),
-            ], new Debug());
+                function() {
+                    foreach (range(1, 10) as $item) {
+                        Scheduler::suspend(Wait::DELAY, 0.5);
+                        dump($item);
+                    }
+                },
+            ], $this->container->get(Debug::class));
             $scheduler->run();
         }
 

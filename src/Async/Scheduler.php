@@ -11,8 +11,9 @@ class Scheduler
     public SplQueue $fibers;
 
     protected ?Debug $debug;
-    protected array $waitingForRead = [];
-    protected array $waitingForWrite = [];
+    protected array $waitingRead = [];
+    protected array $waitingWrite = [];
+    protected array $waitingDelay = [];
 
     public function __construct(array $cbs, Debug $debug = null)
     {
@@ -21,6 +22,7 @@ class Scheduler
             $cbs[] = $debug->print(...);
         }
         $cbs[] = $this->ioPoll(...);
+        $cbs[] = $this->timerPoll(...);
 
         $this->fibers = new SplQueue();
         foreach ($cbs as $cb) {
@@ -68,15 +70,19 @@ class Scheduler
 
             match ($type) {
                 Wait::ASAP  => $this->fibers->enqueue($fiber),
-                Wait::READ  => $this->wait($result[1], $fiber, Wait::READ),
-                Wait::WRITE => $this->wait($result[1], $fiber, Wait::WRITE),
+                Wait::READ  => $this->wait($fiber, $this->waitingRead, $result[1], (int)$result[1]),
+                Wait::WRITE => $this->wait($fiber, $this->waitingWrite, $result[1], (int)$result[1]),
+                Wait::DELAY => $this->wait($fiber, $this->waitingDelay, [
+                    $result[1] * 1000, // delay
+                    floor(microtime(true) * 1000) // start
+                ]),
                 default => null,
             };
         }
         exit("fibers queue empty. exit...\n");
     }
 
-    static public function suspend(Wait $type, $payload = null): mixed
+    static public function suspend(Wait $type, mixed $payload = null): mixed
     {
         $args = $payload ? [$type, $payload] : [$type];
         return Fiber::suspend($args);
@@ -87,21 +93,11 @@ class Scheduler
         return Fiber::suspend($cb);
     }
 
-    protected function wait($socket, $fiber, Wait $type): void
+    protected function wait(Fiber $fiber, &$wait, $payload, $id = null): void
     {
-        $tmp = function($socket, $fiber, &$wait) {
-            $socketId = (int) $socket;
-            if (!isset($wait[$socketId])) {
-                $wait[$socketId] = [$socket, []];
-            }
-            $wait[$socketId][1][] = $fiber;
-        };
-        if ($type === Wait::WRITE) {
-            $tmp($socket, $fiber, $this->waitingForWrite);
-        }
-        if ($type === Wait::READ) {
-            $tmp($socket, $fiber, $this->waitingForRead);
-        }
+        $id = $id ?? count($wait);
+        $wait[$id] ??= [$payload, []];
+        $wait[$id][1][] = $fiber;
     }
 
     /**
@@ -113,12 +109,12 @@ class Scheduler
         while (true) {
             Scheduler::suspend(Wait::ASAP);
 
-            if (!$this->waitingForRead && !$this->waitingForWrite) {
+            if (!$this->waitingRead && !$this->waitingWrite) {
                 continue;
             }
 
-            $rSocks = array_map(fn($x) => $x[0], $this->waitingForRead);
-            $wSocks = array_map(fn($x) => $x[0], $this->waitingForWrite);
+            $rSocks = array_map(fn($x) => $x[0], $this->waitingRead);
+            $wSocks = array_map(fn($x) => $x[0], $this->waitingWrite);
             $eSocks = [];
 
             $timeout = $this->fibers->isEmpty() ? null : 0;
@@ -127,13 +123,32 @@ class Scheduler
             }
 
             foreach ($rSocks as $socket) {
-                array_map(fn($fiber) => $this->fibers->enqueue($fiber), $this->waitingForRead[(int) $socket][1]);
-                unset($this->waitingForRead[(int) $socket]);
+                array_map(fn($fiber) => $this->fibers->enqueue($fiber), $this->waitingRead[(int) $socket][1]);
+                unset($this->waitingRead[(int) $socket]);
             }
 
             foreach ($wSocks as $socket) {
-                array_map(fn($fiber) => $this->fibers->enqueue($fiber), $this->waitingForWrite[(int) $socket][1]);
-                unset($this->waitingForWrite[(int) $socket]);
+                array_map(fn($fiber) => $this->fibers->enqueue($fiber), $this->waitingWrite[(int) $socket][1]);
+                unset($this->waitingWrite[(int) $socket]);
+            }
+        }
+    }
+
+    protected function timerPoll(): void
+    {
+        /** @phpstan-ignore-next-line */
+        while (true) {
+            Scheduler::suspend(Wait::ASAP);
+            if (!$this->waitingDelay) {
+                continue;
+            }
+            $now = floor(microtime(true) * 1000);
+            foreach ($this->waitingDelay as $i => $delay) {
+                [$timeout, $ts] = $delay[0];
+                if ($now > ($ts + $timeout)) {
+                    $this->fibers->enqueue($delay[1][0]);
+                    unset($this->waitingDelay[$i]);
+                }
             }
         }
     }
