@@ -73,8 +73,8 @@ class Scheduler
                 Wait::READ  => $this->wait($fiber, $this->waitingRead, $result[1], (int)$result[1]),
                 Wait::WRITE => $this->wait($fiber, $this->waitingWrite, $result[1], (int)$result[1]),
                 Wait::DELAY => $this->wait($fiber, $this->waitingDelay, [
-                    (int)$result[1] * 1000, // delay
-                    (int)floor(microtime(true) * 1000) // start
+                    $result[1] * 1000, // delay
+                    floor(microtime(true) * 1000) // start
                 ]),
                 default => null,
             };
@@ -145,7 +145,7 @@ class Scheduler
             $now = (int)floor(microtime(true) * 1000);
             foreach ($this->waitingDelay as $i => $delay) {
                 [$timeout, $ts] = $delay[0];
-                if ($now > ($ts + $timeout)) {
+                if ($now > ((int)$ts + (int)$timeout)) {
                     $this->fibers->enqueue($delay[1][0]);
                     unset($this->waitingDelay[$i]);
                 }
