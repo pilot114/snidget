@@ -73,8 +73,8 @@ class Scheduler
                 Wait::READ  => $this->wait($fiber, $this->waitingRead, $result[1], (int)$result[1]),
                 Wait::WRITE => $this->wait($fiber, $this->waitingWrite, $result[1], (int)$result[1]),
                 Wait::DELAY => $this->wait($fiber, $this->waitingDelay, [
-                    $result[1] * 1000, // delay
-                    floor(microtime(true) * 1000) // start
+                    (int)$result[1] * 1000, // delay
+                    (int)floor(microtime(true) * 1000) // start
                 ]),
                 default => null,
             };
