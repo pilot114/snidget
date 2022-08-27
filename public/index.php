@@ -2,4 +2,4 @@
 
 include_once '../src/Kernel.php';
 
-(new Snidget\Kernel())->run(true);
+(new Snidget\Kernel())->run();

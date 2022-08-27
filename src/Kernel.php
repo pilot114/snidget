@@ -46,7 +46,7 @@ namespace Snidget
             $this->unexpectedErrorHandler();
         }
 
-        public function run($asyncMode = false): never
+        public function run(): never
         {
             $router = $this->container->get(Router::class);
             foreach (AttributeLoader::getRoutes($this->config->getControllerPaths()) as $regex => $fqn) {
@@ -56,12 +56,13 @@ namespace Snidget
                 ->get(MiddlewareManager::class, ['middlewarePaths' => $this->config->getMiddlewarePaths()]);
             $request = $this->container->make(Request::class);
 
-            if ($asyncMode) {
+            // async mode
+            if (php_sapi_name() === 'cli') {
                 $this->async(fn($request) => $this->handle($router, $middlewareManager, $request), $request);
                 exit;
             }
 
-            $data = $this->handle($router, $middlewareManager, $request->buildFromGlobal());
+            $data = $this->handle($router, $middlewareManager, $request->fromGlobal());
             (new Response($data))->send();
             exit;
         }
@@ -90,7 +91,7 @@ namespace Snidget
         {
             $request = $this->container->make(Request::class);
             $request->uri = $uri;
-            $request->data = $data;
+            $request->payload = $data;
             return $this;
         }
 

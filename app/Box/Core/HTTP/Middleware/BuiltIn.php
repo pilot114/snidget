@@ -16,10 +16,10 @@ class BuiltIn
 
     public function duckValidate(Request $request, Closure $next, App $config)
     {
-        if ($request->data) {
+        if ($request->payload) {
             $duck = new Duck($config->getDtoPaths());
             $messages = [];
-            foreach ($duck->layAnEgg($request->data) as $name => $errors) {
+            foreach ($duck->layAnEgg($request->payload) as $name => $errors) {
                 $messages[] = sprintf("Поле %s не прошло валидацию: %s", $name, implode('|', $errors));
             }
             if ($messages) {

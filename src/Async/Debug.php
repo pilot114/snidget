@@ -2,6 +2,7 @@
 
 namespace Snidget\Async;
 
+use Snidget\Module\PrintFormat;
 use SplQueue;
 use Fiber;
 use Snidget\Enum\Wait;
@@ -9,10 +10,8 @@ use Snidget\Enum\Wait;
 class Debug
 {
     protected int $start = 0;
-
     protected array $fiberIds = [];
     protected array $impactPersent = [];
-
     protected int $startFiberTs;
     protected string $currentFiberId;
 
@@ -48,11 +47,11 @@ class Debug
             $fibersTime = round(array_sum($this->impactPersent) / 1_000_000);
 
             echo sprintf(
-                "FIBERS> count: %s, time: %s ms (%s%% of total %s ms)\n",
+                "FIBERS> count: %s, time: %s ms (%s%% of total %s)\n",
                 count($this->fiberIds),
-                $fibersTime,
+                PrintFormat::millisecondPrint($fibersTime),
                 round($fibersTime / ($totalTime / 100)),
-                $totalTime,
+                PrintFormat::millisecondPrint($totalTime),
             );
         }
     }
@@ -76,4 +75,5 @@ class Debug
     {
         $this->impactPersent[$this->currentFiberId] += $tsNs - $this->startFiberTs;
     }
+
 }

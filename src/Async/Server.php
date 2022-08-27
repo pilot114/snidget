@@ -8,7 +8,7 @@ use Snidget\Request;
 class Server
 {
     const HOST = '0.0.0.0';
-    const PORT = 8000;
+    const PORT = 80;
 
     static public $kernelHandler;
     static public Request $request;
@@ -21,7 +21,7 @@ class Server
      */
     static public function http(): void
     {
-        echo sprintf("Starting server at %s:%s...\n", self::HOST, self::PORT);
+        echo sprintf("Starting server at http://%s:%s...\n", self::HOST, self::PORT);
         $socket = stream_socket_server( sprintf('tcp://%s:%s', self::HOST, self::PORT));
         stream_set_blocking($socket, false);
 
@@ -46,7 +46,7 @@ class Server
     {
         $start = hrtime(true);
 
-        $responseString = (self::$kernelHandler)(self::$request->buildFromString($request, $start));
+        $responseString = (self::$kernelHandler)(self::$request->fromString($request, $start));
         $msgLength = strlen($responseString);
 
         // https://web.dev/custom-metrics/?utm_source=devtools#server-timing-api

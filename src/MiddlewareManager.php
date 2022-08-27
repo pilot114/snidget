@@ -7,22 +7,19 @@ use Closure;
 
 class MiddlewareManager
 {
+    protected array $allMiddlewares = [];
     protected array $middlewares = [];
 
     public function __construct(
         protected array $middlewarePaths,
         protected Container $container
-    ){}
+    ){
+        $this->allMiddlewares = iterator_to_array(AttributeLoader::getBinds($middlewarePaths));
+    }
 
     public function getMiddlewares(): array
     {
         return $this->middlewares;
-    }
-
-    public function register(): self
-    {
-        // TODO: предварительная регистрация может облегчить match (актуально в асинхронном режиме)
-        return $this;
     }
 
     public function match(string $controller, string $action): self
@@ -34,8 +31,7 @@ class MiddlewareManager
             $binds[$mwFqn] = $priority;
         }
         arsort($binds);
-        $binds = array_map(fn($x) => explode('::', $x), array_keys($binds));
-        $this->middlewares = $binds;
+        $this->middlewares = array_map(fn($x) => explode('::', $x), array_keys($binds));
         return $this;
     }
 
@@ -50,7 +46,7 @@ class MiddlewareManager
 
     protected function getMiddlewareBinds(string $controller, string $action): iterable
     {
-        foreach (AttributeLoader::getBinds($this->middlewarePaths) as $mwFqn => $attribute) {
+        foreach ($this->allMiddlewares as $mwFqn => $attribute) {
             [$c, $m, $priority] = [$attribute->getClass(), $attribute->getMethod(), $attribute->getPriority()];
             if (!$c || (!$m && $c === $controller) || ($m === $action && $c === $controller)) {
                 if (str_contains($mwFqn, '::')) {
