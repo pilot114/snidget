@@ -12,7 +12,7 @@ use Snidget\Typing\Type;
 
 class AttributeLoader
 {
-    static public function getListeners(string $appPath): iterable
+    static public function getListeners(string $appPath): \Generator
     {
         foreach (Kernel::psrIterator([$appPath], true) as $className) {
             if (!class_exists($className)) {
@@ -23,12 +23,12 @@ class AttributeLoader
         }
     }
 
-    static public function getAssertions(string $className): iterable
+    static public function getAssertions(string $className): \Generator
     {
         yield from (new Reflection($className))->getAttributes(Reflection::ATTR_PROPERTY, Assert::class);
     }
 
-    static public function getBinds(array $classPaths): iterable
+    static public function getBinds(array $classPaths): \Generator
     {
         foreach (Kernel::psrIterator($classPaths) as $className) {
             $ref = new Reflection($className);
@@ -37,7 +37,7 @@ class AttributeLoader
         }
     }
 
-    static function getBindsByAction(string $controllerName, string $actionName): iterable
+    static function getBindsByAction(string $controllerName, string $actionName): \Generator
     {
         $ref = new Reflection($controllerName);
         foreach ($ref->getAttributes(Reflection::ATTR_CLASS, Bind::class) as $fqn => $attribute) {
@@ -51,7 +51,7 @@ class AttributeLoader
         }
     }
 
-    static public function getRoutes(array $controllerPaths): iterable
+    static public function getRoutes(array $controllerPaths): \Generator
     {
         foreach (Kernel::psrIterator($controllerPaths) as $className) {
             $ref = new Reflection($className);

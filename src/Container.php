@@ -42,7 +42,7 @@ class Container
         return self::$pool[$className] ?? self::$pool[$className] = $this->make($className, $params);
     }
 
-    protected function getParams(object|string $instance, string $methodName, array $params): iterable
+    protected function getParams(object|string $instance, string $methodName, array $params): \Generator
     {
         foreach ((new Reflection($instance))->getParams($methodName) as $param) {
             $paramName = $param->getName();

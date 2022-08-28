@@ -2,10 +2,11 @@
 
 namespace
 {
-    function dump(...$vars): void
+    function dump(mixed ...$vars): void
     {
         foreach ($vars as $var) {
             $dump = print_r($var, true);
+            #TODO: нужен более гибкий алгоритм. В асинхронном режиме cli, нужен вывод как для браузера
             echo php_sapi_name() === 'cli' ? "$dump\n" : "<pre>$dump</pre>";
         }
     }
@@ -28,7 +29,7 @@ namespace Snidget
         protected EventManager $eventManager;
         protected static string $appPath;
 
-        public function __construct($appPath = null)
+        public function __construct(?string $appPath = null)
         {
             self::$appPath = $appPath ?? dirname(__DIR__) . '/app';
 
@@ -48,7 +49,7 @@ namespace Snidget
             $this->unexpectedErrorHandler();
         }
 
-        public function run($isAsync = false): never
+        public function run(bool $isAsync = false): never
         {
             $router = $this->container->get(Router::class);
             foreach (AttributeLoader::getRoutes($this->config->getControllerPaths()) as $regex => $fqn) {
@@ -127,7 +128,7 @@ namespace Snidget
             $scheduler->run();
         }
 
-        protected function autoload($prefix, $baseDir): void
+        protected function autoload(string $prefix, string $baseDir): void
         {
             spl_autoload_register(function($class) use ($prefix, $baseDir) {
                 $len = strlen($prefix);

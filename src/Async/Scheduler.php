@@ -68,7 +68,7 @@ class Scheduler
         exit("fibers queue empty. exit...\n");
     }
 
-    protected function execute(Fiber $fiber)
+    protected function execute(Fiber $fiber): mixed
     {
         $this->debug && $this->debug->beforeFiber(hrtime(true), $fiber);
         if ($fiber->isStarted()) {
@@ -86,12 +86,12 @@ class Scheduler
         return Fiber::suspend($args);
     }
 
-    static public function fork(callable $cb)
+    static public function fork(callable $cb): mixed
     {
         return Fiber::suspend($cb);
     }
 
-    protected function wait(Fiber $fiber, &$wait, $payload, $id = null): void
+    protected function wait(Fiber $fiber, array &$wait, mixed $payload, ?int $id = null): void
     {
         $id = $id ?? count($wait);
         $wait[$id] ??= [$payload, []];

@@ -1,6 +1,13 @@
 parameters:
-	level: 5
+	level: 6
 	paths:
 		- src
+	# отключаем "строгие" дженерики (ReflectionClass<Foo> вместо ReflectionClass)
+	checkGenericClassInNonGenericObjectType: false
 	ignoreErrors:
+		# в асинхронном коде могут быть бесконечные циклы
 		- '#While loop condition is always true#'
+		# типы для массивов указывать излишне, т.к. для этих целей есть Collection
+		- '#no value type specified in iterable type array#'
+		# На уровне ядра использование контейнера может быть без указания типа
+		- '#Unable to resolve the template type T in call to method#'

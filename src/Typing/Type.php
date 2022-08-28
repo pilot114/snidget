@@ -18,7 +18,7 @@ abstract class Type implements JsonSerializable
         $this->fromArray($array);
     }
 
-    public function fromArray($array = []): self
+    public function fromArray(array $array = []): self
     {
         foreach ($this->getDefaultPublicFields() as $key => $default) {
             $value = $this->getValue($key, $array[$key] ?? $default);
@@ -57,7 +57,7 @@ abstract class Type implements JsonSerializable
         return $this->toArray();
     }
 
-    protected function getValue($key, $value)
+    protected function getValue(string $key, mixed $value): mixed
     {
         $prop = (new Reflection($this))->getProperty($key);
         /** @var \ReflectionNamedType|null $type */
@@ -80,7 +80,7 @@ abstract class Type implements JsonSerializable
         return $value;
     }
 
-    protected function getDefaultPublicFields(): iterable
+    protected function getDefaultPublicFields(): \Generator
     {
         foreach ((new Reflection($this))->getProperties() as $property) {
             if (!$property->isPublic()) {
@@ -96,7 +96,7 @@ abstract class Type implements JsonSerializable
         }
     }
 
-    protected function getUsedPublic(): iterable
+    protected function getUsedPublic(): \Generator
     {
         foreach ((new Reflection($this))->getProperties() as $property) {
             if (!$property->isPublic() || !in_array($property->getName(), array_flip($this->useFields))) {

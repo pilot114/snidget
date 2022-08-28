@@ -63,7 +63,7 @@ class Reflection
         }
     }
 
-    public function getParams(string $methodName): iterable
+    public function getParams(string $methodName): \Generator
     {
         $params = match ($methodName) {
             '__construct' => $this->class->getConstructor()?->getParameters() ?? [],

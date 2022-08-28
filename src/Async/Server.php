@@ -10,7 +10,7 @@ class Server
     const HOST = '0.0.0.0';
     const PORT = 80;
 
-    static public $kernelHandler;
+    static public \Closure $kernelHandler;
     static public Request $request;
 
     static protected array $serveFiles = [];
@@ -48,7 +48,7 @@ class Server
         }
     }
 
-    static protected function getPublicFiles($base): array
+    static protected function getPublicFiles(string $base): array
     {
         $files = glob($base . '*') ?: [];
         $dirs = glob($base . '*', GLOB_ONLYDIR|GLOB_NOSORT|GLOB_MARK) ?: [];

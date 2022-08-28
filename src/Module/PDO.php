@@ -48,7 +48,7 @@ class PDO
         return $this->queries;
     }
 
-    protected function prepare($method, $sql, $params): PDOStatement | false
+    protected function prepare(string $method, string $sql, array $params): PDOStatement | false
     {
         $this->queries[] = [$method, $sql, $params];
         return $this->connection->prepare($sql);

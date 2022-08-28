@@ -44,7 +44,7 @@ class MiddlewareManager
         )($request);
     }
 
-    protected function getMiddlewareBinds(string $controller, string $action): iterable
+    protected function getMiddlewareBinds(string $controller, string $action): \Generator
     {
         foreach ($this->allMiddlewares as $mwFqn => $attribute) {
             [$c, $m, $priority] = [$attribute->getClass(), $attribute->getMethod(), $attribute->getPriority()];
@@ -60,7 +60,7 @@ class MiddlewareManager
         }
     }
 
-    protected function createLayer($nextLayer, $layer): Closure
+    protected function createLayer(Closure $nextLayer, array $layer): Closure
     {
         [$class, $method] = $layer;
         $class = $this->container->get($class);
