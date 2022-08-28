@@ -16,10 +16,10 @@
         "phpunit/phpunit": "^9.5"
     },
     "scripts": {
-        "phpstan": "vendor/bin/phpstan analyse src --level 5",
-        "phploc": "vendor/bin/phploc src | grep '(LOC)'",
+        "phpstan": "vendor/bin/phpstan analyse -c phpstan.neon",
         "psalm": "vendor/bin/psalm src",
-        "tests": "XDEBUG_MODE=coverage vendor/bin/phpunit tests --testdox --coverage-html tests/coverage --coverage-filter src --process-isolation --order-by random -v --bootstrap tests/bootstrap.php"
+        "tests": "XDEBUG_MODE=coverage vendor/bin/phpunit tests --testdox --coverage-html tests/coverage --coverage-filter src --process-isolation --order-by random -v --bootstrap tests/bootstrap.php",
+        "phploc": "vendor/bin/phploc src | grep 'LOC'"
     },
     "extra": {
         "hooks": {
@@ -32,7 +32,8 @@
                 "echo committing as $(git config user.name)",
                 "composer phpstan",
                 "composer psalm",
-                "composer tests"
+                "composer tests",
+                "composer phploc"
             ]
         }
     },

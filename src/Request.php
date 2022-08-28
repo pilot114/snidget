@@ -8,13 +8,19 @@ use Snidget\Exception\SnidgetException;
 class Request
 {
     public string $uri;
-    public string $method;
+    public string $method = 'GET';
     public array $headers = [];
     public mixed $payload;
     public float $requestTimeMs;
 
+    public bool $isOverrided = false;
+
     public function fromGlobal(): self
     {
+        if ($this->isOverrided) {
+            return $this;
+        }
+
         $this->uri = trim($_SERVER['QUERY_STRING'] ?? $_SERVER['REQUEST_URI'], '/');
         $this->payload = json_decode(file_get_contents('php://input'), true);
         $this->method = $_SERVER['REQUEST_METHOD'];
@@ -29,6 +35,10 @@ class Request
 
     public function fromString(string $request, float $startTimeNs): self
     {
+        if ($this->isOverrided) {
+            return $this;
+        }
+
         [$headers, $body] = str_contains($request, "\n\n") ? explode("\n\n", $request) : [$request, null];
         $this->payload = $body ? json_decode($body, true) : $body;
         $this->requestTimeMs = round($startTimeNs / 1_000_000, 4);

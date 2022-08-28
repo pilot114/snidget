@@ -9,7 +9,6 @@ use Snidget\Enum\Wait;
 class Scheduler
 {
     public SplQueue $fibers;
-
     protected ?Debug $debug;
     protected array $waitingRead = [];
     protected array $waitingWrite = [];
@@ -22,7 +21,7 @@ class Scheduler
             $cbs[] = $debug->print(...);
         }
         $cbs[] = $this->ioPoll(...);
-        $cbs[] = $this->timerPoll(...);
+        $cbs[] = $this->delayPoll(...);
 
         $this->fibers = new SplQueue();
         foreach ($cbs as $cb) {
@@ -31,7 +30,7 @@ class Scheduler
         }
     }
 
-    public function run(): void
+    public function run(): never
     {
         pcntl_async_signals(true);
         $isTerminate = false;
@@ -46,18 +45,7 @@ class Scheduler
             if ($fiber->isTerminated()) {
                 continue;
             }
-
-            $this->debug && $this->debug->beforeFiber(
-                hrtime(true),
-                $this->fibers,
-                $fiber
-            );
-            if ($fiber->isStarted()) {
-                $result = $fiber->isSuspended() ? $fiber->resume() : null;
-            } else {
-                $result = $fiber->start();
-            }
-            $this->debug && $this->debug->afterFiber(hrtime(true));
+            $result = $this->execute($fiber);
 
             if (is_callable($result)) {
                 $this->fibers->enqueue(new Fiber($result));
@@ -66,9 +54,7 @@ class Scheduler
             if (!is_array($result)) {
                 continue;
             }
-            $type = $result[0];
-
-            match ($type) {
+            match ($result[0]) {
                 Wait::ASAP  => $this->fibers->enqueue($fiber),
                 Wait::READ  => $this->wait($fiber, $this->waitingRead, $result[1], (int)$result[1]),
                 Wait::WRITE => $this->wait($fiber, $this->waitingWrite, $result[1], (int)$result[1]),
@@ -80,6 +66,18 @@ class Scheduler
             };
         }
         exit("fibers queue empty. exit...\n");
+    }
+
+    protected function execute(Fiber $fiber)
+    {
+        $this->debug && $this->debug->beforeFiber(hrtime(true), $fiber);
+        if ($fiber->isStarted()) {
+            $result = $fiber->isSuspended() ? $fiber->resume() : null;
+        } else {
+            $result = $fiber->start();
+        }
+        $this->debug && $this->debug->afterFiber(hrtime(true), $fiber);
+        return $result;
     }
 
     static public function suspend(Wait $type, mixed $payload = null): mixed
@@ -105,7 +103,6 @@ class Scheduler
      */
     protected function ioPoll(): void
     {
-        /** @phpstan-ignore-next-line */
         while (true) {
             Scheduler::suspend(Wait::ASAP);
 
@@ -134,9 +131,8 @@ class Scheduler
         }
     }
 
-    protected function timerPoll(): void
+    protected function delayPoll(): void
     {
-        /** @phpstan-ignore-next-line */
         while (true) {
             Scheduler::suspend(Wait::ASAP);
             if (!$this->waitingDelay) {

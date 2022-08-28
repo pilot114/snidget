@@ -2,4 +2,5 @@
 
 include_once '../src/Kernel.php';
 
-(new Snidget\Kernel())->run();
+$isAsync = php_sapi_name() === 'cli';
+(new Snidget\Kernel())->run($isAsync);

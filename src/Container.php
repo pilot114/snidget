@@ -39,10 +39,7 @@ class Container
      */
     public function get(string $className, array $params = [])
     {
-        if (isset(self::$pool[$className])) {
-            return self::$pool[$className];
-        }
-        return self::$pool[$className] = $this->make($className, $params);
+        return self::$pool[$className] ?? self::$pool[$className] = $this->make($className, $params);
     }
 
     protected function getParams(object|string $instance, string $methodName, array $params): iterable

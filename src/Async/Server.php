@@ -13,19 +13,25 @@ class Server
     static public $kernelHandler;
     static public Request $request;
 
+    static protected array $serveFiles = [];
+
     /**
      * http server
-     * current stable performance: ab -n 100000 -c 40 localhost:8000/
+     * current stable performance: ab -n 100000 -c 40 127.0.0.1:8000/
      * RPS ~ 1650, median - 20 ms
      * TODO: without usleep in scheduler: RPS ~ 12600, median - 3 ms
      */
     static public function http(): void
     {
-        echo sprintf("Starting server at http://%s:%s...\n", self::HOST, self::PORT);
+        self::$serveFiles = array_map(
+            fn($x) => str_replace($_SERVER['PWD'] . '/', '', $x),
+            self::getPublicFiles($_SERVER['PWD'])
+        );
+
+        echo sprintf("Starting server at http://%s:%s, serve %s\n", self::HOST, self::PORT, $_SERVER['PWD']);
         $socket = stream_socket_server( sprintf('tcp://%s:%s', self::HOST, self::PORT));
         stream_set_blocking($socket, false);
 
-        /** @phpstan-ignore-next-line */
         while (true) {
             Scheduler::suspend(Wait::READ, $socket);
             $clientSocket = stream_socket_accept($socket, 0);
@@ -42,11 +48,34 @@ class Server
         }
     }
 
+    static protected function getPublicFiles($base): array
+    {
+        $files = glob($base . '*') ?: [];
+        $dirs = glob($base . '*', GLOB_ONLYDIR|GLOB_NOSORT|GLOB_MARK) ?: [];
+        foreach ($dirs as $dir) {
+            $dirFiles = self::getPublicFiles($dir);
+            $files = array_merge($files, $dirFiles);
+        }
+        return array_filter($files, fn($x) => is_file($x));
+    }
+
     static protected function httpHandle(string $request): string
     {
         $start = hrtime(true);
+        $request = self::$request->fromString($request, $start);
 
-        $responseString = (self::$kernelHandler)(self::$request->fromString($request, $start));
+        // static and separate php scripts
+        if (in_array($request->uri, self::$serveFiles)) {
+            if (str_ends_with($request->uri, '.php')) {
+                // TODO: handle output and terminate in current process
+                $responseString = shell_exec('php ' . $request->uri);
+            } else {
+                $responseString = file_get_contents($request->uri);
+            }
+        } else {
+            $responseString = (self::$kernelHandler)($request);
+        }
+
         $msgLength = strlen($responseString);
 
         // https://web.dev/custom-metrics/?utm_source=devtools#server-timing-api

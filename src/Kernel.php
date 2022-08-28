@@ -48,7 +48,7 @@ namespace Snidget
             $this->unexpectedErrorHandler();
         }
 
-        public function run(): never
+        public function run($isAsync = false): never
         {
             $router = $this->container->get(Router::class);
             foreach (AttributeLoader::getRoutes($this->config->getControllerPaths()) as $regex => $fqn) {
@@ -56,10 +56,10 @@ namespace Snidget
             }
             $middlewareManager = $this->container
                 ->get(MiddlewareManager::class, ['middlewarePaths' => $this->config->getMiddlewarePaths()]);
-            $request = $this->container->make(Request::class);
+            $request = $this->container->get(Request::class);
 
             // async mode
-            if (php_sapi_name() === 'cli') {
+            if ($isAsync) {
                 $this->async(fn($request) => $this->handle($router, $middlewareManager, $request), $request);
                 exit;
             }
@@ -69,37 +69,13 @@ namespace Snidget
             exit;
         }
 
-        protected function handle(Router $router, MiddlewareManager $middlewareManager, Request $request): string
-        {
-            [$controller, $action, $params] = $router->match($request);
-            $data = $middlewareManager
-                ->match($controller, $action)
-                ->handle($request, fn() => $this->container->call($this->container->get($controller), $action, $params));
-            $this->eventManager->emit(SystemEvent::SEND, $data);
-            return $data;
-        }
-
-        protected function async(callable $kernelHandler, Request $request): void
-        {
-            Server::$kernelHandler = $kernelHandler;
-            Server::$request = $request;
-            $scheduler = new Scheduler([
-                Server::http(...),
-                function() {
-                    foreach (range(1, 10) as $item) {
-                        Scheduler::suspend(Wait::DELAY, 0.5);
-                        dump($item);
-                    }
-                },
-            ], $this->container->get(Debug::class));
-            $scheduler->run();
-        }
-
-        public function overrideRequest(string $uri, array $data): self
+        public function overrideRequest(string $uri, string $method, array $data): self
         {
             $request = $this->container->make(Request::class);
             $request->uri = $uri;
+            $request->method = $method;
             $request->payload = $data;
+            $request->isOverrided = true;
             return $this;
         }
 
@@ -123,6 +99,32 @@ namespace Snidget
                     }
                 }
             }
+        }
+
+        protected function handle(Router $router, MiddlewareManager $middlewareManager, Request $request): string
+        {
+            [$controller, $action, $params] = $router->match($request);
+            $data = $middlewareManager
+                ->match($controller, $action)
+                ->handle($request, fn() => $this->container->call($this->container->get($controller), $action, $params));
+            $this->eventManager->emit(SystemEvent::SEND, $data);
+            return $data;
+        }
+
+        protected function async(callable $kernelHandler, Request $request): void
+        {
+            Server::$kernelHandler = $kernelHandler;
+            Server::$request = $request;
+            $scheduler = new Scheduler([
+                Server::http(...),
+//                function() {
+//                    foreach (range(1, 10) as $item) {
+//                        Scheduler::suspend(Wait::DELAY, 0.2);
+//                        dump($item);
+//                    }
+//                },
+            ], $this->container->get(Debug::class));
+            $scheduler->run();
         }
 
         protected function autoload($prefix, $baseDir): void
