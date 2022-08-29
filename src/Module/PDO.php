@@ -40,7 +40,7 @@ class PDO
     public function count(string $sql, array $params = []): int
     {
         $stmt = $this->prepare(__METHOD__, $sql, $params);
-        return ($stmt && $stmt->execute($params)) ? $stmt->fetchColumn() : 0;
+        return ($stmt && $stmt->execute($params)) ? (int)$stmt->fetchColumn() : 0;
     }
 
     public function getLog(): array

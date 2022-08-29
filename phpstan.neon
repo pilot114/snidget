@@ -9,5 +9,7 @@ parameters:
 		- '#While loop condition is always true#'
 		# типы для массивов указывать излишне, т.к. для этих целей есть Collection
 		- '#no value type specified in iterable type array#'
-		# На уровне ядра использование контейнера может быть без указания типа
+		# дженерики
 		- '#Unable to resolve the template type T in call to method#'
+		- '#constructor expects class-string<T of object>|T of object, string given#'
+		- '#expects class-string<mixed>, string given#'

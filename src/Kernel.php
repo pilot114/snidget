@@ -89,7 +89,7 @@ namespace Snidget
                 $relPath = str_replace(self::$appPath, 'app', $classPath);
                 $parts = array_filter(explode('/', trim($relPath, '.')));
                 $classNamespace = '\\' . implode('\\', array_map(ucfirst(...), $parts)) . '\\';
-                foreach (glob($classPath . '/*') as $file) {
+                foreach (glob($classPath . '/*') ?: [] as $file) {
                     if ($recursive && is_dir($file)) {
                         yield from self::psrIterator([$file], true);
                         continue;
@@ -112,7 +112,7 @@ namespace Snidget
             return $data;
         }
 
-        protected function async(callable $kernelHandler, Request $request): void
+        protected function async(\Closure $kernelHandler, Request $request): void
         {
             Server::$kernelHandler = $kernelHandler;
             Server::$request = $request;

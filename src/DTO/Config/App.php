@@ -13,27 +13,26 @@ class App
         protected string $appPath
     ){}
 
-    public function getControllerPaths(): array
+    protected function getPathByType(string $dir): array
     {
         return [
-            $this->appPath . '/' . $this->controllerPath,
-            ...glob($this->appPath . '/Box/*/' . $this->controllerPath),
+            $this->appPath . '/' . $dir,
+            ...(glob($this->appPath . '/Box/*/' . $dir) ?: []),
         ];
+    }
+
+    public function getControllerPaths(): array
+    {
+        return $this->getPathByType($this->controllerPath);
     }
 
     public function getMiddlewarePaths(): array
     {
-        return [
-            $this->appPath . '/' . $this->middlewarePath,
-            ...glob($this->appPath . '/Box/*/' . $this->middlewarePath),
-        ];
+        return $this->getPathByType($this->middlewarePath);
     }
 
     public function getDtoPaths(): array
     {
-        return [
-            $this->appPath . '/' . $this->dtoPath,
-            ...glob($this->appPath . '/Box/*/' . $this->dtoPath),
-        ];
+        return $this->getPathByType($this->dtoPath);
     }
 }
