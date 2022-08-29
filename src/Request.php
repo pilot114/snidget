@@ -39,7 +39,7 @@ class Request
             return $this;
         }
 
-        [$headers, $body] = str_contains($request, "\n\n") ? explode("\n\n", $request) : [$request, null];
+        [$headers, $body] = explode("\n\n", $request);
         $this->payload = $body ? json_decode($body, true) : $body;
         $this->requestTimeMs = round($startTimeNs / 1_000_000, 4);
         $this->parseHeaders($headers);
@@ -49,7 +49,7 @@ class Request
     protected function parseHeaders(string $headers): void
     {
         $headers = array_filter(explode("\n", $headers), fn($x) => trim($x));
-        [$this->method, $uri] = explode(' ', array_shift($headers));
+        [$this->method, $uri] = explode(' ', array_shift($headers) ?? '');
         $this->uri = trim($uri, '/');
 
         foreach ($headers as $header) {

@@ -3,6 +3,7 @@
 namespace Snidget\Async;
 
 use Snidget\Enum\Wait;
+use Snidget\Exception\SnidgetException;
 use Snidget\Request;
 
 class Server
@@ -29,16 +30,27 @@ class Server
         );
 
         echo sprintf("Starting server at http://%s:%s, serve %s\n", self::HOST, self::PORT, $_SERVER['PWD']);
-        $socket = stream_socket_server( sprintf('tcp://%s:%s', self::HOST, self::PORT));
+        $address = sprintf('tcp://%s:%s', self::HOST, self::PORT);
+        $socket = stream_socket_server($address);
+        if (!$socket) {
+            throw new SnidgetException("Не удалось создать сокет с адресом $address");
+        }
+
         stream_set_blocking($socket, false);
 
         while (true) {
             Scheduler::suspend(Wait::READ, $socket);
             $clientSocket = stream_socket_accept($socket, 0);
+            if (!$clientSocket) {
+                throw new SnidgetException("Не удалось создать клиентский сокет");
+            }
 
             Scheduler::fork(function() use ($clientSocket) {
                 Scheduler::suspend(Wait::READ, $clientSocket);
                 $request = fread($clientSocket, 8192);
+                if (!$request) {
+                    throw new SnidgetException("Не удалось прочитать данные из клиентского сокета");
+                }
                 $response = self::httpHandle($request);
 
                 Scheduler::suspend(Wait::WRITE, $clientSocket);
