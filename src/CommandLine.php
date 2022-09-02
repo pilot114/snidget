@@ -7,7 +7,7 @@ use Snidget\Enum\CLIStyle;
 
 class CommandLine
 {
-    protected bool $isPiped;
+    protected bool $isPiped = false;
     protected int $rows;
     protected int $cols;
     protected int $colors;
@@ -15,7 +15,10 @@ class CommandLine
     public function __construct()
     {
         // https://stackoverflow.com/a/11327451
-        $this->isPiped = (fstat(STDOUT)['mode'] & 0170000) === 0010000;
+        $fstat = fstat(STDOUT);
+        if ($fstat) {
+            $this->isPiped = ($fstat['mode'] & 0170000) === 0010000;
+        }
         $this->rows = intval(`tput lines`);
         $this->cols = intval(`tput cols`);
         $this->colors = max(8, intval(`tput colors`));
@@ -24,9 +27,9 @@ class CommandLine
     /**
      * Вывод данных
      */
-    public function out(string $message, bool $appendEndLine = false, $stream = STDOUT): void
+    public function out(string $message, bool $isEndLine = false, bool $isError = false): void
     {
-        fwrite($stream, $message . ($appendEndLine ? PHP_EOL : ""));
+        fwrite($isError ? STDERR : STDOUT, $message . ($isEndLine ? PHP_EOL : ""));
     }
 
     /**
@@ -46,7 +49,7 @@ class CommandLine
             'view'  => "\033[?25h",
         ];
         if (isset($commands[$commandName])) {
-            $this->out($commands[$commandName], false, STDERR);
+            $this->out($commands[$commandName], false, true);
         }
     }
 
@@ -64,7 +67,7 @@ class CommandLine
             'right'  => "\033[K",
         ];
         if (isset($commands[$commandName])) {
-            $this->out($commands[$commandName], false, STDERR);
+            $this->out($commands[$commandName]);
         }
     }
 
@@ -110,7 +113,7 @@ class CommandLine
         $attr = array_filter($attr);
 
         $attr = implode(';', $attr);
-        $this->out("\033[{$attr}m", false, STDERR);
+        $this->out("\033[{$attr}m", false, true);
     }
 
     /**
@@ -118,10 +121,10 @@ class CommandLine
      */
     public function bell(): void
     {
-        $this->out("\007", false, STDERR);
+        $this->out("\007", false, true);
     }
 
-    public function progress($bar = false): void
+    public function progress(bool $bar = false): void
     {
         $this->cursor('save');
         $i = 0;
@@ -129,7 +132,7 @@ class CommandLine
             $this->cursor('load');
             if ($bar) {
                 $progressBar = sprintf("[%s]", str_repeat('#', $i) . str_repeat('.', 100 - $i));
-                $this->out($progressBar, false, STDERR);
+                $this->out($progressBar, false, true);
                 $this->out("{$i}% complete", true);
                 $this->cursor('up');
             } else {
@@ -138,7 +141,7 @@ class CommandLine
             usleep(200000);
             $i+= 10;
         }
-        $this->out(null, true);
+        $this->out('', true);
     }
 
     /**
@@ -146,8 +149,8 @@ class CommandLine
      */
     public function wait(): void
     {
-        $this->out("you sure? (y/n):", false, STDERR);
-        if (strtolower(fread(STDIN, 1)) === 'y') {
+        $this->out("you sure? (y/n):", false, true);
+        if (strtolower(fread(STDIN, 1) ?: '') === 'y') {
             $this->out('yes!');
         } else {
             $this->out('no!!');

@@ -1,4 +1,7 @@
 #!/usr/bin/php
 <?php
 
-var_dump([1,2,3]);
+include_once '../src/Kernel.php';
+
+$kernel = new Snidget\Kernel();
+$cli = new \Snidget\CommandLine();
