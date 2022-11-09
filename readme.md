@@ -22,11 +22,11 @@ best known for early use in the wizarding game of Quidditch, eventually being re
     public - dir for public scripts
     data - outer data project
     app - dir for you source code
-     ┣━━ Command - CLI handlers
-     ┣━━ Controller - HTTP handlers
+     ┣━━ Box - framework modules
+     ┣━━ CLI - CLI handlers
+     ┣━━ DTO - data transfer objects (for Api and Database)
+     ┣━━ HTTP - HTTP handlers (Controllers and Middlewares)
      ┣━━ Domain - own domain classes of project
-     ┣━━ DTO - data transfer objects
-     ┣━━ Middleware - addition flexible HTTP handlers
      ┣━━ app - CLI entrypoint (can be renamed)
      ┗━━ container.php - DI configuration
 
