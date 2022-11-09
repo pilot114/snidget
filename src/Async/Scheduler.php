@@ -105,7 +105,6 @@ class Scheduler
     {
         while (true) {
             Scheduler::suspend(Wait::ASAP);
-
             if (!$this->waitingRead && !$this->waitingWrite) {
                 continue;
             }

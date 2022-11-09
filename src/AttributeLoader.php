@@ -14,7 +14,7 @@ class AttributeLoader
 {
     static public function getListeners(string $appPath): \Generator
     {
-        foreach (Kernel::psrIterator([$appPath], true) as $className) {
+        foreach (psrIterator([$appPath], true) as $className) {
             if (!class_exists($className)) {
                 continue;
             }
@@ -30,7 +30,7 @@ class AttributeLoader
 
     static public function getBinds(array $classPaths): \Generator
     {
-        foreach (Kernel::psrIterator($classPaths) as $className) {
+        foreach (psrIterator($classPaths) as $className) {
             $ref = new Reflection($className);
             yield from $ref->getAttributes(Reflection::ATTR_CLASS, Bind::class);
             yield from $ref->getAttributes(Reflection::ATTR_METHOD, Bind::class);
@@ -53,7 +53,7 @@ class AttributeLoader
 
     static public function getRoutes(array $controllerPaths): \Generator
     {
-        foreach (Kernel::psrIterator($controllerPaths) as $className) {
+        foreach (psrIterator($controllerPaths) as $className) {
             $ref = new Reflection($className);
             $prefix = $ref->getAttributes(Reflection::ATTR_CLASS, Route::class)->current()?->getPrefix();
             foreach ($ref->getAttributes(Reflection::ATTR_METHOD, Route::class) as $fqn => $attribute) {

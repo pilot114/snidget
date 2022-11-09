@@ -13,14 +13,6 @@ class App
         protected string $appPath
     ){}
 
-    protected function getPathByType(string $dir): array
-    {
-        return [
-            $this->appPath . '/' . $dir,
-            ...(glob($this->appPath . '/Box/*/' . $dir) ?: []),
-        ];
-    }
-
     public function getControllerPaths(): array
     {
         return $this->getPathByType($this->controllerPath);
@@ -34,5 +26,13 @@ class App
     public function getDtoPaths(): array
     {
         return $this->getPathByType($this->dtoPath);
+    }
+
+    protected function getPathByType(string $dir): array
+    {
+        return [
+            $this->appPath . '/' . $dir,
+            ...(glob($this->appPath . '/Box/*/' . $dir) ?: []),
+        ];
     }
 }

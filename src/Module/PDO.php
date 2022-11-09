@@ -13,6 +13,9 @@ class PDO
 
     public function __construct(PdoConnect $config)
     {
+        if (str_starts_with($config->dsn, 'sqlite:') && !file_exists($config->dsn)) {
+            touch(str_replace('sqlite:', '', $config->dsn));
+        }
         $this->connection = new NativePDO(
             $config->dsn,
             $config->user,

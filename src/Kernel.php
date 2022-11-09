@@ -2,12 +2,54 @@
 
 namespace
 {
+    function run(bool $isAsync)
+    {
+        (new Snidget\Kernel())->run($isAsync);
+    }
+
     function dump(mixed ...$vars): void
     {
         foreach ($vars as $var) {
             $dump = print_r($var, true);
             #TODO: нужен более гибкий алгоритм. В асинхронном режиме cli, нужен вывод как для браузера
             echo php_sapi_name() === 'cli' ? "$dump\n" : "<pre>$dump</pre>";
+        }
+    }
+
+    function autoload(string $prefix, string $baseDir): void
+    {
+        spl_autoload_register(function($class) use ($prefix, $baseDir) {
+            $len = strlen($prefix);
+            if (strncmp($prefix, $class, $len) !== 0) {
+                return;
+            }
+            $relativeClass = substr($class, $len);
+            $file = $baseDir . str_replace('\\', '/', $relativeClass) . '.php';
+            if (file_exists($file)) {
+                require $file;
+            }
+        });
+    }
+
+    /**
+     * @return iterable<string>
+     */
+    function psrIterator(array $classPaths, bool $recursive = false): iterable
+    {
+        foreach ($classPaths as $classPath) {
+            $relPath = str_replace(\Snidget\Kernel::$appPath, 'app', $classPath);
+            $parts = array_filter(explode('/', trim($relPath, '.')));
+            $classNamespace = '\\' . implode('\\', array_map(ucfirst(...), $parts)) . '\\';
+            foreach (glob($classPath . '/*') ?: [] as $file) {
+                if ($recursive && is_dir($file)) {
+                    yield from psrIterator([$file], true);
+                    continue;
+                }
+                preg_match("#/(?<className>\w+)\.php#i", $file, $matches);
+                if (!empty($matches['className'])) {
+                    yield $classNamespace . $matches['className'];
+                }
+            }
         }
     }
 }
@@ -27,15 +69,15 @@ namespace Snidget
         protected Container $container;
         protected App $config;
         protected EventManager $eventManager;
-        protected static string $appPath;
+        public static string $appPath;
 
         public function __construct(?string $appPath = null)
         {
             self::$appPath = $appPath ?? dirname(__DIR__) . '/app';
 
             if (!$appPath) {
-                $this->autoload('Snidget\\', __DIR__ . '/');
-                $this->autoload('App\\', self::$appPath . '/');
+                autoload('Snidget\\', __DIR__ . '/');
+                autoload('App\\', self::$appPath . '/');
             }
 
             $this->container = new Container();
@@ -70,36 +112,14 @@ namespace Snidget
             exit;
         }
 
-        public function overrideRequest(string $uri, string $method, array $data): self
+        public function overrideRequest(string $uri, string $method, array $payload): self
         {
             $request = $this->container->make(Request::class);
             $request->uri = $uri;
             $request->method = $method;
-            $request->payload = $data;
+            $request->payload = $payload;
             $request->isOverrided = true;
             return $this;
-        }
-
-        /**
-         * @return iterable<string>
-         */
-        static public function psrIterator(array $classPaths, bool $recursive = false): iterable
-        {
-            foreach ($classPaths as $classPath) {
-                $relPath = str_replace(self::$appPath, 'app', $classPath);
-                $parts = array_filter(explode('/', trim($relPath, '.')));
-                $classNamespace = '\\' . implode('\\', array_map(ucfirst(...), $parts)) . '\\';
-                foreach (glob($classPath . '/*') ?: [] as $file) {
-                    if ($recursive && is_dir($file)) {
-                        yield from self::psrIterator([$file], true);
-                        continue;
-                    }
-                    preg_match("#/(?<className>\w+)\.php#i", $file, $matches);
-                    if (!empty($matches['className'])) {
-                        yield $classNamespace . $matches['className'];
-                    }
-                }
-            }
         }
 
         protected function handle(Router $router, MiddlewareManager $middlewareManager, Request $request): string
@@ -118,29 +138,8 @@ namespace Snidget
             Server::$request = $request;
             $scheduler = new Scheduler([
                 Server::http(...),
-//                function() {
-//                    foreach (range(1, 10) as $item) {
-//                        Scheduler::suspend(Wait::DELAY, 0.2);
-//                        dump($item);
-//                    }
-//                },
             ], $this->container->get(Debug::class));
             $scheduler->run();
-        }
-
-        protected function autoload(string $prefix, string $baseDir): void
-        {
-            spl_autoload_register(function($class) use ($prefix, $baseDir) {
-                $len = strlen($prefix);
-                if (strncmp($prefix, $class, $len) !== 0) {
-                    return;
-                }
-                $relativeClass = substr($class, $len);
-                $file = $baseDir . str_replace('\\', '/', $relativeClass) . '.php';
-                if (file_exists($file)) {
-                    require $file;
-                }
-            });
         }
 
         protected function unexpectedErrorHandler(): void
