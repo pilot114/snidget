@@ -2,7 +2,7 @@
 
 namespace
 {
-    function run(bool $isAsync)
+    function run(bool $isAsync): never
     {
         (new Snidget\Kernel())->run($isAsync);
     }

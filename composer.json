@@ -11,7 +11,6 @@
         "ext-xdebug": "*",
         "phpstan/phpstan": "^1.6",
         "phploc/phploc": "^7.0",
-        "vimeo/psalm": "^4.23",
         "brainmaestro/composer-git-hooks": "^2.8",
         "phpunit/phpunit": "^9.5"
     },
@@ -19,7 +18,9 @@
         "phpstan": "vendor/bin/phpstan analyse -c phpstan.neon",
         "psalm": "vendor/bin/psalm src",
         "tests": "XDEBUG_MODE=coverage vendor/bin/phpunit tests --testdox --coverage-html tests/coverage --coverage-filter src --process-isolation --order-by random -v --bootstrap tests/bootstrap.php",
-        "phploc": "vendor/bin/phploc src | grep 'LOC'"
+        "phploc": "vendor/bin/phploc src | grep 'LOC'",
+        "start_sync": "cd public && sudo php -S 127.0.0.1:99",
+        "start_async": "docker-compose up"
     },
     "extra": {
         "hooks": {

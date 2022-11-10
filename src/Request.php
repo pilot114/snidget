@@ -38,8 +38,7 @@ class Request
         if ($this->isOverrided) {
             return $this;
         }
-
-        [$headers, $body] = explode("\n\n", $request);
+        [$headers, $body] = str_contains($request, "\n\n") ? explode("\n\n", $request) : [$request, ''];
         $this->payload = $body ? json_decode($body, true) : $body;
         $this->requestTimeMs = round($startTimeNs / 1_000_000, 4);
         $this->parseHeaders($headers);

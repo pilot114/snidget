@@ -1,7 +1,7 @@
 #!/usr/bin/php
 <?php
 
-include_once '../src/Kernel.php';
+include_once __DIR__ . '/../src/Kernel.php';
 
 $kernel = new Snidget\Kernel();
 $cli = new \Snidget\CommandLine();

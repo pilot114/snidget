@@ -19,7 +19,8 @@ best known for early use in the wizarding game of Quidditch, eventually being re
 
 # App structure
 
-    public - dir for public scripts
+    public - public scripts
+    bin - command-line executable scripts
     data - outer data project
     app - dir for you source code
      ┣━━ Box - framework modules
