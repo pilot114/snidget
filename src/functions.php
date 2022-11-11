@@ -2,7 +2,7 @@
 
 function run(bool $isAsync): never
 {
-    (new Snidget\Kernel())->run($isAsync);
+    (new Snidget\Kernel($isAsync))->run();
 }
 
 function isCli(): bool

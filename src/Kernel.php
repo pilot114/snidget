@@ -15,23 +15,31 @@ class Kernel
     protected AppPaths $config;
     protected EventManager $eventManager;
     public static string $appPath;
+    public bool $isAsync = false;
 
-    public function __construct(?string $appPath = null)
+    public function __construct(bool $isAsync = false, ?string $appPath = null)
     {
         self::$appPath = $appPath ?? dirname(__DIR__) . '/app';
+        $this->isAsync = $isAsync;
 
         $this->container = new Container();
         $eventManager = $this->container->get(EventManager::class);
         $eventManager->register(self::$appPath);
         $eventManager->emit(SystemEvent::START);
-        $this->eventManager = $eventManager;
+        if (!$isAsync) {
+            $eventManager->emit(
+                SystemEvent::REQUEST,
+                $this->container->get(Request::class)->fromGlobal()
+            );
+        }
 
+        $this->eventManager = $eventManager;
         $this->config = $this->container->get(AppPaths::class, ['appPath' => self::$appPath]);
 
         $this->unexpectedErrorHandler();
     }
 
-    public function run(bool $isAsync = false): never
+    public function run(): never
     {
         $router = $this->container->get(Router::class);
         foreach (AttributeLoader::getRoutes($this->config->getControllerPaths()) as $regex => $fqn) {
@@ -41,14 +49,14 @@ class Kernel
             ->get(MiddlewareManager::class, ['middlewarePaths' => $this->config->getMiddlewarePaths()]);
         $request = $this->container->get(Request::class);
 
-        // async mode
-        if ($isAsync) {
-            $this->async(fn($request) => $this->handle($router, $middlewareManager, $request), $request);
+        if (!$this->isAsync) {
+            $data = $this->handle($router, $middlewareManager, $request->fromGlobal());
+            (new Response($data))->send();
+            exit;
         }
 
-        $data = $this->handle($router, $middlewareManager, $request->fromGlobal());
-        (new Response($data))->send();
-        exit;
+        $this->eventManager->emit(SystemEvent::REQUEST, $request);
+        $this->async(fn($request) => $this->handle($router, $middlewareManager, $request), $request);
     }
 
     public function overrideRequest(string $uri, string $method, array $payload): self
@@ -57,7 +65,7 @@ class Kernel
         $request->uri = $uri;
         $request->method = $method;
         $request->payload = $payload;
-        $request->isOverrided = true;
+        $request->isOverride = true;
         return $this;
     }
 
@@ -67,7 +75,7 @@ class Kernel
         $data = $middlewareManager
             ->match($controller, $action)
             ->handle($request, fn() => $this->container->call($this->container->get($controller), $action, $params));
-        $this->eventManager->emit(SystemEvent::SEND, $data);
+        $this->eventManager->emit(SystemEvent::RESPONSE, $data);
         return $data;
     }
 

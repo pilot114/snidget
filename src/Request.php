@@ -13,11 +13,11 @@ class Request
     public mixed $payload;
     public float $requestTimeMs;
 
-    public bool $isOverrided = false;
+    public bool $isOverride = false;
 
     public function fromGlobal(): self
     {
-        if ($this->isOverrided) {
+        if ($this->isOverride) {
             return $this;
         }
 
@@ -35,7 +35,7 @@ class Request
 
     public function fromString(string $request, float $startTimeNs): self
     {
-        if ($this->isOverrided) {
+        if ($this->isOverride) {
             return $this;
         }
         [$headers, $body] = str_contains($request, "\n\n") ? explode("\n\n", $request) : [$request, ''];

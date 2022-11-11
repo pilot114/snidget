@@ -18,16 +18,16 @@ class Assert
     public function check(mixed $value): array
     {
         $errors = [];
-        if (isset($this->min) && $value < $this->min) {
+        if (is_int($this->min) && $value < $this->min) {
             $errors[] = 'Значение меньше ' . $this->min;
         }
-        if (isset($this->max) && $value > $this->max) {
+        if (is_int($this->max) && $value > $this->max) {
             $errors[] = 'Значение больше ' . $this->max;
         }
-        if (isset($this->minLength) && mb_strlen($value) < $this->minLength) {
+        if (is_int($this->minLength) && mb_strlen($value) < $this->minLength) {
             $errors[] = "Значение короче {$this->minLength} символов";
         }
-        if (isset($this->maxLength) && mb_strlen($value) > $this->maxLength) {
+        if (is_int($this->maxLength) && mb_strlen($value) > $this->maxLength) {
             $errors[] = "Значение длинее {$this->maxLength} символов";
         }
         return $errors;
