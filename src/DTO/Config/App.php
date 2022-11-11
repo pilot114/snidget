@@ -11,7 +11,8 @@ class App
 
     public function __construct(
         protected string $appPath
-    ){}
+    ) {
+    }
 
     public function getControllerPaths(): array
     {

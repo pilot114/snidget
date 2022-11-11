@@ -7,11 +7,12 @@ use Snidget\Module\Reflection;
 
 class Duck
 {
-    static protected array $cache = [];
+    protected static array $cache = [];
 
     public function __construct(
         protected array $dtoPaths
-    ){}
+    ) {
+    }
 
     // TODO: handle nested DTO
     protected function quack(array $data): string

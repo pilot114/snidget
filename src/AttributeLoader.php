@@ -12,7 +12,7 @@ use Snidget\Typing\Type;
 
 class AttributeLoader
 {
-    static public function getListeners(string $appPath): \Generator
+    public static function getListeners(string $appPath): \Generator
     {
         foreach (psrIterator([$appPath], true) as $className) {
             if (!class_exists($className)) {
@@ -23,12 +23,12 @@ class AttributeLoader
         }
     }
 
-    static public function getAssertions(string $className): \Generator
+    public static function getAssertions(string $className): \Generator
     {
         yield from (new Reflection($className))->getAttributes(Reflection::ATTR_PROPERTY, Assert::class);
     }
 
-    static public function getBinds(array $classPaths): \Generator
+    public static function getBinds(array $classPaths): \Generator
     {
         foreach (psrIterator($classPaths) as $className) {
             $ref = new Reflection($className);
@@ -51,7 +51,7 @@ class AttributeLoader
         }
     }
 
-    static public function getRoutes(array $controllerPaths): \Generator
+    public static function getRoutes(array $controllerPaths): \Generator
     {
         foreach (psrIterator($controllerPaths) as $className) {
             $ref = new Reflection($className);
@@ -64,7 +64,7 @@ class AttributeLoader
         }
     }
 
-    static public function getDbTypeDefinition(string $className): string
+    public static function getDbTypeDefinition(string $className): string
     {
         $definitions = [];
         $ref = new Reflection($className);
@@ -74,7 +74,7 @@ class AttributeLoader
         return implode(', ', $definitions);
     }
 
-    static public function getDbTypeInsertDefinition(string $className, Type $data): string
+    public static function getDbTypeInsertDefinition(string $className, Type $data): string
     {
         $definitions = [];
         $ref = new Reflection($className);

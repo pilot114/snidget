@@ -11,10 +11,10 @@ class Server
     const HOST = '0.0.0.0';
     const PORT = 80;
 
-    static public \Closure $kernelHandler;
-    static public Request $request;
+    public static \Closure $kernelHandler;
+    public static Request $request;
 
-    static protected array $serveFiles = [];
+    protected static array $serveFiles = [];
 
     /**
      * http server
@@ -22,7 +22,7 @@ class Server
      * RPS ~ 1650, median - 20 ms
      * TODO: without usleep in scheduler: RPS ~ 12600, median - 3 ms
      */
-    static public function http(): void
+    public static function http(): void
     {
         self::$serveFiles = array_map(
             fn($x) => str_replace($_SERVER['PWD'] . '/', '', $x),
@@ -45,7 +45,7 @@ class Server
                 throw new SnidgetException("Не удалось создать клиентский сокет");
             }
 
-            Scheduler::fork(function() use ($clientSocket) {
+            Scheduler::fork(function () use ($clientSocket) {
                 Scheduler::suspend(Wait::READ, $clientSocket);
                 $request = fread($clientSocket, 8192);
                 if (!$request) {
@@ -60,10 +60,10 @@ class Server
         }
     }
 
-    static protected function getPublicFiles(string $base): array
+    protected static function getPublicFiles(string $base): array
     {
         $files = glob($base . '*') ?: [];
-        $dirs = glob($base . '*', GLOB_ONLYDIR|GLOB_NOSORT|GLOB_MARK) ?: [];
+        $dirs = glob($base . '*', GLOB_ONLYDIR | GLOB_NOSORT | GLOB_MARK) ?: [];
         foreach ($dirs as $dir) {
             $dirFiles = self::getPublicFiles($dir);
             $files = array_merge($files, $dirFiles);
@@ -71,7 +71,7 @@ class Server
         return array_filter($files, fn($x) => is_file($x));
     }
 
-    static protected function httpHandle(string $request): string
+    protected static function httpHandle(string $request): string
     {
         $start = hrtime(true);
         $request = self::$request->fromString($request, $start);

@@ -12,7 +12,8 @@ class Table
         protected PDO $db,
         protected string $name,
         protected Type $type
-    ){}
+    ) {
+    }
 
     public function exist(): bool
     {

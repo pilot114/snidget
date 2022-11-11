@@ -128,7 +128,7 @@ class CommandLine
     {
         $this->cursor('save');
         $i = 0;
-        while($i <= 100) {
+        while ($i <= 100) {
             $this->cursor('load');
             if ($bar) {
                 $progressBar = sprintf("[%s]", str_repeat('#', $i) . str_repeat('.', 100 - $i));
@@ -139,7 +139,7 @@ class CommandLine
                 $this->out("{$i}% complete");
             }
             usleep(200000);
-            $i+= 10;
+            $i += 10;
         }
         $this->out('', true);
     }

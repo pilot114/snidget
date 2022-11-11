@@ -10,7 +10,8 @@ class Listen
 {
     public function __construct(
         protected SystemEvent $event,
-    ){}
+    ) {
+    }
 
     public function getEvent(): SystemEvent
     {

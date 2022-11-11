@@ -16,7 +16,7 @@ class Debug
 
     public function __construct(
         protected int $perSecond = 1
-    ){
+    ) {
         $this->start = hrtime(true);
     }
 

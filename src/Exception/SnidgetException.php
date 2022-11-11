@@ -4,4 +4,6 @@ namespace Snidget\Exception;
 
 use Exception;
 
-class SnidgetException extends Exception {}
+class SnidgetException extends Exception
+{
+}

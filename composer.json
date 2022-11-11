@@ -5,7 +5,13 @@
     "require": {
         "ext-pdo": "*",
         "ext-mbstring": "*",
-        "ext-pcntl": "*"
+        "ext-pcntl": "*",
+        "psr/log": "*",
+        "psr/simple-cache": "^3.0",
+        "psr/http-message": "^1.0",
+        "psr/container": "^2.0",
+        "psr/event-dispatcher": "^1.0",
+        "psr/http-server-middleware": "^1.0"
     },
     "require-dev": {
         "ext-xdebug": "*",
@@ -15,10 +21,10 @@
         "phpunit/phpunit": "^9.5"
     },
     "scripts": {
-        "phpstan": "vendor/bin/phpstan analyse -c phpstan.neon",
-        "psalm": "vendor/bin/psalm src",
-        "tests": "XDEBUG_MODE=coverage vendor/bin/phpunit tests --testdox --coverage-html tests/coverage --coverage-filter src --process-isolation --order-by random -v --bootstrap tests/bootstrap.php",
-        "phploc": "vendor/bin/phploc src | grep 'LOC'",
+        "phpstan": "phpstan analyse -c phpstan.neon",
+        "tests": "XDEBUG_MODE=coverage phpunit tests --testdox --coverage-html tests/coverage --coverage-filter src --process-isolation --order-by random -v --bootstrap tests/bootstrap.php",
+        "phploc": "phploc src | grep 'LOC'",
+
         "start_sync": "cd public && sudo php -S 127.0.0.1:99",
         "start_async": "docker-compose up"
     },
@@ -32,7 +38,6 @@
             "pre-commit": [
                 "echo committing as $(git config user.name)",
                 "composer phpstan",
-                "composer psalm",
                 "composer tests",
                 "composer phploc"
             ]

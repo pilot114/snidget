@@ -17,7 +17,8 @@ class Column
         public bool $isUnsigned = false,
         public mixed $default = null,
         public ?int $length = null
-    ){}
+    ) {
+    }
 
     public function getDefinition(): string
     {

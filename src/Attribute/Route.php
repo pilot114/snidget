@@ -1,6 +1,7 @@
 <?php
 
 namespace Snidget\Attribute;
+
 use Attribute;
 use Snidget\Exception\SnidgetException;
 
@@ -10,7 +11,7 @@ class Route
     public function __construct(
         protected string $regex = '',
         protected string $prefix = '',
-    ){
+    ) {
         if ($this->prefix && $this->regex) {
             throw new SnidgetException('Для аттрибута Route нельзя задать вместе prefix и regex');
         }
@@ -25,5 +26,4 @@ class Route
     {
         return $this->prefix;
     }
-
 }

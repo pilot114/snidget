@@ -9,7 +9,8 @@ class EventManager
     public function __construct(
         protected Container $container,
         protected array $listeners = [],
-    ){}
+    ) {
+    }
 
     public function register(string $appPath): void
     {

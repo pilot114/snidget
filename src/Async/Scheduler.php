@@ -34,7 +34,7 @@ class Scheduler
     {
         pcntl_async_signals(true);
         $isTerminate = false;
-        pcntl_signal(SIGTERM, function() use (&$isTerminate) {
+        pcntl_signal(SIGTERM, function () use (&$isTerminate) {
             $isTerminate = true;
         });
 
@@ -80,13 +80,13 @@ class Scheduler
         return $result;
     }
 
-    static public function suspend(Wait $type, mixed $payload = null): mixed
+    public static function suspend(Wait $type, mixed $payload = null): mixed
     {
         $args = $payload ? [$type, $payload] : [$type];
         return Fiber::suspend($args);
     }
 
-    static public function fork(callable $cb): mixed
+    public static function fork(callable $cb): mixed
     {
         return Fiber::suspend($cb);
     }

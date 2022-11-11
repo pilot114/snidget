@@ -7,7 +7,7 @@ class PrintFormat
     /**
      * Вывод миллисекунд в удобочитаемом формате
      */
-    static public function millisecondPrint(int $x): string
+    public static function millisecondPrint(int $x): string
     {
         $ms = $x % 1_000;
         $s = floor(($x % 60_000) / 1_000);

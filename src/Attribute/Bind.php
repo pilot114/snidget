@@ -1,6 +1,7 @@
 <?php
 
 namespace Snidget\Attribute;
+
 use Attribute;
 
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
@@ -10,7 +11,8 @@ class Bind
         protected ?string $class = null,
         protected ?string $method = null,
         protected int $priority = 0,
-    ){}
+    ) {
+    }
 
     public function getClass(): ?string
     {

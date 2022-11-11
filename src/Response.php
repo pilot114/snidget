@@ -6,7 +6,8 @@ class Response
 {
     public function __construct(
         protected string $data
-    ){}
+    ) {
+    }
 
     public function send(): void
     {

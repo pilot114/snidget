@@ -12,7 +12,7 @@ class Curl
             'http' => [
                 'method' => 'GET',
                 'header' => 'Accept-language: en\r\n'
-                           .'Cookie: foo=bar\r\n'
+                           . 'Cookie: foo=bar\r\n'
             ]
         ];
     }

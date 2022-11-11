@@ -18,7 +18,7 @@ namespace
 
     function autoload(string $prefix, string $baseDir): void
     {
-        spl_autoload_register(function($class) use ($prefix, $baseDir) {
+        spl_autoload_register(function ($class) use ($prefix, $baseDir) {
             $len = strlen($prefix);
             if (strncmp($prefix, $class, $len) !== 0) {
                 return;
@@ -144,7 +144,7 @@ namespace Snidget
 
         protected function unexpectedErrorHandler(): void
         {
-            register_shutdown_function(function() {
+            register_shutdown_function(function () {
                 if ($this->config->displayAllErrors && $error = error_get_last()) {
                     dump(sprintf('Fatal %s: %s', $error['type'], $error['message']));
                     dump($error['file'] . ':' . $error['line']);

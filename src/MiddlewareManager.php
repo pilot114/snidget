@@ -13,7 +13,7 @@ class MiddlewareManager
     public function __construct(
         protected array $middlewarePaths,
         protected Container $container
-    ){
+    ) {
         $this->allMiddlewares = iterator_to_array(AttributeLoader::getBinds($middlewarePaths));
     }
 

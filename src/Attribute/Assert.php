@@ -12,7 +12,8 @@ class Assert
         public ?int $max = null,
         public ?int $minLength = null,
         public ?int $maxLength = null,
-    ){}
+    ) {
+    }
 
     public function check(mixed $value): array
     {
