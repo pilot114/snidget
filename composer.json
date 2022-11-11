@@ -32,7 +32,7 @@
             "Snidget\\": "src",
             "App\\": "app"
         },
-        "files": ["src/utils.php"]
+        "files": ["src/functions.php"]
     },
     "extra": {
         "hooks": {

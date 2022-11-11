@@ -78,38 +78,39 @@ class CommandLine
     {
         $frontColors = [
             30 => CLIColor::BLACK,
-            CLIColor::RED,
-            CLIColor::GREEN,
-            CLIColor::YELLOW,
-            CLIColor::BLUE,
-            CLIColor::MAGENTA,
-            CLIColor::CYAN,
-            CLIColor::WHITE
+            31 => CLIColor::RED,
+            32 => CLIColor::GREEN,
+            33 => CLIColor::YELLOW,
+            34 => CLIColor::BLUE,
+            35 => CLIColor::MAGENTA,
+            36 => CLIColor::CYAN,
+            37 => CLIColor::WHITE
         ];
         $backColors = [
             40 => CLIColor::BLACK,
-            CLIColor::RED,
-            CLIColor::GREEN,
-            CLIColor::YELLOW,
-            CLIColor::BLUE,
-            CLIColor::MAGENTA,
-            CLIColor::CYAN,
-            CLIColor::WHITE
+            41 => CLIColor::RED,
+            42 => CLIColor::GREEN,
+            43 => CLIColor::YELLOW,
+            44 => CLIColor::BLUE,
+            45 => CLIColor::MAGENTA,
+            46 => CLIColor::CYAN,
+            47 => CLIColor::WHITE
         ];
         $styles = [
-            CLIStyle::RESET,
-            CLIStyle::BOLD,
-            CLIStyle::DIM,
+            0 => CLIStyle::RESET,
+            1 => CLIStyle::BOLD,
+            2 => CLIStyle::DIM,
             4 => CLIStyle::UNDER,
-            CLIStyle::BLINK,
+            5 => CLIStyle::BLINK,
             7 => CLIStyle::REV,
-            CLIStyle::HIDE
+            8 => CLIStyle::HIDE
         ];
 
-        $attr = [];
-        $attr[] = array_search($frontColor, $frontColors);
-        $attr[] = array_search($backColor, $backColors);
-        $attr[] = array_search($style, $styles);
+        $attr = [
+            array_search($frontColor, $frontColors),
+            array_search($backColor, $backColors),
+            array_search($style, $styles),
+        ];
         $attr = array_filter($attr);
 
         $attr = implode(';', $attr);

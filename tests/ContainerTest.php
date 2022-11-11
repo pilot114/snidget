@@ -19,10 +19,10 @@ class ContainerTest extends TestCase
         yield [Chameleon::class, ['genome' => 1], null];
         yield [Chameleon::class, ['genome' => 2], null];
         yield [Chameleon::class, ['genome' => 3], null];
-        yield [Iguania::class,   ['genome' => 4], null];
+        yield [Iguana::class,    ['genome' => 4], null];
         yield [Animal::class,    ['genome' => 5], Chameleon::class];
         yield [Reptile::class,   ['genome' => 6], Chameleon::class];
-        yield [Lizard::class,    ['genome' => 7], fn() => Iguania::class];
+        yield [Lizard::class,    ['genome' => 7], fn() => Iguana::class];
     }
 
     protected function getClassesAndInterfacesByMethod(): Generator
@@ -56,7 +56,6 @@ class ContainerTest extends TestCase
     /**
      * @param class-string $className
      * @dataProvider getClassesAndInterfacesByMethod
-     * @throws SnidgetException
      */
     public function testHas(string $className, array $params, string|callable|null $target, string $method): void
     {
@@ -73,7 +72,6 @@ class ContainerTest extends TestCase
     /**
      * @param class-string $className
      * @dataProvider getClassesAndInterfacesByMethod
-     * @throws SnidgetException
      */
     public function testPull(string $className, array $params, string|callable|null $target, string $method): void
     {
@@ -89,7 +87,6 @@ class ContainerTest extends TestCase
 
     /**
      * @dataProvider getInstanceCounts
-     * @throws SnidgetException
      */
     public function testCache(string $method, int $instanceCount): void
     {
@@ -102,7 +99,7 @@ class ContainerTest extends TestCase
             }
             $ids[] = $container->$method($className, $params)->getGenome();
         }
-        $this->assertEquals($instanceCount, count(array_unique($ids)), 'Неверное кол-во инстансов');
+        $this->assertCount($instanceCount, array_unique($ids), 'Неверное кол-во инстансов');
     }
 
     /**
@@ -122,9 +119,6 @@ class ContainerTest extends TestCase
         $this->assertEquals($class->$method(), $result, 'Неверный результат вызова');
     }
 
-    /**
-     * @throws SnidgetException
-     */
     public function testLink(): void
     {
         $data = [Lizard::class, ['genome' => 1]];
@@ -137,10 +131,10 @@ class ContainerTest extends TestCase
             'Неверное разрешение класса'
         );
 
-        $this->container->link(Lizard::class, Iguania::class);
+        $this->container->link(Lizard::class, Iguana::class);
 
         $this->assertInstanceOf(
-            Iguania::class,
+            Iguana::class,
             $this->container->get(...$data),
             'Неверное разрешение класса'
         );

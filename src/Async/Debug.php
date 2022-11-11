@@ -2,7 +2,6 @@
 
 namespace Snidget\Async;
 
-use Snidget\Module\PrintFormat;
 use Fiber;
 use Snidget\Enum\Wait;
 
@@ -12,7 +11,7 @@ class Debug
     protected array $fiberTicks = [];
     protected array $impactTime = [];
     protected int $startFiberNs;
-    protected string $currentFiberId;
+    protected int $currentFiberId;
 
     public function __construct(
         protected int $perSecond = 1
@@ -47,16 +46,16 @@ class Debug
             echo sprintf(
                 "FIBERS> all: %s, time: %s ms (%s%% of total %s)\n",
                 count($this->fiberTicks),
-                PrintFormat::millisecondPrint($fibersTime),
+                millisecondPrint($fibersTime),
                 round($fibersTime / ($totalTime / 100)),
-                PrintFormat::millisecondPrint($totalTime),
+                millisecondPrint($totalTime),
             );
         }
     }
 
     public function beforeFiber(int $tsNs, Fiber $fiber): void
     {
-        $fiberId = spl_object_hash($fiber);
+        $fiberId = spl_object_id($fiber);
         if (!$fiber->isStarted()) {
             echo sprintf("FIBERS> start %s\n", $fiberId);
             $this->fiberTicks[$fiberId] = 0;
@@ -70,7 +69,7 @@ class Debug
 
     public function afterFiber(int $finishFiberNs, Fiber $fiber): void
     {
-        $fiberId = spl_object_hash($fiber);
+        $fiberId = spl_object_id($fiber);
 
         // TODO: сбрасывать в лог информацию по файберам (список, состояние)
         // в админке по вкладке async показывать как таймлайн

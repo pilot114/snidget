@@ -53,6 +53,6 @@ abstract class Lizard extends Reptile
 }
 
 class Chameleon extends Lizard {}
-class Iguania extends Lizard {}
+class Iguana extends Lizard {}
 
 class Environment {}

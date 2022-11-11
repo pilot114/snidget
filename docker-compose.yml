@@ -7,5 +7,5 @@ services:
     volumes:
       - "./:/app"
     ports:
-      - "80:80"
+      - "99:80"
     command: ['php', 'index.php']

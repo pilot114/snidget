@@ -7,7 +7,6 @@ function run(bool $isAsync): never
 
 function isCli(): bool
 {
-    #TODO: нужен более гибкий алгоритм. В асинхронном режиме cli, нужен вывод как для браузера
     return php_sapi_name() === 'cli';
 }
 
@@ -15,6 +14,7 @@ function dump(mixed ...$vars): void
 {
     foreach ($vars as $var) {
         $dump = print_r($var, true);
+        #TODO: В асинхронном режиме вывод не работает
         echo isCli() ? "$dump\n" : "<pre>$dump</pre>";
     }
 }
@@ -26,8 +26,7 @@ function autoload(string $prefix, string $baseDir): void
         if (strncmp($prefix, $class, $len) !== 0) {
             return;
         }
-        $relativeClass = substr($class, $len);
-        $file = $baseDir . str_replace('\\', '/', $relativeClass) . '.php';
+        $file = $baseDir . str_replace('\\', '/', substr($class, $len)) . '.php';
         if (file_exists($file)) {
             require $file;
         }
@@ -40,8 +39,8 @@ function autoload(string $prefix, string $baseDir): void
 function psrIterator(array $classPaths, bool $recursive = false): iterable
 {
     foreach ($classPaths as $classPath) {
-        $relPath = str_replace(\Snidget\Kernel::$appPath, 'app', $classPath);
-        $parts = array_filter(explode('/', trim($relPath, '.')));
+        $relPath = substr($classPath, strlen(dirname(__DIR__)) + 1);
+        $parts = array_filter(explode('/', $relPath));
         $classNamespace = '\\' . implode('\\', array_map(ucfirst(...), $parts)) . '\\';
         foreach (glob($classPath . '/*') ?: [] as $file) {
             if ($recursive && is_dir($file)) {
@@ -54,4 +53,26 @@ function psrIterator(array $classPaths, bool $recursive = false): iterable
             }
         }
     }
+}
+
+/**
+ * Вывод миллисекунд в удобочитаемом формате
+ */
+function millisecondPrint(int $sec): string
+{
+    $ms = $sec % 1_000;
+    $s = floor(($sec % 60_000) / 1_000);
+    $m = floor(($sec % 3_600_000) / 60_000);
+    $h = floor(($sec % 86_400_000) / 3_600_000);
+    $d = floor(($sec % 2_592_000_000) / 86_400_000);
+    $M = floor($sec / 2_592_000_000);
+    $result = [];
+    $M && $result[] = "$M months";
+    $d && $result[] = "$d days";
+    $h && $result[] = "$h hours";
+    $m && $result[] = "$m minutes";
+    $s && $result[] = "$s seconds";
+    $ms && $result[] = "$ms milliseconds";
+
+    return implode(' ', $result);
 }

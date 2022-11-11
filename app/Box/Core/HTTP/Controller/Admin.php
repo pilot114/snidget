@@ -25,22 +25,21 @@ class Admin
     #[Route(regex: 'routes')]
     public function routes(Router $router, MiddlewareManager $mw): string
     {
-        $hidePrefixes = true;
         $actions = [];
         foreach ($router->routes() as $regex => $route) {
             $routeMw = $mw->match(...explode('::', $route))->getMiddlewares();
             $routeMw = array_map(fn($x) => implode('::', $x), $routeMw);
-            if ($hidePrefixes) {
-                $routeMw = str_replace('App\\', '', $routeMw);
-                $routeMw = str_replace('Box\\', '', $routeMw);
-                $routeMw = str_replace('HTTP\Middleware\\', '', $routeMw);
-                $routeMw = str_replace('\\', ':', $routeMw);
 
-                $route = str_replace('App\\', '', $route);
-                $route = str_replace('Box\\', '', $route);
-                $route = str_replace('HTTP\Controller\\', '', $route);
-                $route = str_replace('\\', ':', $route);
-            }
+            // hide prefixes
+            $routeMw = str_replace('App\\', '', $routeMw);
+            $routeMw = str_replace('Box\\', '', $routeMw);
+            $routeMw = str_replace('HTTP\Middleware\\', '', $routeMw);
+            $routeMw = str_replace('\\', ':', $routeMw);
+            $route = str_replace('App\\', '', $route);
+            $route = str_replace('Box\\', '', $route);
+            $route = str_replace('HTTP\Controller\\', '', $route);
+            $route = str_replace('\\', ':', $route);
+
             $actions[] = [
                 'URI' => sprintf('<a href="/%s">/%s</a>', $regex, htmlentities($regex)),
                 'Controllers' => $route,
@@ -66,7 +65,7 @@ class Admin
         return $this->template($this->links(), '<h3>DB entities</h3>');
     }
 
-    protected function template($links, $content): string
+    protected function template(string $links, string $content): string
     {
         return "<!DOCTYPE html>
 <html>

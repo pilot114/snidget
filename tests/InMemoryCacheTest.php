@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use Psr\SimpleCache\CacheInterface;
-use Snidget\InMemoryCache;
+use Snidget\MemoryCache;
 
 class InMemoryCacheTest extends TestCase
 {
@@ -10,7 +10,7 @@ class InMemoryCacheTest extends TestCase
 
     public function setUp(): void
     {
-        $this->cache = new InMemoryCache();
+        $this->cache = new MemoryCache();
     }
 
     protected function values(): Generator
