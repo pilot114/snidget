@@ -8,9 +8,8 @@
         "ext-pcntl": "*",
         "psr/log": "*",
         "psr/simple-cache": "^3.0",
-        "psr/http-message": "^1.0",
         "psr/container": "^2.0",
-        "psr/event-dispatcher": "^1.0",
+        "psr/http-message": "^1.0",
         "psr/http-server-middleware": "^1.0"
     },
     "require-dev": {
@@ -27,6 +26,13 @@
 
         "start_sync": "cd public && sudo php -S 127.0.0.1:99",
         "start_async": "docker-compose up"
+    },
+    "autoload": {
+        "psr-4": {
+            "Snidget\\": "src",
+            "App\\": "app"
+        },
+        "files": ["src/utils.php"]
     },
     "extra": {
         "hooks": {

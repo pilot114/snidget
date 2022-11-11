@@ -3,8 +3,6 @@
 namespace App\Box\Core\HTTP\Controller;
 
 use Snidget\Attribute\Route;
-use Snidget\Attribute\Listen;
-use Snidget\Enum\SystemEvent;
 
 class Main
 {

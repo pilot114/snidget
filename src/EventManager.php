@@ -2,15 +2,14 @@
 
 namespace Snidget;
 
-use Snidget\Enum\SystemEvent;
+use UnitEnum;
 
 class EventManager
 {
     public function __construct(
         protected Container $container,
         protected array $listeners = [],
-    ) {
-    }
+    ){}
 
     public function register(string $appPath): void
     {
@@ -19,7 +18,7 @@ class EventManager
         }
     }
 
-    public function emit(SystemEvent $event, mixed $data = null): void
+    public function emit(UnitEnum $event, mixed $data = null): void
     {
         foreach ($this->listeners[$event->name] ?? [] as $listener) {
             [$class, $method] = explode('::', $listener);

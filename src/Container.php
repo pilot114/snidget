@@ -2,10 +2,14 @@
 
 namespace Snidget;
 
+use Psr\Container\ContainerInterface;
 use Snidget\Exception\SnidgetException;
 use Snidget\Module\Reflection;
 
-class Container
+/**
+ * interface for user-space usage!
+ */
+class Container implements ContainerInterface
 {
     protected static array $pool = [];
 
@@ -34,12 +38,17 @@ class Container
 
     /**
      * @template T
-     * @param class-string<T> $className
+     * @param class-string<T> $id
      * @return T
      */
-    public function get(string $className, array $params = [])
+    public function get(string $id, array $params = [])
     {
-        return self::$pool[$className] ?? self::$pool[$className] = $this->make($className, $params);
+        return self::$pool[$id] ?? self::$pool[$id] = $this->make($id, $params);
+    }
+
+    public function has(string $id): bool
+    {
+        return isset(self::$pool[$id]);
     }
 
     protected function getParams(object|string $instance, string $methodName, array $params): \Generator
