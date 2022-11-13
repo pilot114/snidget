@@ -5,14 +5,14 @@ namespace Snidget;
 use Snidget\Async\Debug;
 use Snidget\Async\Scheduler;
 use Snidget\Async\Server;
-use Snidget\DTO\Config\App;
+use Snidget\DTO\Config\AppPaths;
 use Snidget\Enum\SystemEvent;
 use Throwable;
 
 class Kernel
 {
     protected Container $container;
-    protected App $config;
+    protected AppPaths $config;
     protected EventManager $eventManager;
     public static string $appPath;
 
@@ -26,7 +26,7 @@ class Kernel
         $eventManager->emit(SystemEvent::START);
         $this->eventManager = $eventManager;
 
-        $this->config = $this->container->get(App::class, ['appPath' => self::$appPath]);
+        $this->config = $this->container->get(AppPaths::class, ['appPath' => self::$appPath]);
 
         $this->unexpectedErrorHandler();
     }
@@ -44,7 +44,6 @@ class Kernel
         // async mode
         if ($isAsync) {
             $this->async(fn($request) => $this->handle($router, $middlewareManager, $request), $request);
-            exit;
         }
 
         $data = $this->handle($router, $middlewareManager, $request->fromGlobal());
@@ -72,7 +71,7 @@ class Kernel
         return $data;
     }
 
-    protected function async(\Closure $kernelHandler, Request $request): void
+    protected function async(\Closure $kernelHandler, Request $request): never
     {
         Server::$kernelHandler = $kernelHandler;
         Server::$request = $request;

@@ -24,8 +24,8 @@
         "tests": "XDEBUG_MODE=coverage phpunit tests --testdox --coverage-html tests/coverage --coverage-filter src --process-isolation --order-by random -v --bootstrap tests/bootstrap.php",
         "phploc": "phploc src | grep 'LOC'",
 
-        "start_sync": "cd public && sudo php -S 127.0.0.1:99",
-        "start_async": "docker-compose up"
+        "serve": "cd public && sudo php -S 127.0.0.1:99",
+        "aserve": "docker-compose up"
     },
     "autoload": {
         "psr-4": {

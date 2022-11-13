@@ -2,7 +2,7 @@
 
 namespace Snidget\DTO\Config;
 
-class App
+class AppPaths
 {
     protected string $controllerPath = 'HTTP/Controller';
     protected string $middlewarePath = 'HTTP/Middleware';

@@ -5,12 +5,17 @@ function run(bool $isAsync): never
     (new Snidget\Kernel())->run($isAsync);
 }
 
+function isCli(): bool
+{
+    #TODO: нужен более гибкий алгоритм. В асинхронном режиме cli, нужен вывод как для браузера
+    return php_sapi_name() === 'cli';
+}
+
 function dump(mixed ...$vars): void
 {
     foreach ($vars as $var) {
         $dump = print_r($var, true);
-        #TODO: нужен более гибкий алгоритм. В асинхронном режиме cli, нужен вывод как для браузера
-        echo php_sapi_name() === 'cli' ? "$dump\n" : "<pre>$dump</pre>";
+        echo isCli() ? "$dump\n" : "<pre>$dump</pre>";
     }
 }
 

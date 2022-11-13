@@ -20,10 +20,12 @@ class InMemoryCache implements CacheInterface
     {
         if ($ttl instanceof \DateInterval) {
             $now = new \DateTimeImmutable();
-            $ttl = $now->add($ttl)->getTimestamp() - $now->getTimestamp();
+            $ttl = $now->add($ttl)->getTimestamp() - time();
         }
         $this->values[$key] = $value;
-        $this->timers[$key] = time() . ':' . $ttl;
+        if ($ttl) {
+            $this->timers[$key] = time() . ':' . $ttl;
+        }
         return true;
     }
 
@@ -74,13 +76,14 @@ class InMemoryCache implements CacheInterface
         return isset($this->values[$key]);
     }
 
-    protected function deleteIfExpired(string $key): bool
+    protected function deleteIfExpired(string $key): void
     {
         if (!isset($this->timers[$key])) {
-            return true;
+            return;
         }
         [$startTs, $duration] = explode(':', $this->timers[$key]);
-        $isExpired = (time() - (int)$startTs) > (int)$duration;
-        return $isExpired && $this->delete($key);
+        $duration = (int)$duration;
+        $isExpired = $duration && (time() - (int)$startTs) > $duration;
+        $isExpired && $this->delete($key);
     }
 }

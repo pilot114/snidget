@@ -3,18 +3,18 @@
 namespace App\Box\Core\HTTP\Middleware;
 
 use Snidget\Attribute\Bind;
-use Snidget\{DTO\Config\App, Duck, Request};
+use Snidget\{DTO\Config\AppPaths, Duck, Request};
 use Closure;
 
 #[Bind(priority: PHP_INT_MAX)]
 class BuiltIn
 {
-    public function auth(Request $request, Closure $next)
+    public function auth(Request $request, Closure $next): mixed
     {
         return $next($request);
     }
 
-    public function duckValidate(Request $request, Closure $next, App $config)
+    public function duckValidate(Request $request, Closure $next, AppPaths $config): mixed
     {
         if ($request->payload) {
             $duck = new Duck($config->getDtoPaths());
