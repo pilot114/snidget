@@ -12,4 +12,7 @@ enum SystemEvent
     case FINISH;
     // вызывается при необработанном исключении
     case EXCEPTION;
+
+    // TODO: разделить события реквеста и события старта/остановки фреймворка.
+    // START -> RECEIVED -> SENT -> FINISH
 }

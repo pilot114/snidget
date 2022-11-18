@@ -10,6 +10,4 @@ parameters:
 		# типы для массивов указывать излишне, т.к. для этих целей есть Collection
 		- '#no value type specified in iterable type array#'
 		# дженерики
-		- '#Unable to resolve the template type T in call to method#'
-		- '#constructor expects class-string<T of object>|T of object, string given#'
-		- '#expects class-string<mixed>, string given#'
+		- '#expects class-string#'

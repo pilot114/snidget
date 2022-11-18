@@ -3,6 +3,7 @@
 namespace Snidget;
 
 use Psr\SimpleCache\CacheInterface;
+use Psr\SimpleCache\InvalidArgumentException;
 
 class InMemoryCache implements CacheInterface
 {
