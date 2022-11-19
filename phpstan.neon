@@ -1,4 +1,6 @@
 parameters:
+	scanFiles:
+		- tests/fixtures/ClassesAndInterfaces.php
 	level: 8
 	paths:
 		- src

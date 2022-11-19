@@ -82,7 +82,7 @@ abstract class Type implements JsonSerializable
 
     protected function getDefaultPublicFields(): \Generator
     {
-        foreach ((new Reflection($this))->getProperties() as $property) {
+        foreach ((new Reflection($this))->getPublicProperties() as $property) {
             if (!$property->isPublic()) {
                 continue;
             }
@@ -98,7 +98,7 @@ abstract class Type implements JsonSerializable
 
     protected function getUsedPublic(): \Generator
     {
-        foreach ((new Reflection($this))->getProperties() as $property) {
+        foreach ((new Reflection($this))->getPublicProperties() as $property) {
             if (!$property->isPublic() || !in_array($property->getName(), array_flip($this->useFields))) {
                 continue;
             }

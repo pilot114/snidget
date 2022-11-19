@@ -3,6 +3,7 @@
 namespace Snidget\Module;
 
 use ReflectionClass;
+use ReflectionException;
 use ReflectionMethod;
 use ReflectionProperty;
 use Attribute;
@@ -16,6 +17,9 @@ class Reflection
 
     protected ReflectionClass $class;
 
+    /**
+     * @throws ReflectionException
+     */
     public function __construct(string|object $class)
     {
         $this->class = new ReflectionClass(is_object($class) ? $class::class : $class);
@@ -31,11 +35,14 @@ class Reflection
         return $this->class->getMethods();
     }
 
-    public function getProperties(): array
+    public function getPublicProperties(): array
     {
         return $this->class->getProperties(ReflectionProperty::IS_PUBLIC);
     }
 
+    /**
+     * @throws ReflectionException
+     */
     public function getProperty(string $propName): ReflectionProperty
     {
         return $this->class->getProperty($propName);
@@ -49,7 +56,7 @@ class Reflection
     public function getAttributes(int $type, string $attrName): iterable
     {
         $tmp = match ($type) {
-            self::ATTR_PROPERTY => $this->getProperties(),
+            self::ATTR_PROPERTY => $this->getPublicProperties(),
             self::ATTR_METHOD   => $this->getMethods(),
             self::ATTR_CLASS    => [$this->class],
             default             => throw new \UnhandledMatchError()

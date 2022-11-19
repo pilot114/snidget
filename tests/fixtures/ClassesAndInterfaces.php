@@ -2,7 +2,7 @@
 
 interface Animal
 {
-    public function reproduction(Animal $animal): Animal;
+    public function reproduction(Animal $animal, Environment $env): Animal;
     public function getGenome(): int;
 }
 
@@ -10,17 +10,25 @@ abstract class Reptile implements Animal
 {
     final public function __construct(
         protected int $genome,
-    ){}
+        protected Environment $env,
+    ){
+//        dump('__construct ' . static::class . "($genome)");
+    }
 
-    public function reproduction(Animal $animal): self
+    public function reproduction(Animal $animal, Environment $env): self
     {
         $genome = $this->getGenome() + $animal->getGenome();
-        return new static($genome);
+        return new static($genome, $env);
     }
 
     public function getGenome(): int
     {
         return $this->genome;
+    }
+
+    static public function getName(): string
+    {
+        return static::class;
     }
 }
 
@@ -46,3 +54,5 @@ abstract class Lizard extends Reptile
 
 class Chameleon extends Lizard {}
 class Iguania extends Lizard {}
+
+class Environment {}

@@ -3,6 +3,7 @@
 namespace Snidget;
 
 use Psr\Container\ContainerInterface;
+use ReflectionException;
 use ReflectionNamedType;
 use ReflectionParameter;
 use Snidget\Exception\SnidgetException;
@@ -19,16 +20,18 @@ class Container implements ContainerInterface
 
     public function __construct()
     {
-        // ссылка на себя, чтобы при запросе контейнера из контейнера возвращался сам инстанс
+        // ссылка на себя, чтобы при запросе контейнера из контейнера возвращать себя
         $this->pool[__CLASS__] = $this;
     }
 
     /**
      * @param object|class-string<T> $instance
      * @throws SnidgetException
+     * @throws ReflectionException
      */
     public function call(object|string $instance, string $methodName, array $params = []): mixed
     {
+        $instance = is_string($instance) ? $this->getRealId($instance) : $instance;
         $realParams = $this->getParams($instance, $methodName, $params);
 
         if ((new Reflection($instance))->getMethod($methodName)->isStatic()) {
@@ -47,8 +50,7 @@ class Container implements ContainerInterface
      */
     public function make(string $origId, array $params = [])
     {
-        $id = $this->map[$origId] ?? $origId;
-        $id = is_callable($id) ? $id($this) : $id;
+        $id = $this->getRealId($origId);
         /** @var class-string<T> $id */
         return $this->pool[$origId] = $this->pool[$id] = new $id(...$this->getParams($id, '__construct', $params));
     }
@@ -60,12 +62,13 @@ class Container implements ContainerInterface
      */
     public function get(string $id, array $params = [])
     {
+        $id = $this->getRealId($id);
         return $this->pool[$id] ?? $this->make($id, $params);
     }
 
     public function has(string $id): bool
     {
-        return isset($this->pool[$id]);
+        return isset($this->pool[$this->getRealId($id)]);
     }
 
     public function link(string $id, callable|string|null $target = null): void
@@ -75,6 +78,12 @@ class Container implements ContainerInterface
         } else {
             unset($this->map[$id]);
         }
+    }
+
+    protected function getRealId(string $id): string
+    {
+        $id = $this->map[$id] ?? $id;
+        return is_callable($id) ? $id($this) : $id;
     }
 
     protected function getParams(object|string $instance, string $methodName, array $params): \Generator
@@ -95,7 +104,7 @@ class Container implements ContainerInterface
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      * @throws SnidgetException
      */
     protected function getValue(ReflectionParameter $param): mixed

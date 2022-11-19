@@ -19,7 +19,7 @@ class Duck
     {
         $hash = serialize(array_keys($data));
         foreach (psrIterator($this->dtoPaths) as $className) {
-            $props = (new Reflection($className))->getProperties();
+            $props = (new Reflection($className))->getPublicProperties();
             $typeHash = serialize(array_map(fn($x) => $x->getName(), $props));
             if (isset(self::$cache[$typeHash])) {
                 throw new SnidgetException("Совпадающие DTO: $className - " . self::$cache[$typeHash]);
