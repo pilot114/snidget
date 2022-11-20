@@ -19,6 +19,9 @@ class InMemoryCache implements CacheInterface
 
     public function set(string $key, mixed $value, null|int|\DateInterval $ttl = null): bool
     {
+        if (key_exists($key, $this->values)) {
+            return false;
+        }
         if ($ttl instanceof \DateInterval) {
             $now = new \DateTimeImmutable();
             $ttl = $now->add($ttl)->getTimestamp() - time();
@@ -32,7 +35,7 @@ class InMemoryCache implements CacheInterface
 
     public function delete(string $key): bool
     {
-        if (!isset($this->values[$key])) {
+        if (!key_exists($key, $this->values)) {
             return false;
         }
         unset($this->values[$key]);
@@ -49,32 +52,39 @@ class InMemoryCache implements CacheInterface
 
     public function getMultiple(iterable $keys, mixed $default = null): iterable
     {
-        return array_map(fn($key) => $this->get($key, $default), (array)$keys);
+        $keys = array_flip((array)$keys);
+        foreach ($keys as $key => $v) {
+            $keys[$key] = $this->get($key, $default);
+        }
+        return $keys;
     }
 
     /**
      * @param iterable<string, mixed> $values
+     * @throws InvalidArgumentException
      */
     public function setMultiple(iterable $values, null|int|\DateInterval $ttl = null): bool
     {
+        $results = [];
         foreach ($values as $key => $value) {
-            $this->set($key, $value, $ttl);
+            $results[] = $this->set($key, $value, $ttl);
         }
-        return true;
+        return in_array(true, $results, true);
     }
 
     public function deleteMultiple(iterable $keys): bool
     {
+        $results = [];
         foreach ($keys as $key) {
-            $this->delete($key);
+            $results[] = $this->delete($key);
         }
-        return true;
+        return in_array(true, $results, true);
     }
 
     public function has(string $key): bool
     {
         $this->deleteIfExpired($key);
-        return isset($this->values[$key]);
+        return key_exists($key, $this->values);
     }
 
     protected function deleteIfExpired(string $key): void
@@ -84,7 +94,7 @@ class InMemoryCache implements CacheInterface
         }
         [$startTs, $duration] = explode(':', $this->timers[$key]);
         $duration = (int)$duration;
-        $isExpired = $duration && (time() - (int)$startTs) > $duration;
+        $isExpired = $duration && (time() - (int)$startTs) >= $duration;
         $isExpired && $this->delete($key);
     }
 }

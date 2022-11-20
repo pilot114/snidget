@@ -26,8 +26,7 @@ class Container implements ContainerInterface
 
     /**
      * @param object|class-string<T> $instance
-     * @throws SnidgetException
-     * @throws ReflectionException
+     * @throws SnidgetException|ReflectionException
      */
     public function call(object|string $instance, string $methodName, array $params = []): mixed
     {
@@ -46,7 +45,7 @@ class Container implements ContainerInterface
     /**
      * @param class-string<T> $origId
      * @return T
-     * @throws SnidgetException
+     * @throws SnidgetException|ReflectionException
      */
     public function make(string $origId, array $params = [])
     {
@@ -58,7 +57,7 @@ class Container implements ContainerInterface
     /**
      * @param class-string<T> $id
      * @return T
-     * @throws SnidgetException
+     * @throws SnidgetException|ReflectionException
      */
     public function get(string $id, array $params = [])
     {
@@ -86,6 +85,9 @@ class Container implements ContainerInterface
         return is_callable($id) ? $id($this) : $id;
     }
 
+    /**
+     * @throws ReflectionException|SnidgetException
+     */
     protected function getParams(object|string $instance, string $methodName, array $params): \Generator
     {
         foreach ((new Reflection($instance))->getParams($methodName) as $param) {
@@ -104,8 +106,7 @@ class Container implements ContainerInterface
     }
 
     /**
-     * @throws ReflectionException
-     * @throws SnidgetException
+     * @throws ReflectionException|SnidgetException
      */
     protected function getValue(ReflectionParameter $param): mixed
     {

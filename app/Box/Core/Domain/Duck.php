@@ -1,7 +1,8 @@
 <?php
 
-namespace Snidget;
+namespace App\Box\Core\Domain;
 
+use Snidget\AttributeLoader;
 use Snidget\Exception\SnidgetException;
 use Snidget\Module\Reflection;
 

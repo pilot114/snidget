@@ -2,8 +2,9 @@
 
 namespace App\Box\Core\HTTP\Middleware;
 
+use App\Box\Core\Domain\Duck;
 use Snidget\Attribute\Bind;
-use Snidget\{DTO\Config\AppPaths, Duck, Request};
+use Snidget\{DTO\Config\AppPaths, Request};
 use Closure;
 
 #[Bind(priority: PHP_INT_MAX)]
