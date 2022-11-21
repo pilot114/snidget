@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DTO\API;
+namespace App\Schema\API;
 
 use Snidget\Attribute\Assert;
 use Snidget\Typing\Type;

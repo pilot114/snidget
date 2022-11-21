@@ -1,12 +1,12 @@
 <?php
 
-namespace Snidget\DTO\Config;
+namespace Snidget\Schema\Config;
 
 class AppPaths
 {
     protected string $controllerPath = 'HTTP/Controller';
     protected string $middlewarePath = 'HTTP/Middleware';
-    protected string $dtoPath = 'DTO/API';
+    protected string $schemaPath = 'Schema/API';
     public bool $displayAllErrors = true;
 
     public function __construct(
@@ -24,9 +24,9 @@ class AppPaths
         return $this->getPathByType($this->middlewarePath);
     }
 
-    public function getDtoPaths(): array
+    public function getSchemaPaths(): array
     {
-        return $this->getPathByType($this->dtoPath);
+        return $this->getPathByType($this->schemaPath);
     }
 
     protected function getPathByType(string $dir): array

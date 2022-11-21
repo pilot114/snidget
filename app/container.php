@@ -1,6 +1,6 @@
 <?php
 
-use App\DTO\Database\People;
+use App\Schema\Database\People;
 use Snidget\SQL\Table;
 use Snidget\Container;
 

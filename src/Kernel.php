@@ -5,7 +5,7 @@ namespace Snidget;
 use Snidget\Async\Debug;
 use Snidget\Async\Scheduler;
 use Snidget\Async\Server;
-use Snidget\DTO\Config\AppPaths;
+use Snidget\Schema\Config\AppPaths;
 use Snidget\Enum\SystemEvent;
 use Throwable;
 

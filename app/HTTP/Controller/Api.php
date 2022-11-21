@@ -2,7 +2,7 @@
 
 namespace App\HTTP\Controller;
 
-use App\DTO\Database\People;
+use App\Schema\Database\People;
 use Snidget\Attribute\Route;
 use Snidget\Container;
 use Snidget\SQL\Table;
@@ -13,8 +13,8 @@ class Api
     #[Route(regex: 'post')]
     public function list(Container $container): string
     {
-        $dto = $container->get(People::class);
-        $table = $container->get(Table::class, ['name' => 'test', 'type' => $dto]);
+        $schema = $container->get(People::class);
+        $table = $container->get(Table::class, ['name' => 'test', 'type' => $schema]);
 
         if (!$table->exist()) {
             $table->create();
@@ -33,8 +33,8 @@ class Api
     #[Route(regex: 'post/(?<id>\d+)')]
     public function get(int $id, Container $container): string
     {
-        $dto = $container->get(People::class);
-        $table = $container->get(Table::class, ['name' => 'test', 'type' => $dto]);
+        $schema = $container->get(People::class);
+        $table = $container->get(Table::class, ['name' => 'test', 'type' => $schema]);
 
         $data = $table->read($id);
 

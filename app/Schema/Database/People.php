@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DTO\Database;
+namespace App\Schema\Database;
 
 use Snidget\Attribute\Column;
 use Snidget\Enum\SQLiteType;

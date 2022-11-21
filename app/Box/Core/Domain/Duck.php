@@ -11,26 +11,26 @@ class Duck
     protected static array $cache = [];
 
     public function __construct(
-        protected array $dtoPaths
+        protected array $schemaPaths
     ) {
     }
 
-    // TODO: handle nested DTO
+    // TODO: handle nested schema
     protected function quack(array $data): string
     {
         $hash = serialize(array_keys($data));
-        foreach (psrIterator($this->dtoPaths) as $className) {
+        foreach (psrIterator($this->schemaPaths) as $className) {
             $props = (new Reflection($className))->getPublicProperties();
             $typeHash = serialize(array_map(fn($x) => $x->getName(), $props));
             if (isset(self::$cache[$typeHash])) {
-                throw new SnidgetException("Совпадающие DTO: $className - " . self::$cache[$typeHash]);
+                throw new SnidgetException("Совпадающие схемы: $className - " . self::$cache[$typeHash]);
             }
             self::$cache[$typeHash] = $className;
             if ($typeHash === $hash) {
                 return $className;
             }
         }
-        throw new SnidgetException("Не найдено DTO, соответствующее хешу $hash");
+        throw new SnidgetException("Не найдено схемы, соответствующее хешу $hash");
     }
 
     /** @return iterable<string, array> */
