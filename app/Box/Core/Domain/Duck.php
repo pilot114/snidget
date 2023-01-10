@@ -16,6 +16,7 @@ class Duck
     }
 
     // TODO: handle nested schema
+    // TODO: duck use for correct build DTO and save to container
     protected function quack(array $data): string
     {
         $hash = serialize(array_keys($data));

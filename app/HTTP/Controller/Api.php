@@ -13,8 +13,10 @@ class Api
     #[Route(regex: 'post')]
     public function list(Container $container): string
     {
-        $schema = $container->get(People::class);
-        $table = $container->get(Table::class, ['name' => 'test', 'type' => $schema]);
+        $table = $container->get(Table::class, [
+            'name' => 'test',
+            'type' => $container->get(People::class)
+        ]);
 
         if (!$table->exist()) {
             $table->create();
@@ -33,8 +35,10 @@ class Api
     #[Route(regex: 'post/(?<id>\d+)')]
     public function get(int $id, Container $container): string
     {
-        $schema = $container->get(People::class);
-        $table = $container->get(Table::class, ['name' => 'test', 'type' => $schema]);
+        $table = $container->get(Table::class, [
+            'name' => 'test',
+            'type' => $container->get(People::class)
+        ]);
 
         $data = $table->read($id);
 

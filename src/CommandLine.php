@@ -5,6 +5,15 @@ namespace Snidget;
 use Snidget\Enum\CLIColor;
 use Snidget\Enum\CLIStyle;
 
+/**
+ * TODO Features:
+ * - commands and subcommands by annotations
+ * - options and arguments by types with annotations
+ * - color output
+ * - interactive input
+ * - show progress
+ * - cursor manipulate
+ */
 class CommandLine
 {
     protected bool $isPiped = false;

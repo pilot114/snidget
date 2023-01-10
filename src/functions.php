@@ -5,6 +5,13 @@ function run(bool $isAsync): never
     (new Snidget\Kernel($isAsync))->run();
 }
 
+function override(string $url, string $method, array $data): never
+{
+    (new Snidget\Kernel())
+        ->overrideRequest($url, $method, $data)
+        ->run();
+}
+
 function isCli(): bool
 {
     return php_sapi_name() === 'cli';

@@ -20,7 +20,7 @@ class Container implements ContainerInterface
 
     public function __construct()
     {
-        // ссылка на себя, чтобы при запросе контейнера из контейнера возвращать себя
+        // self linking for container
         $this->pool[__CLASS__] = $this;
     }
 

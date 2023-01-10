@@ -2,6 +2,8 @@
 
 include_once '../vendor/autoload.php';
 
-(new Snidget\Kernel())
-    ->overrideRequest('post', 'POST', ['login' => '114', 'password' => 'qwert'])
-    ->run();
+override(
+    url: 'post',
+    method: 'POST',
+    data: ['login' => '114', 'password' => 'qwert']
+);

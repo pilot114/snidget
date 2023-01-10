@@ -21,7 +21,7 @@ class EventManager
     public function emit(UnitEnum $event, mixed $data = null): void
     {
         foreach ($this->listeners[$event->name] ?? [] as $listener) {
-            $this->container->get(Logger::class)->debug("event [$event->name] dispatch listener: $listener");
+            $this->container->get(Logger::class)->notice("event [$event->name] dispatch listener: $listener");
             [$class, $method] = explode('::', $listener);
             $this->container->call($class, $method, ['data' => $data]);
         }
