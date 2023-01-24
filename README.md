@@ -5,7 +5,7 @@ Snidget - idiomatic and ~~nerdy~~ smart php microframework
 The Golden Snidget was a small golden magical bird with fully rotational wings,  
 best known for early use in the wizarding game of Quidditch, eventually being replaced by the Golden Snitch
 
-![The Golden Snidget](https://static.wikia.nocookie.net/harrypotter/images/4/40/Golden_Snidget_HM_Icon.png/revision/latest/scale-to-width-down/320?cb=20201129013514)
+![The Golden Snidget](./docs/snidget.png)
 
 # Features
 
