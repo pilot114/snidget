@@ -2,10 +2,10 @@ version: '3'
 
 services:
   php:
-    build: ./php_image
+    build: ./php_cli
     working_dir: /app/public
     volumes:
-      - "./:/app"
+      - "../:/app"
     ports:
       - "99:80"
     command: ['php', 'index.php']

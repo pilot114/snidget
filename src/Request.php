@@ -21,7 +21,7 @@ class Request
             return $this;
         }
 
-        $this->uri = trim($_SERVER['QUERY_STRING'] ?? $_SERVER['REQUEST_URI'], '/');
+        $this->uri = trim($_SERVER['REQUEST_URI'], '/');
         $this->payload = json_decode(file_get_contents('php://input') ?: '', true);
         $this->method = $_SERVER['REQUEST_METHOD'];
         $this->requestTimeMs = $_SERVER['REQUEST_TIME_FLOAT'];
