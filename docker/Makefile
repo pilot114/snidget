@@ -1,4 +1,10 @@
 serve:
-	docker-compose -f serve.yml build && docker-compose  -f serve.yml up
+	export PUID=$(id -u $USER)
+	export PGID=$(id -g $USER)
+	docker-compose -f serve.yml build --build-arg $PUID --build-arg $PGID && docker-compose -f serve.yml up
 aserve:
-	docker-compose -f aserve.yml up
+	export PUID=$(id -u $USER)
+	export PGID=$(id -g $USER)
+	docker-compose -f aserve.yml build --build-arg $PUID --build-arg $PGID && docker-compose -f aserve.yml up
+enter:
+	docker exec -it snidget-php-1 zsh

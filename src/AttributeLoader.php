@@ -2,8 +2,10 @@
 
 namespace Snidget;
 
+use Snidget\Attribute\Arg;
 use Snidget\Attribute\Bind;
 use Snidget\Attribute\Column;
+use Snidget\Attribute\Command;
 use Snidget\Attribute\Listen;
 use Snidget\Attribute\Route;
 use Snidget\Attribute\Assert;
@@ -12,29 +14,9 @@ use Snidget\Typing\Type;
 
 class AttributeLoader
 {
-    public static function getListeners(string $appPath): \Generator
+    public static function getAssertions(string $typeName): \Generator
     {
-        foreach (psrIterator([$appPath], true) as $className) {
-            if (!class_exists($className)) {
-                continue;
-            }
-            $ref = new Reflection($className);
-            yield from $ref->getAttributes(Reflection::ATTR_METHOD, Listen::class);
-        }
-    }
-
-    public static function getAssertions(string $className): \Generator
-    {
-        yield from (new Reflection($className))->getAttributes(Reflection::ATTR_PROPERTY, Assert::class);
-    }
-
-    public static function getBinds(array $classPaths): \Generator
-    {
-        foreach (psrIterator($classPaths) as $className) {
-            $ref = new Reflection($className);
-            yield from $ref->getAttributes(Reflection::ATTR_CLASS, Bind::class);
-            yield from $ref->getAttributes(Reflection::ATTR_METHOD, Bind::class);
-        }
+        yield from (new Reflection($typeName))->getAttributes(Reflection::ATTR_PROPERTY, Assert::class);
     }
 
     static function getBindsByAction(string $controllerName, string $actionName): \Generator
@@ -51,6 +33,43 @@ class AttributeLoader
         }
     }
 
+    public static function getDbTypeDefinition(string $typeName): string
+    {
+        $definitions = [];
+        $ref = new Reflection($typeName);
+        foreach ($ref->getAttributes(Reflection::ATTR_PROPERTY, Column::class) as $attribute) {
+            $definitions[] = $attribute->getDefinition();
+        }
+        return implode(', ', $definitions);
+    }
+
+    public static function getDbTypeInsertDefinition(string $typeName, Type $data): string
+    {
+        $definitions = [];
+        $ref = new Reflection($typeName);
+        foreach ($ref->getAttributes(Reflection::ATTR_PROPERTY, Column::class) as $fqn => $attribute) {
+            $propName = explode('::', $fqn)[1];
+            $definitions[$propName] = $attribute->getInsertDefinition($data);
+        }
+        $definitions = array_filter($definitions);
+        return sprintf(
+            '(%s) values (%s)',
+            implode(', ', array_keys($definitions)),
+            implode(', ', array_values($definitions)),
+        );
+    }
+
+    public static function getListeners(array $listenerPaths): \Generator
+    {
+        foreach (psrIterator($listenerPaths, true) as $className) {
+            if (!class_exists($className)) {
+                continue;
+            }
+            $ref = new Reflection($className);
+            yield from $ref->getAttributes(Reflection::ATTR_METHOD, Listen::class);
+        }
+    }
+
     public static function getRoutes(array $controllerPaths): \Generator
     {
         foreach (psrIterator($controllerPaths) as $className) {
@@ -64,29 +83,53 @@ class AttributeLoader
         }
     }
 
-    public static function getDbTypeDefinition(string $className): string
+    public static function getBinds(array $classPaths): \Generator
     {
-        $definitions = [];
-        $ref = new Reflection($className);
-        foreach ($ref->getAttributes(Reflection::ATTR_PROPERTY, Column::class) as $attribute) {
-            $definitions[] = $attribute->getDefinition();
+        foreach (psrIterator($classPaths) as $className) {
+            $ref = new Reflection($className);
+            yield from $ref->getAttributes(Reflection::ATTR_CLASS, Bind::class);
+            yield from $ref->getAttributes(Reflection::ATTR_METHOD, Bind::class);
         }
-        return implode(', ', $definitions);
     }
 
-    public static function getDbTypeInsertDefinition(string $className, Type $data): string
+    public static function getDtoInfoByCommandName(array $commandPaths, string $command, string $subCommand): array
     {
-        $definitions = [];
-        $ref = new Reflection($className);
-        foreach ($ref->getAttributes(Reflection::ATTR_PROPERTY, Column::class) as $fqn => $attribute) {
-            $propName = explode('::', $fqn)[1];
-            $definitions[$propName] = $attribute->getInsertDefinition($data);
+        foreach (AttributeLoader::getCommands($commandPaths) as $fqn => $attr) {
+            [$class, $method] = explode('::', $fqn);
+            if (str_ends_with($class, $command) && $method === $subCommand) {
+                foreach ((new Reflection($class))->getParams($method) as $param) {
+                    $paramTypeName = $param->getType()->getName();
+                    if (is_subclass_of($paramTypeName, Type::class)) {
+                        return [$class, $method, $paramTypeName, $param->getName()];
+                    }
+                }
+            }
         }
-        $definitions = array_filter($definitions);
-        return sprintf(
-            '(%s) values (%s)',
-            implode(', ', array_keys($definitions)),
-            implode(', ', array_values($definitions)),
-        );
+        return [];
+    }
+
+    public static function getArgs(string $dtoName, $isOption = true): \Generator
+    {
+        $refDto = new Reflection($dtoName);
+        foreach ($refDto->getPublicProperties() as $prop) {
+            $firstAttr = $refDto->getPropAttributes($prop->getName(), Arg::class)[0]->newInstance();
+            if ($isOption && $firstAttr->isOption()) {
+                yield $prop => $firstAttr;
+            }
+            if (!$isOption && !$firstAttr->isOption()) {
+                yield $prop => $firstAttr;
+            }
+        }
+    }
+
+    /** TODO: for info in CLI */
+    public static function getCommands(array $commandPaths): \Generator
+    {
+        foreach (psrIterator($commandPaths) as $className) {
+            $ref = new Reflection($className);
+            foreach ($ref->getAttributes(Reflection::ATTR_METHOD, Command::class) as $fqn => $attribute) {
+                yield $fqn => $attribute;
+            }
+        }
     }
 }

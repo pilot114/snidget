@@ -70,6 +70,11 @@ class Reflection
         }
     }
 
+    public function getPropAttributes(string $propName, string $attrName): array
+    {
+        return $this->class->getProperty($propName)->getAttributes($attrName);
+    }
+
     public function getParams(string $methodName): \Generator
     {
         $params = match ($methodName) {

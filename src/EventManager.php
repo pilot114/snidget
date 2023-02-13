@@ -13,7 +13,7 @@ class EventManager
 
     public function register(string $appPath): void
     {
-        foreach (AttributeLoader::getListeners($appPath) as $fqn => $listener) {
+        foreach (AttributeLoader::getListeners([$appPath]) as $fqn => $listener) {
             $this->listeners[$listener->getEvent()->name][] = $fqn;
         }
     }

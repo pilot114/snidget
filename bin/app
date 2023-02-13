@@ -1,7 +1,134 @@
 #!/usr/bin/php
 <?php
 
+use Snidget\AttributeLoader;
+use Snidget\Schema\Config\AppPaths;
+
 include_once __DIR__ . '/../vendor/autoload.php';
 
-$kernel = new Snidget\Kernel();
-$cli = new \Snidget\CommandLine();
+/** banner and help by commands */
+function info(): void
+{
+    echo "Snidget Console\n";
+    // TODO: list commands with arguments
+}
+
+// docker exec -it snidget-php-1 php ../bin/app Test:run -a hello -a world -b=test -de one --gamma test two three1 three2
+
+function handle(array $argv): void
+{
+    $container = new \Snidget\Container();
+
+    $script = array_shift($argv);
+    [$command, $subCommand] = explode(':', array_shift($argv));
+
+    // 1. получить из команды имя нужной DTO
+    $config = $container->get(AppPaths::class, [
+        'appPath' => '/app/app',
+    ]);
+
+    $info = AttributeLoader::getDtoInfoByCommandName($config->getCommandPaths(), $command, $subCommand);
+    [$commandClassName, $commandMethodName, $dtoName, $paramName] = $info;
+
+    $data = [];
+    foreach (AttributeLoader::getArgs($dtoName) as $prop => $attribute) {
+        $name = $prop->getName();
+        $desc = $attribute->getDescription();
+        // number | string | array. bool equal EXIST
+        $type = $prop->getType()->getName();
+        $isArray = $type === 'array';
+        $isBool = $type === 'bool';
+        $short = $attribute->getShortcut();
+
+        // multi-option
+        $shortOptions = [];
+        foreach ($argv as $i => $arg) {
+            preg_match("#^-([a-z]{2,})$#", $arg, $matches);
+            if (count($matches) === 2) {
+                $tmp = array_map(fn($x) => "-$x", str_split($matches[1]));
+                array_push($shortOptions, ...$tmp);
+                unset($argv[$i]);
+            }
+        }
+        array_push($argv, ...$shortOptions);
+
+        // TODO: typing on add to $data
+        // TODO: quoted strings
+
+        if (!$prop->getType()->allowsNull() && !$isArray && !$isBool) {
+            throw new \Snidget\Exception\SnidgetException("опция $name должна быть указана как необязательная");
+        }
+        foreach ($argv as $i => $arg) {
+            preg_match("#^--$name=(.*)$#", $arg, $matches);
+            if (count($matches) === 2) {
+                if ($isArray) {
+                    $data[$name][] = $matches[1];
+                } else {
+                    $data[$name] = $isBool ? true : $matches[1];
+                }
+                unset($argv[$i]);
+                if (!$isArray) {
+                    continue 2;
+                }
+            }
+            if ($arg === "--$name") {
+                if ($isArray) {
+                    $data[$name][] = $argv[$i+1];
+                } else {
+                    $data[$name] = $isBool ? true : $argv[$i+1];
+                }
+                unset($argv[$i], $argv[$i+1]);
+                if (!$isArray) {
+                    continue 2;
+                }
+            }
+        }
+
+        if ($short) {
+            foreach ($argv as $i => $arg) {
+                preg_match("#^-$short=(.*)$#", $arg, $matches);
+                if (count($matches) === 2) {
+                    if ($isArray) {
+                        $data[$name][] = $matches[1];
+                    } else {
+                        $data[$name] = $isBool ? true : $matches[1];
+                    }
+                    unset($argv[$i]);
+                    if (!$isArray) {
+                        continue 2;
+                    }
+                }
+                if ($arg === "-$short") {
+                    if ($isArray) {
+                        $data[$name][] = $argv[$i+1];
+                    } else {
+                        $data[$name] = $isBool ? true : $argv[$i+1];
+                    }
+                    unset($argv[$i]);
+                    if (!$isBool) {
+                        unset($argv[$i+1]);
+                    }
+                    if (!$isArray) {
+                        continue 2;
+                    }
+                }
+            }
+        }
+    }
+
+    foreach (AttributeLoader::getArgs($dtoName, false) as $prop => $attribute) {
+        $name = $prop->getName();
+        $type = $prop->getType()->getName();
+        if ($type !== 'array') {
+            $data[$name] = array_shift($argv);
+        }
+        if ($type === 'array') {
+            $data[$name] = $argv;
+            $argv = [];
+        }
+    }
+    $container->get($dtoName, ['array' => $data]);
+    $container->call($commandClassName, $commandMethodName);
+}
+
+handle($argv);

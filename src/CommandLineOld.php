@@ -14,7 +14,7 @@ use Snidget\Enum\CLIStyle;
  * - show progress
  * - cursor manipulate
  */
-class CommandLine
+class CommandLineOld
 {
     protected bool $isPiped = false;
     protected int $rows;

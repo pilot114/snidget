@@ -13,6 +13,7 @@ services:
     command: ['nginx', '-g', 'daemon off;']
   php:
     build: php_fpm
-    working_dir: /app/public
+    working_dir: /app/bin
     volumes:
-      - "../:/app"
+      - "../:/app:ro"
+      - "../data:/app/data"

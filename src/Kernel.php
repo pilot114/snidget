@@ -16,6 +16,7 @@ class Kernel
     protected EventManager $eventManager;
     public static string $appPath;
     public bool $isAsync = false;
+    public bool $displayAllErrors = true;
 
     public function __construct(bool $isAsync = false, ?string $appPath = null)
     {
@@ -92,7 +93,7 @@ class Kernel
     protected function unexpectedErrorHandler(): void
     {
         register_shutdown_function(function () {
-            if ($this->config->displayAllErrors && $error = error_get_last()) {
+            if ($this->displayAllErrors && $error = error_get_last()) {
                 dump(sprintf('Fatal %s: %s', $error['type'], $error['message']));
                 dump($error['file'] . ':' . $error['line']);
             }
@@ -101,14 +102,14 @@ class Kernel
         set_exception_handler(function (Throwable $exception) {
             $this->eventManager->emit(SystemEvent::EXCEPTION, $exception);
 
-            if ($this->config->displayAllErrors) {
+            if ($this->displayAllErrors) {
                 dump(get_class($exception) . ': ' . $exception->getMessage());
                 dump($exception->getFile() . ':' . $exception->getLine());
                 dump($exception->getTraceAsString());
             }
         });
 
-        if (!$this->config->displayAllErrors) {
+        if (!$this->displayAllErrors) {
             return;
         }
 

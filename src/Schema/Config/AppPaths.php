@@ -4,14 +4,17 @@ namespace Snidget\Schema\Config;
 
 class AppPaths
 {
-    protected string $controllerPath = 'HTTP/Controller';
-    protected string $middlewarePath = 'HTTP/Middleware';
-    protected string $schemaPath = 'Schema/API';
-    public bool $displayAllErrors = true;
-
     public function __construct(
-        protected string $appPath
-    ) {
+        protected string $appPath,
+        protected string $controllerPath = 'HTTP/Controller',
+        protected string $middlewarePath = 'HTTP/Middleware',
+        protected string $schemaPath = 'Schema/API',
+        protected string $commandPath = 'Command',
+    ) {}
+
+    public function getCommandPaths(): array
+    {
+        return $this->getPathByType($this->commandPath);
     }
 
     public function getControllerPaths(): array
