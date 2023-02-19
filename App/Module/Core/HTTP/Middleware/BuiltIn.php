@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Box\Core\HTTP\Middleware;
+namespace App\Module\Core\HTTP\Middleware;
 
-use App\Box\Core\Domain\Duck;
+use App\Module\Core\Domain\Duck;
 use Snidget\Attribute\Bind;
 use Snidget\{Schema\Config\AppPaths, Request};
 use Closure;

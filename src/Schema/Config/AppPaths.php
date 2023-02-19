@@ -36,7 +36,7 @@ class AppPaths
     {
         return [
             $this->appPath . '/' . $dir,
-            ...(glob($this->appPath . '/Box/*/' . $dir) ?: []),
+            ...(glob($this->appPath . '/Module/*/' . $dir) ?: []),
         ];
     }
 }

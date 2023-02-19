@@ -20,7 +20,7 @@ class Kernel
 
     public function __construct(bool $isAsync = false, ?string $appPath = null)
     {
-        self::$appPath = $appPath ?? dirname(__DIR__) . '/app';
+        self::$appPath = $appPath ?? dirname(__DIR__) . '/App';
         $this->isAsync = $isAsync;
 
         $this->container = new Container();

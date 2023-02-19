@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Box\Core\HTTP\Controller;
+namespace App\Module\Core\HTTP\Controller;
 
 use Snidget\Attribute\Route;
 use Snidget\MiddlewareManager;
@@ -32,11 +32,11 @@ class Admin
 
             // hide prefixes
             $routeMw = str_replace('App\\', '', $routeMw);
-            $routeMw = str_replace('Box\\', '', $routeMw);
+            $routeMw = str_replace('Module\\', '', $routeMw);
             $routeMw = str_replace('HTTP\Middleware\\', '', $routeMw);
             $routeMw = str_replace('\\', ':', $routeMw);
             $route = str_replace('App\\', '', $route);
-            $route = str_replace('Box\\', '', $route);
+            $route = str_replace('Module\\', '', $route);
             $route = str_replace('HTTP\Controller\\', '', $route);
             $route = str_replace('\\', ':', $route);
 

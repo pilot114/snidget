@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Command;
+namespace App\Module\Core\Command;
 
-use App\Schema\Command\TestInput;
+use App\Module\Core\Schema\Command\TestInput;
 use Snidget\Attribute\Command;
 
 class Test

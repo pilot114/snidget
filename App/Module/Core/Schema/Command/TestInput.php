@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Schema\Command;
+namespace App\Module\Core\Schema\Command;
 
 use Snidget\Attribute\Arg;
 use Snidget\Typing\Type;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Box\Core\Domain;
+namespace App\Module\Core\Domain;
 
 use Snidget\AttributeLoader;
 use Snidget\Exception\SnidgetException;

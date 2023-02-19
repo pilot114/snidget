@@ -1,35 +1,14 @@
-#!/usr/bin/php
+#!/usr/local/bin/php
 <?php
 
+use Snidget\Container;
 use Snidget\AttributeLoader;
 use Snidget\Schema\Config\AppPaths;
 
 include_once __DIR__ . '/../vendor/autoload.php';
 
-/** banner and help by commands */
-function info(): void
+function parse(string $dtoName, array $argv): array
 {
-    echo "Snidget Console\n";
-    // TODO: list commands with arguments
-}
-
-// docker exec -it snidget-php-1 php ../bin/app Test:run -a hello -a world -b=test -de one --gamma test two three1 three2
-
-function handle(array $argv): void
-{
-    $container = new \Snidget\Container();
-
-    $script = array_shift($argv);
-    [$command, $subCommand] = explode(':', array_shift($argv));
-
-    // 1. получить из команды имя нужной DTO
-    $config = $container->get(AppPaths::class, [
-        'appPath' => '/app/app',
-    ]);
-
-    $info = AttributeLoader::getDtoInfoByCommandName($config->getCommandPaths(), $command, $subCommand);
-    [$commandClassName, $commandMethodName, $dtoName, $paramName] = $info;
-
     $data = [];
     foreach (AttributeLoader::getArgs($dtoName) as $prop => $attribute) {
         $name = $prop->getName();
@@ -115,7 +94,6 @@ function handle(array $argv): void
             }
         }
     }
-
     foreach (AttributeLoader::getArgs($dtoName, false) as $prop => $attribute) {
         $name = $prop->getName();
         $type = $prop->getType()->getName();
@@ -127,8 +105,58 @@ function handle(array $argv): void
             $argv = [];
         }
     }
+    return $data;
+}
+
+function getCommandInfo(array $argv, array $paths): array
+{
+    array_shift($argv);
+    [$command, $subCommand] = explode(':', array_shift($argv));
+    return AttributeLoader::getDtoInfoByCommandName($paths, $command, $subCommand);
+}
+
+/** banner and help by commands */
+function info(array $paths): void
+{
+    $tmp = [];
+    foreach (AttributeLoader::getCommands($paths) as $fqn => $attr) {
+        [$class, $method] = explode('::',$fqn);
+        $parts = explode('\\', $class);
+        $tmp[end($parts)] = [$method => $attr->getDescription()];
+    }
+    foreach ($tmp as $groupName => $group) {
+        echo "$groupName\n";
+        foreach ($group as $command => $desc) {
+            echo "    $command\t$desc\n";
+        }
+    }
+}
+
+function handle(array $argv): void
+{
+    // TODO: module prefix for commands
+
+    $container = new Container();
+    $paths = $container->get(AppPaths::class, [
+        'appPath' => '/app/App',
+    ])->getCommandPaths();
+
+    // info
+    if (count($argv) === 1) {
+        info($paths);
+        return;
+    }
+
+    [$commandClassName, $commandMethodName, $dtoName, $paramName] = getCommandInfo($argv, $paths);
+
+    $data = parse($dtoName, $argv);
+
     $container->get($dtoName, ['array' => $data]);
     $container->call($commandClassName, $commandMethodName);
 }
+
+// my:
+// ./app AutoComplete:run -c 2 -i ./app -i Test:
+// ./app Test:run -a hello -a world -b=test -de one --gamma test two three1 three2
 
 handle($argv);

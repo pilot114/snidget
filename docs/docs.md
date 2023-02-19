@@ -38,7 +38,7 @@ Most of it describes use cases from common practices web-development
 09.06.22 - Add psalm and composer-git-hooks  
 09.07.22 - Events  
 15.07.22 - Events improve  
-30.07.22 - modules (Boxes)  
+30.07.22 - Modules
 15-21.08.22 - async mode  
 - docker, TODOs, async events, tests
 

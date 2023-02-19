@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Box\Core\HTTP\Controller;
+namespace App\Module\Core\HTTP\Controller;
 
 use Snidget\Attribute\Route;
 

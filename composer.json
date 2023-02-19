@@ -30,7 +30,7 @@
     "autoload": {
         "psr-4": {
             "Snidget\\": "src",
-            "App\\": "app"
+            "App\\": "App"
         },
         "files": ["src/functions.php"]
     },

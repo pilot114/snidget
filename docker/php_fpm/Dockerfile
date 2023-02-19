@@ -16,10 +16,13 @@ RUN echo "%wheel ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 USER workspace
 
-# dev
+### dev section ###
 
 RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.5/zsh-in-docker.sh)" -- \
     -t robbyrussell \
     -p git
 
-RUN echo 'eval "$(/app/console/index.php completion zsh)"' >> ~/.zshrc
+COPY .zshrc /home/workspace
+COPY completion.zsh /home/workspace
+
+COPY --from=composer/composer:2.5-bin /composer /usr/bin/composer
