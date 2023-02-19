@@ -12,10 +12,14 @@ class AutoComplete
     #[Command('auto-complete for commands and options')]
     public function run(AutoCompleteInput $data, AppPaths $config): void
     {
-        // TODO: partial command input and Exceptions
+        $count = count($data->input);
 
-        // commands
-        if (count($data->input) === 1) {
+        if ($count === 0) {
+            return;
+        }
+
+        // all commands or filter by part command
+        if ($count < 3 && $data->current === 1) {
             foreach (AttributeLoader::getCommands($config->getCommandPaths()) as $fqn => $attr) {
                 [$class, $method] = explode('::',$fqn);
                 $parts = explode('\\', $class);
@@ -26,10 +30,10 @@ class AutoComplete
             return;
         }
 
-
-        $dtoName = getCommandInfo($data->input, $config->getCommandPaths())[2];
+        $info = getCommandInfo($data->input, $config->getCommandPaths());
 
         // options
+        $dtoName = $info[2];
         foreach (AttributeLoader::getArgs($dtoName) as $prop => $attribute) {
             $name = $prop->getName();
             $desc = $attribute->getDescription();

@@ -52,9 +52,9 @@ function parse(string $dtoName, array $argv): array
             }
             if ($arg === "--$name") {
                 if ($isArray) {
-                    $data[$name][] = $argv[$i+1];
+                    $data[$name][] = ($argv[$i+1] ?? null);
                 } else {
-                    $data[$name] = $isBool ? true : $argv[$i+1];
+                    $data[$name] = $isBool ? true : ($argv[$i+1] ?? null);
                 }
                 unset($argv[$i], $argv[$i+1]);
                 if (!$isArray) {
@@ -79,9 +79,9 @@ function parse(string $dtoName, array $argv): array
                 }
                 if ($arg === "-$short") {
                     if ($isArray) {
-                        $data[$name][] = $argv[$i+1];
+                        $data[$name][] = ($argv[$i+1] ?? null);
                     } else {
-                        $data[$name] = $isBool ? true : $argv[$i+1];
+                        $data[$name] = $isBool ? true : ($argv[$i+1] ?? null);
                     }
                     unset($argv[$i]);
                     if (!$isBool) {
@@ -108,10 +108,14 @@ function parse(string $dtoName, array $argv): array
     return $data;
 }
 
-function getCommandInfo(array $argv, array $paths): array
+function getCommandInfo(array $args, array $paths): ?array
 {
-    array_shift($argv);
-    [$command, $subCommand] = explode(':', array_shift($argv));
+    array_shift($args);
+    $command = array_shift($args);
+    if (!str_contains($command, ':')) {
+        return null;
+    }
+    [$command, $subCommand] = explode(':', $command);
     return AttributeLoader::getDtoInfoByCommandName($paths, $command, $subCommand);
 }
 
