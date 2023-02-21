@@ -17,7 +17,8 @@
         "phpstan/phpstan": "^1.6",
         "phploc/phploc": "^7.0",
         "brainmaestro/composer-git-hooks": "^2.8",
-        "phpunit/phpunit": "^9.5"
+        "phpunit/phpunit": "^9.5",
+        "league/commonmark": "^2.3"
     },
     "scripts": {
         "phpstan": "phpstan analyse -c phpstan.neon",

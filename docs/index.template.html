@@ -1,0 +1,105 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root { font-family: 'Inter', sans-serif; }
+    @supports (font-variation-settings: normal) {
+      :root { font-family: 'Inter var', sans-serif; }
+    }
+    [v-cloak] {
+      display: none;
+    }
+    h1 {
+      font-size: 30px !important;
+    }
+  </style>
+  <script type="module">
+    import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+
+    createApp({
+      data() {
+        return {
+          pages: %pages%
+        }
+      },
+      methods: {
+        changeActive(page) {
+          this.pages.forEach(page => page.active = false);
+          page.active = true;
+        },
+        filterByType(type) {
+          return this.pages.filter(page => page.type === type);
+        },
+      },
+      computed: {
+        getActive() {
+          return this.pages.find(page => page.active === true);
+        },
+      },
+    }).mount('#app')
+  </script>
+</head>
+<body>
+<div id="app" v-cloak class="bg-slate-100 w-screen h-screen antialiased text-slate-800 selection:bg-blue-600 selection:text-white">
+  <div class="flex flex-col relative w-screen">
+    <div id="menu" class="bg-gray-900 min-h-screen z-10 text-slate-300 w-76 fixed left-0 h-screen">
+
+      <div id="logo" class="my-4 px-6">
+        <h1 class="text-lg md:text-2xl font-bold text-white">Snidget <span class="text-blue-500">1.0</span> (beta)</h1>
+        <p class="text-slate-500 text-sm">Документация [RU]</p>
+      </div>
+
+      <div class="p-4 text-xl">🪄 Основные разделы</div>
+      <div class="w-full" v-for="page in filterByType('part')">
+        <a
+                href="#"
+                class="w-full px-2 inline-flex space-x-2 items-center border-b border-slate-700 py-3 transition ease-linear duration-50"
+                :class="{[`bg-blue-800`]: page.active}"
+                @click="changeActive(page)"
+        >
+          <div class="flex flex-col px-4">
+            <span class="text-lg font-bold leading-5 text-white">{{ page.title }}</span>
+            <span class="text-sm text-white/50 hidden md:block">{{ page.overview }}</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="p-4 text-xl">🧐 Справочная информация</div>
+      <div class="w-full" v-for="page in filterByType('addition')">
+        <a
+                href="#"
+                class="w-full px-2 inline-flex space-x-2 items-center border-b border-slate-700 py-3 transition ease-linear duration-50"
+                :class="{[`bg-blue-800`]: page.active}"
+                @click="changeActive(page)"
+        >
+          <div class="flex flex-col px-4">
+            <span class="text-lg font-bold leading-5 text-white">{{ page.title }}</span>
+            <span class="text-sm text-white/50 hidden md:block">{{ page.overview }}</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="p-4 text-xl">🎁 Модули</div>
+      <div class="w-full" v-for="page in filterByType('module')">
+        <a
+                href="#"
+                class="w-full px-2 inline-flex space-x-2 items-center border-b border-slate-700 py-3 transition ease-linear duration-50"
+                :class="{[`bg-blue-800`]: page.active}"
+                @click="changeActive(page)"
+        >
+          <div class="flex flex-col px-4">
+            <span class="text-lg font-bold leading-5 text-white">{{ page.title }}</span>
+            <span class="text-sm text-white/50 hidden md:block">{{ page.overview }}</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="col-span-12 py-12 ml-80 max-w-2xl" v-html="getActive.content"></div>
+  </div>
+</div>
+</body>
+</html>
