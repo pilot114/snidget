@@ -6,13 +6,13 @@ use League\CommonMark\CommonMarkConverter as CommonMarkConverterAlias;
 include_once __DIR__ . '/../vendor/autoload.php';
 
 $converter = new CommonMarkConverterAlias([
-    'html_input' => 'strip',
+    'html_input' => 'allow',
     'allow_unsafe_links' => false,
 ]);
 
 function load(string $filename): string {
     global $converter;
-    $md = file_get_contents(__DIR__ . '/../docs/' . $filename);
+    $md = file_get_contents(__DIR__ . '/../docs/md/' . $filename);
     return $converter->convert($md);
 }
 
@@ -22,32 +22,35 @@ $pages = [
         'content' => load('intro.md'), 'type' => 'part'
     ], [
         'title' => 'Основы', 'overview' => 'Базовые понятия', 'active' => false,
-        'content' => load('docs.md'), 'type' => 'part'
+        'content' => load('base.md'), 'type' => 'part'
     ], [
         'title' => 'HTTP', 'overview' => 'Роутинг, контроллеры, посредники', 'active' => false,
-        'content' => load('async.md'), 'type' => 'part'
+        'content' => load('http.md'), 'type' => 'part'
     ], [
         'title' => 'CLI', 'overview' => 'Консольные команды', 'active' => false,
-        'content' => load('intro.md'), 'type' => 'part'
+        'content' => load('cli.md'), 'type' => 'part'
     ], [
         'title' => 'Базы данных', 'overview' => 'Работа с персистентными данными', 'active' => false,
-        'content' => load('intro.md'), 'type' => 'part'
+        'content' => load('database.md'), 'type' => 'part'
     ], [
-        'title' => 'Расширение функционала', 'overview' => 'PSR, модули, инфраструктура', 'active' => false,
-        'content' => load('intro.md'), 'type' => 'part'
+        'title' => 'Расширение функционала', 'overview' => 'события, PSR, модули, инфраструктура', 'active' => false,
+        'content' => load('extra.md'), 'type' => 'part'
     ],
 
     [
         'title' => 'Список атрибутов', 'active' => false,
-        'content' => load('intro.md'), 'type' => 'addition'
+        'content' => load('attributes.md'), 'type' => 'addition'
     ], [
         'title' => 'Список событий', 'active' => false,
-        'content' => load('intro.md'), 'type' => 'addition'
+        'content' => load('events.md'), 'type' => 'addition'
     ],
 
     [
+        'title' => 'Admin', 'active' => false,
+        'content' => load('admin.md'), 'type' => 'module'
+    ], [
         'title' => 'Async', 'active' => false,
-        'content' => load('intro.md'), 'type' => 'module'
+        'content' => load('async.md'), 'type' => 'module'
     ],
 ];
 

@@ -108,7 +108,7 @@ class AttributeLoader
         return [];
     }
 
-    public static function getArgs(string $dtoName, $isOption = true): \Generator
+    public static function getArgs(string $dtoName, bool $isOption = true): \Generator
     {
         $refDto = new Reflection($dtoName);
         foreach ($refDto->getPublicProperties() as $prop) {

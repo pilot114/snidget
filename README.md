@@ -1,11 +1,11 @@
-Snidget - idiomatic and ~~nerdy~~ smart php microframework
+Snidget - idiomatic and smart php microframework
 
 # What is a "Snidget" ?
 
 The Golden Snidget was a small golden magical bird with fully rotational wings,  
 best known for early use in the wizarding game of Quidditch, eventually being replaced by the Golden Snitch
 
-![The Golden Snidget](./docs/snidget.png)
+![The Golden Snidget](./docs/assets/snidget.png)
 
 # Features
 
