@@ -35,6 +35,9 @@ $pages = [
     ], [
         'title' => 'Расширение функционала', 'overview' => 'события, PSR, модули, инфраструктура', 'active' => false,
         'content' => load('extra.md'), 'type' => 'part'
+    ], [
+        'title' => 'Фронт', 'overview' => 'Немного о уровне представления', 'active' => false,
+        'content' => load('front.md'), 'type' => 'part'
     ],
 
     [
