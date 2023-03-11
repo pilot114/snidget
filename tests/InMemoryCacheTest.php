@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use Psr\SimpleCache\CacheInterface;
-use Snidget\MemoryCache;
+use Snidget\Psr\MemoryCache;
 
 class InMemoryCacheTest extends TestCase
 {

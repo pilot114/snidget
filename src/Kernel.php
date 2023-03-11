@@ -5,8 +5,10 @@ namespace Snidget;
 use Snidget\Async\Debug;
 use Snidget\Async\Scheduler;
 use Snidget\Async\Server;
-use Snidget\Schema\Config\AppPaths;
 use Snidget\Enum\SystemEvent;
+use Snidget\Schema\Config\AppPaths;
+use Snidget\Psr\Container;
+use Snidget\Psr\EventManager;
 use Throwable;
 
 class Kernel

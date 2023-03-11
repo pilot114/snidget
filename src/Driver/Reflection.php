@@ -1,6 +1,6 @@
 <?php
 
-namespace Snidget\Module;
+namespace Snidget\Driver;
 
 use ReflectionClass;
 use ReflectionException;
@@ -23,6 +23,11 @@ class Reflection
     public function __construct(string|object $class)
     {
         $this->class = new ReflectionClass(is_object($class) ? $class::class : $class);
+    }
+
+    public function isAbstract(): bool
+    {
+        return $this->class->isAbstract();
     }
 
     public function getMethod(string $name): ReflectionMethod

@@ -2,7 +2,7 @@
 
 namespace Snidget\Typing;
 
-use Snidget\Module\Reflection;
+use Snidget\Driver\Reflection;
 use JsonSerializable;
 use DateTimeInterface;
 use TypeError;

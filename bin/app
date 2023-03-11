@@ -1,9 +1,9 @@
 #!/usr/local/bin/php
 <?php
 
-use Snidget\Container;
 use Snidget\AttributeLoader;
 use Snidget\Schema\Config\AppPaths;
+use src\Psr\Container;
 
 include_once __DIR__ . '/../vendor/autoload.php';
 

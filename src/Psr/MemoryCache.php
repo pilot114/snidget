@@ -1,6 +1,6 @@
 <?php
 
-namespace Snidget;
+namespace Snidget\Psr;
 
 use Psr\SimpleCache\CacheInterface;
 use Psr\SimpleCache\InvalidArgumentException;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Snidget\Module;
+namespace Snidget\Driver;
 
 class Curl
 {

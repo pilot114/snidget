@@ -9,7 +9,7 @@ use Snidget\Attribute\Command;
 use Snidget\Attribute\Listen;
 use Snidget\Attribute\Route;
 use Snidget\Attribute\Assert;
-use Snidget\Module\Reflection;
+use Snidget\Driver\Reflection;
 use Snidget\Typing\Type;
 
 class AttributeLoader

@@ -2,8 +2,9 @@
 
 namespace Snidget;
 
-use Snidget\Module\Reflection;
 use Closure;
+use Snidget\Driver\Reflection;
+use Snidget\Psr\Container;
 
 class MiddlewareManager
 {

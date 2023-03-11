@@ -1,6 +1,6 @@
 <?php
 
-namespace Snidget\Module;
+namespace Snidget\Driver;
 
 use Snidget\Schema\Config\PdoConnect;
 use PDO as NativePDO;

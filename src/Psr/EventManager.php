@@ -1,7 +1,8 @@
 <?php
 
-namespace Snidget;
+namespace Snidget\Psr;
 
+use Snidget\AttributeLoader;
 use UnitEnum;
 
 class EventManager

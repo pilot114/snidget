@@ -1,6 +1,6 @@
 <?php
 
-namespace Snidget;
+namespace Snidget\Psr;
 
 use Psr\Log\LoggerInterface;
 use Snidget\Enum\LogLevel;

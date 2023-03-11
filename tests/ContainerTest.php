@@ -1,8 +1,8 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Snidget\Container;
 use Snidget\Exception\SnidgetException;
+use Snidget\Psr\Container;
 
 class ContainerTest extends TestCase
 {
@@ -141,7 +141,7 @@ class ContainerTest extends TestCase
 
         $this->container->link(Lizard::class);
 
-        $this->expectError();
+        $this->expectException(SnidgetException::class);
         $this->container->get(...$data);
     }
 }

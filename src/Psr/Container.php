@@ -1,13 +1,13 @@
 <?php
 
-namespace Snidget;
+namespace Snidget\Psr;
 
 use Psr\Container\ContainerInterface;
 use ReflectionException;
 use ReflectionNamedType;
 use ReflectionParameter;
+use Snidget\Driver\Reflection;
 use Snidget\Exception\SnidgetException;
-use Snidget\Module\Reflection;
 
 /**
  * interface for user-space usage
@@ -50,6 +50,9 @@ class Container implements ContainerInterface
     public function make(string $origId, array $params = [])
     {
         $id = $this->getRealId($origId);
+        if ((new Reflection($id))->isAbstract()) {
+            throw new SnidgetException("Невозможно инcтанцировать абстрактный класс $id");
+        }
         /** @var class-string<T> $id */
         return $this->pool[$origId] = $this->pool[$id] = new $id(...$this->getParams($id, '__construct', $params));
     }

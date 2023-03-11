@@ -3,7 +3,7 @@
 namespace Snidget\SQL;
 
 use Snidget\AttributeLoader;
-use Snidget\Module\PDO;
+use Snidget\Driver\PDO;
 use Snidget\Typing\Type;
 
 class Table
