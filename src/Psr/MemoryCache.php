@@ -3,7 +3,7 @@
 namespace Snidget\Psr;
 
 use Psr\SimpleCache\CacheInterface;
-use Psr\SimpleCache\InvalidArgumentException;
+use Snidget\Exception\InvalidCacheKeyException;
 
 class MemoryCache implements CacheInterface
 {
@@ -13,12 +13,14 @@ class MemoryCache implements CacheInterface
 
     public function get(string $key, mixed $default = null): mixed
     {
+        $this->checkCacheKey($key);
         $this->deleteIfExpired($key);
         return $this->values[$key] ?? $default;
     }
 
     public function set(string $key, mixed $value, null|int|\DateInterval $ttl = null): bool
     {
+        $this->checkCacheKey($key);
         if (key_exists($key, $this->values)) {
             return false;
         }
@@ -35,6 +37,7 @@ class MemoryCache implements CacheInterface
 
     public function delete(string $key): bool
     {
+        $this->checkCacheKey($key);
         if (!key_exists($key, $this->values)) {
             return false;
         }
@@ -52,6 +55,7 @@ class MemoryCache implements CacheInterface
 
     public function getMultiple(iterable $keys, mixed $default = null): iterable
     {
+        array_map(fn($key) => $this->checkCacheKey($key), (array)$keys);
         $keys = array_flip((array)$keys);
         foreach ($keys as $key => $v) {
             $keys[$key] = $this->get($key, $default);
@@ -61,10 +65,11 @@ class MemoryCache implements CacheInterface
 
     /**
      * @param iterable<string, mixed> $values
-     * @throws InvalidArgumentException
+     * @throws InvalidCacheKeyException
      */
     public function setMultiple(iterable $values, null|int|\DateInterval $ttl = null): bool
     {
+        array_map(fn($key) => $this->checkCacheKey($key), array_keys((array)$values));
         $results = [];
         foreach ($values as $key => $value) {
             $results[] = $this->set($key, $value, $ttl);
@@ -74,6 +79,7 @@ class MemoryCache implements CacheInterface
 
     public function deleteMultiple(iterable $keys): bool
     {
+        array_map(fn($key) => $this->checkCacheKey($key), (array)$keys);
         $results = [];
         foreach ($keys as $key) {
             $results[] = $this->delete($key);
@@ -89,6 +95,7 @@ class MemoryCache implements CacheInterface
 
     protected function deleteIfExpired(string $key): void
     {
+        $this->checkCacheKey($key);
         if (!isset($this->timers[$key])) {
             return;
         }
@@ -96,5 +103,12 @@ class MemoryCache implements CacheInterface
         $duration = (int)$duration;
         $isExpired = $duration && (time() - (int)$startTs) >= $duration;
         $isExpired && $this->delete($key);
+    }
+
+    protected function checkCacheKey(string $key): void
+    {
+        if (preg_match('#^[0-9a-zA-Z_:]+$#', $key) === 0 || strlen($key) > 255) {
+            throw new InvalidCacheKeyException("Невалидный ключ: $key");
+        }
     }
 }

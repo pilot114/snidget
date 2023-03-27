@@ -2,6 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use Psr\SimpleCache\CacheInterface;
+use Snidget\Exception\InvalidCacheKeyException;
 use Snidget\Psr\MemoryCache;
 
 class InMemoryCacheTest extends TestCase
@@ -19,9 +20,9 @@ class InMemoryCacheTest extends TestCase
         yield 'true'   => [true];
         yield 'false'  => [false];
         yield 'zero'   => [0];
-        yield '-int'   => [-1];
+        yield '_int'   => [-1];
         yield 'int'    => [1];
-        yield '-float' => [-1.1];
+        yield '_float' => [-1.1];
         yield 'float'  => [1.1];
         yield 'empty'  => [''];
         yield 'string' => ['Lorem Ipsum'];
@@ -35,6 +36,29 @@ class InMemoryCacheTest extends TestCase
     {
         yield 'interval' => ['value', 'key', new DateInterval('PT1S')];
         yield 'seconds'  => ['value', 'key', 1];
+    }
+
+    protected function invalidKeys(): Generator
+    {
+        yield 'empty'    => [''];
+        yield 'symbol'   => ['-'];
+        yield 'noLatin'  => ['кириллица'];
+        yield 'overflow' => [str_repeat('x', 256)];
+    }
+
+    protected function methodsWithInvalidKeys(): Generator
+    {
+        $keys = array_column(iterator_to_array($this->invalidKeys()), 0);
+
+        foreach ($keys as $key) {
+            yield ['get', $key];
+            yield ['set', $key, 0];
+            yield ['delete', $key];
+            yield ['has', $key];
+        }
+        yield ['getMultiple', $keys];
+        yield ['setMultiple', array_combine($keys, $keys)];
+        yield ['deleteMultiple', $keys];
     }
 
     /**
@@ -89,5 +113,14 @@ class InMemoryCacheTest extends TestCase
         $this->assertTrue($this->cache->has($key), 'Должно быть значения в кеше');
         sleep($ttl instanceof DateInterval ? $ttl->s : $ttl);
         $this->assertFalse($this->cache->has($key), 'Не должно быть значения в кеше');
+    }
+
+    /**
+     * @dataProvider methodsWithInvalidKeys
+     */
+    public function testInvalidCacheKey(string $method, mixed ...$args): void
+    {
+        $this->expectException(InvalidCacheKeyException::class);
+        $this->cache->$method(...$args);
     }
 }

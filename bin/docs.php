@@ -33,7 +33,7 @@ $pages = [
         'title' => 'Базы данных', 'overview' => 'Работа с персистентными данными', 'active' => false,
         'content' => load('database.md'), 'type' => 'part'
     ], [
-        'title' => 'Расширение функционала', 'overview' => 'события, PSR, модули, инфраструктура', 'active' => false,
+        'title' => 'Расширение функционала', 'overview' => 'PSR, события, модули, инфраструктура', 'active' => false,
         'content' => load('extra.md'), 'type' => 'part'
     ], [
         'title' => 'Фронт', 'overview' => 'Немного о уровне представления', 'active' => false,
@@ -41,6 +41,9 @@ $pages = [
     ],
 
     [
+        'title' => 'PSR имплементации', 'active' => false,
+        'content' => load('psr.md'), 'type' => 'addition'
+    ], [
         'title' => 'Список атрибутов', 'active' => false,
         'content' => load('attributes.md'), 'type' => 'addition'
     ], [
