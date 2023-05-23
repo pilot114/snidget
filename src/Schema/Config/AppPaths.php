@@ -14,25 +14,25 @@ class AppPaths
 
     public function getCommandPaths(): array
     {
-        return $this->getPathByType($this->commandPath);
+        return $this->getPathsByType($this->commandPath);
     }
 
     public function getControllerPaths(): array
     {
-        return $this->getPathByType($this->controllerPath);
+        return $this->getPathsByType($this->controllerPath);
     }
 
     public function getMiddlewarePaths(): array
     {
-        return $this->getPathByType($this->middlewarePath);
+        return $this->getPathsByType($this->middlewarePath);
     }
 
     public function getSchemaPaths(): array
     {
-        return $this->getPathByType($this->schemaPath);
+        return $this->getPathsByType($this->schemaPath);
     }
 
-    protected function getPathByType(string $dir): array
+    protected function getPathsByType(string $dir): array
     {
         return [
             $this->appPath . '/' . $dir,

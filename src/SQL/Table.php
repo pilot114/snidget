@@ -3,13 +3,13 @@
 namespace Snidget\SQL;
 
 use Snidget\AttributeLoader;
-use Snidget\Driver\PDO;
+use Snidget\Driver\SqlitePDO;
 use Snidget\Typing\Type;
 
 class Table
 {
     public function __construct(
-        protected PDO $db,
+        protected SqlitePDO $db,
         protected string $name,
         protected Type $type
     ) {

@@ -2,20 +2,17 @@
 
 namespace Snidget\Driver;
 
+use Snidget\Exception\SnidgetException;
 use Snidget\Schema\Config\PdoConnect;
 use PDO as NativePDO;
 use PDOStatement;
 
-class PDO
+abstract class PDO
 {
     protected NativePDO $connection;
-    protected array $queries = [];
 
     public function __construct(PdoConnect $config)
     {
-        if (str_starts_with($config->dsn, 'sqlite:') && !file_exists($config->dsn)) {
-            touch(str_replace('sqlite:', '', $config->dsn));
-        }
         $this->connection = new NativePDO(
             $config->dsn,
             $config->user,
@@ -28,32 +25,41 @@ class PDO
         );
     }
 
+    /**
+     * @throws SnidgetException
+     */
     public function execute(string $sql, array $params = []): bool
     {
-        $stmt = $this->prepare(__METHOD__, $sql, $params);
-        return $stmt && $stmt->execute($params);
+        return $this->prepare($sql)->execute($params);
     }
 
+    /**
+     * @throws SnidgetException
+     */
     public function query(string $sql, array $params = []): array
     {
-        $stmt = $this->prepare(__METHOD__, $sql, $params);
-        return ($stmt && $stmt->execute($params)) ? $stmt->fetchAll() : [];
+        $stmt = $this->prepare($sql);
+        return $stmt->execute($params) ? $stmt->fetchAll() : [];
     }
 
+    /**
+     * @throws SnidgetException
+     */
     public function count(string $sql, array $params = []): int
     {
-        $stmt = $this->prepare(__METHOD__, $sql, $params);
-        return ($stmt && $stmt->execute($params)) ? (int)$stmt->fetchColumn() : 0;
+        $stmt = $this->prepare($sql);
+        return $stmt->execute($params) ? (int)$stmt->fetchColumn() : 0;
     }
 
-    public function getLog(): array
+    /**
+     * @throws SnidgetException
+     */
+    protected function prepare(string $sql): PDOStatement
     {
-        return $this->queries;
-    }
-
-    protected function prepare(string $method, string $sql, array $params): PDOStatement | false
-    {
-        $this->queries[] = [$method, $sql, $params];
-        return $this->connection->prepare($sql);
+        $stmt = $this->connection->prepare($sql);
+        if (!$stmt) {
+            throw new SnidgetException("Не удалось подготовить sql запрос: $sql");
+        }
+        return $stmt;
     }
 }
