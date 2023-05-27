@@ -2,6 +2,7 @@
     "name": "wshell/snidget",
     "description": "snidget framework",
     "type": "project",
+    "license": "MIT",
     "require": {
         "ext-pdo": "*",
         "ext-mbstring": "*",
