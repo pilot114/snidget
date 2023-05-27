@@ -1,0 +1,61 @@
+#!/bin/sh
+
+# TODO
+exit 0
+
+RED='\033[0;31m';
+BLUE='\033[0;34m';
+GREEN='\033[0;32m';
+NC='\033[0m';
+
+echo "${BLUE}Running Syntax Linter...${NC}"
+composer syntax-lint
+LINTER_EXIT_CODE=$?
+
+if [ $LINTER_EXIT_CODE -ne 0 ]; then
+    echo "${RED}❌ Syntax Linter Error${NC}"
+fi
+
+echo "${BLUE}Running Rector...${NC}"
+composer rector-lint
+RECTOR_EXIT_CODE=$?
+
+if [ $RECTOR_EXIT_CODE -ne 0 ]; then
+    echo "${RED}❌ Rector Error (please try composer rector-fix)${NC}"
+fi
+
+echo "${BLUE}Running ECS Linter...${NC}"
+composer ecs-lint
+ECS_EXIT_CODE=$?
+
+if [ $ECS_EXIT_CODE -ne 0 ]; then
+    echo "${RED}❌ ECS Error (please try composer ecs-fix)${NC}"
+fi
+
+echo "${BLUE}Running PHPStan Static Analyze...${NC}"
+composer phpstan-lint
+PHPSTAN_EXIT_CODE=$?
+
+if [ $PHPSTAN_EXIT_CODE -ne 0 ]; then
+    echo "${RED}❌ PHPStan Error${NC}"
+fi
+
+echo "${BLUE}Running PHPUnit Tests...${NC}"
+composer test
+TEST_EXIT_CODE=$?
+
+if [ $TEST_EXIT_CODE -ne 0 ]; then
+    echo "${RED}❌ PHPUnit Tests Failed${NC}"
+fi
+
+if  [ $LINTER_EXIT_CODE -ne 0 ] ||
+    [ $RECTOR_EXIT_CODE -ne 0 ] ||
+    [ $ECS_EXIT_CODE -ne 0 ] ||
+    [ $PHPSTAN_EXIT_CODE -ne 0 ] ||
+    [ $TEST_EXIT_CODE -ne 0 ]; then
+    exit 1;
+fi
+
+# return 0-exit code
+echo "${GREEN}All Done [V]${NC}"
+exit 0

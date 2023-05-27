@@ -1,0 +1,11 @@
+#!/usr/bin/zsh
+
+echo committing as $(git config user.name)
+# git pull --rebase --autostash origin develop
+
+PREFIX='docker run --rm -t -v "$PWD":/app -w /app -u $(id -u):$(id -g)'
+alias composer='eval $PREFIX composer:2.5.1 composer'
+
+composer phpstan
+composer tests
+composer phploc

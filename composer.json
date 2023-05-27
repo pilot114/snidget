@@ -15,11 +15,10 @@
     },
     "require-dev": {
         "ext-xdebug": "*",
-        "phpstan/phpstan": "^1.6",
+        "phpstan/phpstan": "^1.10",
         "phploc/phploc": "^7.0",
-        "brainmaestro/composer-git-hooks": "^2.8",
         "phpunit/phpunit": "^9.5",
-        "league/commonmark": "^2.3"
+        "league/commonmark": "^2.4"
     },
     "scripts": {
         "phpstan": "phpstan analyse -c phpstan.neon",
@@ -27,7 +26,8 @@
         "phploc": "phploc src | grep 'LOC'",
 
         "serve": "cd public && php -S 0.0.0.0:99",
-        "aserve": "docker-compose up"
+        "aserve": "docker-compose up",
+        "hook-install" : "git config core.hooksPath ./.git-hooks"
     },
     "autoload": {
         "psr-4": {
@@ -35,25 +35,5 @@
             "App\\": "App"
         },
         "files": ["src/functions.php"]
-    },
-    "extra": {
-        "hooks": {
-            "config": {
-                "stop-on-failure": [
-                    "pre-commit"
-                ]
-            },
-            "pre-commit": [
-                "echo committing as $(git config user.name)",
-                "composer phpstan",
-                "composer tests",
-                "composer phploc"
-            ]
-        }
-    },
-    "config": {
-        "allow-plugins": {
-            "brainmaestro/composer-git-hooks": true
-        }
     }
 }
