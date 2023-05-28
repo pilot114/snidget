@@ -10,7 +10,7 @@ class Arg
     public function __construct(
         protected string $description,
         protected bool $isOption = true,
-        protected ?string $shortcut = null,
+        protected ?string $short = null,
     ) {
     }
 
@@ -24,8 +24,8 @@ class Arg
         return $this->isOption;
     }
 
-    public function getShortcut(): ?string
+    public function getShort(): ?string
     {
-        return $this->shortcut;
+        return $this->short;
     }
 }

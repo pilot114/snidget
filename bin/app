@@ -1,166 +1,26 @@
 #!/usr/local/bin/php
 <?php
 
-use Snidget\AttributeLoader;
+use Snidget\CommandHandler;
 use Snidget\Schema\Config\AppPaths;
-use src\Psr\Container;
+use Snidget\Psr\Container;
 
 include_once __DIR__ . '/../vendor/autoload.php';
 
-function parse(string $dtoName, array $argv): array
-{
-    $data = [];
-    foreach (AttributeLoader::getArgs($dtoName) as $prop => $attribute) {
-        $name = $prop->getName();
-        $desc = $attribute->getDescription();
-        // number | string | array. bool equal EXIST
-        $type = $prop->getType()->getName();
-        $isArray = $type === 'array';
-        $isBool = $type === 'bool';
-        $short = $attribute->getShortcut();
+// ./app Test:run -a hello -a world -b=test -de one --gamma test2 two three1 three2
 
-        // multi-option
-        $shortOptions = [];
-        foreach ($argv as $i => $arg) {
-            preg_match("#^-([a-z]{2,})$#", $arg, $matches);
-            if (count($matches) === 2) {
-                $tmp = array_map(fn($x) => "-$x", str_split($matches[1]));
-                array_push($shortOptions, ...$tmp);
-                unset($argv[$i]);
-            }
-        }
-        array_push($argv, ...$shortOptions);
+$handler = new CommandHandler($argv);
 
-        // TODO: typing on add to $data
-        // TODO: quoted strings
-
-        if (!$prop->getType()->allowsNull() && !$isArray && !$isBool) {
-            throw new \Snidget\Exception\SnidgetException("опция $name должна быть указана как необязательная");
-        }
-        foreach ($argv as $i => $arg) {
-            preg_match("#^--$name=(.*)$#", $arg, $matches);
-            if (count($matches) === 2) {
-                if ($isArray) {
-                    $data[$name][] = $matches[1];
-                } else {
-                    $data[$name] = $isBool ? true : $matches[1];
-                }
-                unset($argv[$i]);
-                if (!$isArray) {
-                    continue 2;
-                }
-            }
-            if ($arg === "--$name") {
-                if ($isArray) {
-                    $data[$name][] = ($argv[$i+1] ?? null);
-                } else {
-                    $data[$name] = $isBool ? true : ($argv[$i+1] ?? null);
-                }
-                unset($argv[$i], $argv[$i+1]);
-                if (!$isArray) {
-                    continue 2;
-                }
-            }
-        }
-
-        if ($short) {
-            foreach ($argv as $i => $arg) {
-                preg_match("#^-$short=(.*)$#", $arg, $matches);
-                if (count($matches) === 2) {
-                    if ($isArray) {
-                        $data[$name][] = $matches[1];
-                    } else {
-                        $data[$name] = $isBool ? true : $matches[1];
-                    }
-                    unset($argv[$i]);
-                    if (!$isArray) {
-                        continue 2;
-                    }
-                }
-                if ($arg === "-$short") {
-                    if ($isArray) {
-                        $data[$name][] = ($argv[$i+1] ?? null);
-                    } else {
-                        $data[$name] = $isBool ? true : ($argv[$i+1] ?? null);
-                    }
-                    unset($argv[$i]);
-                    if (!$isBool) {
-                        unset($argv[$i+1]);
-                    }
-                    if (!$isArray) {
-                        continue 2;
-                    }
-                }
-            }
-        }
-    }
-    foreach (AttributeLoader::getArgs($dtoName, false) as $prop => $attribute) {
-        $name = $prop->getName();
-        $type = $prop->getType()->getName();
-        if ($type !== 'array') {
-            $data[$name] = array_shift($argv);
-        }
-        if ($type === 'array') {
-            $data[$name] = $argv;
-            $argv = [];
-        }
-    }
-    return $data;
-}
-
-function getCommandInfo(array $args, array $paths): ?array
-{
-    array_shift($args);
-    $command = array_shift($args);
-    if (!str_contains($command, ':')) {
-        return null;
-    }
-    [$command, $subCommand] = explode(':', $command);
-    return AttributeLoader::getDtoInfoByCommandName($paths, $command, $subCommand);
-}
-
-/** banner and help by commands */
-function info(array $paths): void
-{
-    $tmp = [];
-    foreach (AttributeLoader::getCommands($paths) as $fqn => $attr) {
-        [$class, $method] = explode('::',$fqn);
-        $parts = explode('\\', $class);
-        $tmp[end($parts)] = [$method => $attr->getDescription()];
-    }
-    foreach ($tmp as $groupName => $group) {
-        echo "$groupName\n";
-        foreach ($group as $command => $desc) {
-            echo "    $command\t$desc\n";
-        }
-    }
-}
-
-function handle(array $argv): void
-{
-    // TODO: module prefix for commands
-
-    $container = new Container();
-    $paths = $container->get(AppPaths::class, [
-        'appPath' => '/app/App',
-    ])->getCommandPaths();
-
-    // info
-    if (count($argv) === 1) {
-        info($paths);
-        return;
-    }
-
-    [$commandClassName, $commandMethodName, $dtoName, $paramName] = getCommandInfo($argv, $paths);
-
-    $data = parse($dtoName, $argv);
-
+// TODO: module prefix for commands
+$container = new Container();
+$paths = $container->get(AppPaths::class, [
+    'appPath' => '/app/App',
+])->getCommandPaths();
+$commandData = $handler->extractCommand($paths);
+if ($commandData === []) {
+    $handler->default($paths);
+} else {
+    [$dtoName, $data, $commandClassName, $commandMethodName] = $commandData;
     $container->get($dtoName, ['array' => $data]);
     $container->call($commandClassName, $commandMethodName);
 }
-
-// my:
-// ./app AutoComplete:run -c 2 -i ./app -i Test:
-// ./app Test:run -a hello -a world -b=test -de one --gamma test two three1 three2
-
-handle($argv);

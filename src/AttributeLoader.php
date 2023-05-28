@@ -100,7 +100,7 @@ class AttributeLoader
                 foreach ((new Reflection($class))->getParams($method) as $param) {
                     $paramTypeName = $param->getType()->getName();
                     if (is_subclass_of($paramTypeName, Type::class)) {
-                        return [$class, $method, $paramTypeName, $param->getName()];
+                        return [$class, $method, $paramTypeName];
                     }
                 }
             }

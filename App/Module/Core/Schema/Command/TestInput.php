@@ -7,15 +7,15 @@ use Snidget\Typing\Type;
 
 class TestInput extends Type
 {
-    #[Arg('alpha option', shortcut: 'a')]
+    #[Arg('alpha option', short: 'a')]
     public array $alpha = [];
-    #[Arg('beta option', shortcut: 'b')]
+    #[Arg('beta option', short: 'b')]
     public ?string $beta = null;
     #[Arg('gamma option')]
     public ?string $gamma = null;
-    #[Arg('delta option', shortcut: 'd')]
+    #[Arg('delta option', short: 'd')]
     public bool $delta = false;
-    #[Arg('epsilon option', shortcut: 'e')]
+    #[Arg('epsilon option', short: 'e')]
     public bool $epsilon = false;
 
     #[Arg('first arg', isOption: false)]

@@ -10,7 +10,7 @@ class Test
     #[Command('Creates a new user')]
     public function run(TestInput $data): void
     {
-        echo "sucess!\n";
+        echo "success!\n";
         dump($data);
     }
 }

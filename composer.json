@@ -24,9 +24,6 @@
         "phpstan": "phpstan analyse -c phpstan.neon",
         "tests": "XDEBUG_MODE=coverage phpunit tests --coverage-html tests/coverage --coverage-filter src --order-by random -v --bootstrap tests/bootstrap.php",
         "phploc": "phploc src | grep 'LOC'",
-
-        "serve": "cd public && php -S 0.0.0.0:99",
-        "aserve": "docker-compose up",
         "hook-install" : "git config core.hooksPath ./.git-hooks"
     },
     "autoload": {
