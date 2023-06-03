@@ -5,7 +5,7 @@ function run(bool $isAsync): never
     (new Snidget\Kernel($isAsync))->run();
 }
 
-function override(string $url, string $method, array $data): never
+function request(string $url, string $method, array $data): never
 {
     (new Snidget\Kernel())
         ->overrideRequest($url, $method, $data)

@@ -2,7 +2,7 @@
 
 include_once '../vendor/autoload.php';
 
-override(
+request(
     url: 'post',
     method: 'POST',
     data: ['login' => '114', 'password' => 'qwert']
