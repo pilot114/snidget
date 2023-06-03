@@ -7,8 +7,6 @@ parameters:
 	# отключаем "строгие" дженерики (ReflectionClass<Foo> вместо ReflectionClass)
 	checkGenericClassInNonGenericObjectType: false
 	ignoreErrors:
-		# в асинхронном коде могут быть бесконечные циклы
-		- '#While loop condition is always true#'
 		# типы для массивов указывать излишне, т.к. для этих целей есть Collection
 		- '#no value type specified in iterable type array#'
 		# дженерики
