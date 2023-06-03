@@ -2,10 +2,12 @@ version: '3'
 
 services:
   php:
+    environment:
+      - ASYNC=1
     build: ./php_cli
     working_dir: /app/public
     volumes:
       - "../:/app"
     ports:
-      - "99:80"
+      - "${PORT}:80"
     command: ['php', 'index.php']

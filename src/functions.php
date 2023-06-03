@@ -1,10 +1,5 @@
 <?php
 
-function run(bool $isAsync): never
-{
-    (new Snidget\Kernel($isAsync))->run();
-}
-
 function request(string $url, string $method, array $data): never
 {
     (new Snidget\Kernel())

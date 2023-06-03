@@ -1,6 +1,6 @@
 <?php
 
-namespace Snidget\Async;
+namespace App\Module\Async;
 
 use Snidget\Enum\Wait;
 use Snidget\Exception\SnidgetException;

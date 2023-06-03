@@ -1,6 +1,6 @@
 <?php
 
-namespace Snidget\Async;
+namespace App\Module\Async;
 
 use Fiber;
 use Snidget\Enum\Wait;

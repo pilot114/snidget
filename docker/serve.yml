@@ -6,7 +6,7 @@ services:
     depends_on:
       - php
     ports:
-      - "99:80"
+      - "${PORT}:80"
     volumes:
       - "./site.conf:/etc/nginx/conf.d/default.conf"
       - "../public:/app/public:ro"

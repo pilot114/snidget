@@ -1,3 +1,5 @@
+# this need symlink to project. Module may rewrite symlink
+
 serve:
 	export PUID=$(id -u $USER)
 	export PGID=$(id -g $USER)

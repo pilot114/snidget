@@ -1,10 +1,10 @@
 <?php
 
-namespace Snidget\Async;
+namespace App\Module\Async;
 
-use SplQueue;
 use Fiber;
 use Snidget\Enum\Wait;
+use SplQueue;
 
 class Scheduler
 {

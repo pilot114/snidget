@@ -1,5 +1,8 @@
 <?php
 
+use App\Module\Async\AsyncKernel;
+use Snidget\Kernel;
+
 include_once '../vendor/autoload.php';
 
 // TODO: create Env class and select mode by env variable
@@ -7,4 +10,8 @@ include_once '../vendor/autoload.php';
 // TODO: logs
 // and other TODOs
 
-run(isAsync: isCli());
+// TODO: index file override
+if (isset($_ENV['ASYNC'])) {
+    (new AsyncKernel())->run();
+}
+(new Kernel())->run();
