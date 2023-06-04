@@ -4,7 +4,7 @@ services:
   php:
     environment:
       - ASYNC=1
-    build: ./php_cli
+    build: ./php
     working_dir: /app/public
     volumes:
       - "../:/app"

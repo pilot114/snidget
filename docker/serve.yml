@@ -12,7 +12,7 @@ services:
       - "../public:/app/public:ro"
     command: ['nginx', '-g', 'daemon off;']
   php:
-    build: php_fpm
+    build: php
     working_dir: /app/bin
     volumes:
       - "../:/app:ro"
