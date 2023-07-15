@@ -8,3 +8,5 @@ stop:
 	docker-compose -f default.yml stop
 enter:
 	docker exec -it snidget-php-1 zsh
+log:
+	docker-compose -f default.yml logs -f
