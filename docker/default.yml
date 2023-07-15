@@ -3,8 +3,6 @@ version: '3'
 services:
   nginx:
     image: nginx:1.23
-    depends_on:
-      - php
     ports:
       - "${PORT}:80"
     volumes:

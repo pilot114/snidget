@@ -2,7 +2,7 @@
 
 use App\Schema\Database\People;
 use Snidget\SQL\Table;
-use Snidget\Psr\Container;
+use Snidget\PSR\Container;
 
 return [
     // TODO: 2 optional arg is call context class

@@ -73,8 +73,8 @@ function millisecondPrint(int $sec): string
     $d && $result[] = "$d days";
     $h && $result[] = "$h hours";
     $m && $result[] = "$m minutes";
-    $s && $result[] = "$s seconds";
-    $ms && $result[] = "$ms milliseconds";
+    $s && $result[] = "$s sec";
+    $ms && $result[] = "$ms msec";
 
     return implode(' ', $result);
 }

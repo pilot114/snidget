@@ -10,7 +10,8 @@ best known for early use in the wizarding game of Quidditch, eventually being re
 # Features
 
 - php 8 features
-- best practices for scalable architectures (layers, DDD, CQRS)
+- flexible system of modules
+- best practices for scalable architectures (DDD + CQRS)
 - full compatible with "12-factor app" concept
 - thoughtful api architecture from the box
 - compatibility with PSR

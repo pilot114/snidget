@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use Snidget\Exception\SnidgetException;
-use Snidget\Psr\Container;
+use Snidget\PSR\Container;
 
 class ContainerTest extends TestCase
 {

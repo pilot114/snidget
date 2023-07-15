@@ -4,7 +4,7 @@ namespace Snidget;
 
 use Closure;
 use Snidget\Driver\Reflection;
-use Snidget\Psr\Container;
+use Snidget\PSR\Container;
 
 class MiddlewareManager
 {

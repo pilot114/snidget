@@ -1,11 +1,12 @@
 <?php
 
-namespace Snidget\Psr;
+namespace Snidget\PSR;
 
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Snidget\AttributeLoader;
 use UnitEnum;
 
-class EventManager
+class EventManager implements EventDispatcherInterface
 {
     public function __construct(
         protected Container $container,
@@ -26,5 +27,15 @@ class EventManager
             [$class, $method] = explode('::', $listener);
             $this->container->call($class, $method, ['data' => $data]);
         }
+    }
+
+    /**
+     * @param UnitEnum $event
+     * @return UnitEnum
+     */
+    public function dispatch(object $event)
+    {
+        // TODO
+        return $event;
     }
 }

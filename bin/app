@@ -3,7 +3,7 @@
 
 use Snidget\CommandHandler;
 use Snidget\Schema\Config\AppPaths;
-use Snidget\Psr\Container;
+use Snidget\PSR\Container;
 
 include_once __DIR__ . '/../vendor/autoload.php';
 

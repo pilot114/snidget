@@ -1,6 +1,6 @@
 <?php
 
-namespace Snidget\Psr;
+namespace Snidget\PSR;
 
 use Psr\Container\ContainerInterface;
 use ReflectionException;

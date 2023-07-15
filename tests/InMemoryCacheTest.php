@@ -3,7 +3,7 @@
 use PHPUnit\Framework\TestCase;
 use Psr\SimpleCache\CacheInterface;
 use Snidget\Exception\InvalidCacheKeyException;
-use Snidget\Psr\MemoryCache;
+use Snidget\PSR\MemoryCache;
 
 class InMemoryCacheTest extends TestCase
 {

@@ -3,8 +3,8 @@
 namespace Snidget;
 
 use Snidget\Enum\SystemEvent;
-use Snidget\Psr\Container;
-use Snidget\Psr\EventManager;
+use Snidget\PSR\Container;
+use Snidget\PSR\EventManager;
 use Snidget\Schema\Config\AppPaths;
 use Throwable;
 
