@@ -10,10 +10,11 @@ use Snidget\Router;
 class Admin
 {
     protected array $links = [
-        '/admin' => 'Dashboard',
-        '/admin/routes' => 'Endpoints',
-        '/admin/domain' => 'Domain',
+        '/admin'          => 'Dashboard',
+        '/admin/routes'   => 'Endpoints',
+        '/admin/domain'   => 'Domain',
         '/admin/database' => 'Database',
+        '/?SPX_UI_URI=/'  => 'Profiler',
     ];
 
     #[Route(regex: '')]

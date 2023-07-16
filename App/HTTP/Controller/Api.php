@@ -23,7 +23,7 @@ class Api
             $table->insert($table->getType());
             $table->insert($table->getType());
             $table->insert($table->getType());
-//            dump($container->get(\Snidget\Module\PDO::class)->getLog());
+//            dump($container->get(\Snidget\Driver\PDO::class)->getLog());
         }
 
         return json_encode([

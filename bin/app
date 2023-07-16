@@ -1,5 +1,9 @@
 #!/usr/local/bin/php
 <?php
+// SPX_ENABLED=1 php app
+// SPX_FP_LIVE=1 - live update
+// SPX_REPORT=full - report from web UI
+// SPX_AUTO_START=0 + spx_profiler_start(); / spx_profiler_stop(); - for control
 
 use Snidget\CommandHandler;
 use Snidget\Schema\Config\AppPaths;

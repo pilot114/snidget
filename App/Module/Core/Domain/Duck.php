@@ -4,7 +4,7 @@ namespace App\Module\Core\Domain;
 
 use Snidget\AttributeLoader;
 use Snidget\Exception\SnidgetException;
-use Snidget\Module\Reflection;
+use Snidget\Driver\Reflection;
 
 class Duck
 {
