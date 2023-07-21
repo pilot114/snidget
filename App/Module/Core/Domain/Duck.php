@@ -2,9 +2,9 @@
 
 namespace App\Module\Core\Domain;
 
-use Snidget\AttributeLoader;
-use Snidget\Exception\SnidgetException;
-use Snidget\Driver\Reflection;
+use Snidget\Kernel\AttributeLoader;
+use Snidget\Kernel\Reflection;
+use Snidget\Kernel\SnidgetException;
 
 class Duck
 {

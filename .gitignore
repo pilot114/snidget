@@ -3,4 +3,3 @@ data
 vendor
 tests/coverage
 .phpunit.result.cache
-1.php

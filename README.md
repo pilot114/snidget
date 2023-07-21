@@ -18,4 +18,8 @@ best known for early use in the wizarding game of Quidditch, eventually being re
 - advanced code generation
 - encourages the use of effective algorithms and patterns
 
-// TODO: src/Core src/HTTP src/CLI
+# Roadmap
+
+- composer.json link to bin? need run all 'scripts' without `cd`
+- set prod environment (for example, vendor dir its read-only volume, data its optional)
+- create interface for Driver and Module?

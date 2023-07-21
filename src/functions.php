@@ -2,7 +2,7 @@
 
 function request(string $url, string $method, array $data): never
 {
-    (new Snidget\Kernel())
+    (new \Snidget\Kernel\Kernel())
         ->overrideRequest($url, $method, $data)
         ->run();
 }

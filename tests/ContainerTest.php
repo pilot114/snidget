@@ -1,8 +1,8 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Snidget\Exception\SnidgetException;
-use Snidget\PSR\Container;
+use Snidget\Kernel\PSR\Container;
+use Snidget\Kernel\SnidgetException;
 
 class ContainerTest extends TestCase
 {

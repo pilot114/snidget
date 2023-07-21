@@ -2,9 +2,8 @@
 
 namespace App\Module\Async;
 
-use Snidget\Enum\Wait;
-use Snidget\Exception\SnidgetException;
-use Snidget\Request;
+use Snidget\HTTP\Request;
+use Snidget\Kernel\SnidgetException;
 
 class Server
 {

@@ -2,7 +2,7 @@
 
 namespace App\Module\Core\HTTP\Controller;
 
-use Snidget\Attribute\Route;
+use Snidget\HTTP\Route;
 
 class Main
 {

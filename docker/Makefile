@@ -1,12 +1,12 @@
 build:
 	export PUID=$(id -u $USER)
 	export PGID=$(id -g $USER)
-	docker-compose -f default.yml build --build-arg $PUID --build-arg $PGID
+	docker-compose -f serve.yml build --build-arg $PUID --build-arg $PGID
 start:
-	docker-compose -f default.yml up -d
+	docker-compose -f serve.yml up -d
 stop:
-	docker-compose -f default.yml stop
+	docker-compose -f serve.yml stop
 enter:
 	docker exec -it snidget-php-1 zsh
 log:
-	docker-compose -f default.yml logs -f
+	docker-compose -f serve.yml logs -f

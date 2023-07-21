@@ -3,9 +3,9 @@
 namespace App\Module\Core\HTTP\Middleware;
 
 use App\Module\Core\Domain\Duck;
-use Snidget\Attribute\Bind;
-use Snidget\{Schema\Config\AppPaths, Request};
 use Closure;
+use Snidget\{HTTP\Request, Kernel\Typing\Config\AppPaths};
+use Snidget\HTTP\Bind;
 
 #[Bind(priority: PHP_INT_MAX)]
 class BuiltIn

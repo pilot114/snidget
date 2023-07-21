@@ -3,7 +3,7 @@
 namespace App\Module\Core\Command;
 
 use App\Module\Core\Schema\Command\TestInput;
-use Snidget\Attribute\Command;
+use Snidget\CLI\Command;
 
 class Test
 {

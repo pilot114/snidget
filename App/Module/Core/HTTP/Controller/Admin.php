@@ -2,9 +2,9 @@
 
 namespace App\Module\Core\HTTP\Controller;
 
-use Snidget\Attribute\Route;
-use Snidget\MiddlewareManager;
-use Snidget\Router;
+use Snidget\HTTP\Route;
+use Snidget\HTTP\Router;
+use Snidget\Kernel\MiddlewareManager;
 
 #[Route(prefix: 'admin')]
 class Admin

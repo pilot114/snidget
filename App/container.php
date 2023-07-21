@@ -1,8 +1,8 @@
 <?php
 
 use App\Schema\Database\People;
-use Snidget\SQL\Table;
-use Snidget\PSR\Container;
+use Snidget\Database\SQL\Table;
+use Snidget\Kernel\PSR\Container;
 
 return [
     // TODO: 2 optional arg is call context class

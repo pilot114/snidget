@@ -3,7 +3,6 @@
 namespace App\Module\Async;
 
 use Fiber;
-use Snidget\Enum\Wait;
 use SplQueue;
 
 class Scheduler

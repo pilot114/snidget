@@ -5,9 +5,9 @@
 // SPX_REPORT=full - report from web UI
 // SPX_AUTO_START=0 + spx_profiler_start(); / spx_profiler_stop(); - for control
 
-use Snidget\CommandHandler;
-use Snidget\Schema\Config\AppPaths;
-use Snidget\PSR\Container;
+use Snidget\CLI\CommandHandler;
+use Snidget\Kernel\PSR\Container;
+use Snidget\Kernel\Typing\Config\AppPaths;
 
 include_once __DIR__ . '/../vendor/autoload.php';
 

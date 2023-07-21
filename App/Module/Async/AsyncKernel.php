@@ -2,8 +2,8 @@
 
 namespace App\Module\Async;
 
-use Snidget\Enum\SystemEvent;
-use Snidget\Kernel;
+use Snidget\Kernel\Kernel;
+use Snidget\Kernel\SystemEvent;
 
 class AsyncKernel extends Kernel
 {

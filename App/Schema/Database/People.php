@@ -2,9 +2,9 @@
 
 namespace App\Schema\Database;
 
-use Snidget\Attribute\Column;
-use Snidget\Enum\SQLiteType;
-use Snidget\Typing\Type;
+use Snidget\Database\Column;
+use Snidget\Database\SQLiteType;
+use Snidget\Kernel\Typing\Type;
 
 class People extends Type
 {

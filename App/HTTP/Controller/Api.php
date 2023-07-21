@@ -3,9 +3,9 @@
 namespace App\HTTP\Controller;
 
 use App\Schema\Database\People;
-use Snidget\Attribute\Route;
-use Snidget\SQL\Table;
-use Snidget\PSR\Container;
+use Snidget\Database\SQL\Table;
+use Snidget\HTTP\Route;
+use Snidget\Kernel\PSR\Container;
 
 #[Route(prefix: 'api/v1')]
 class Api

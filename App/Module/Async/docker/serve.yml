@@ -1,13 +1,16 @@
-version: '3'
+version: '3.8'
 
 services:
   php:
     environment:
       - ASYNC=1
+      - PHP_IDE_CONFIG="serverName=Docker"
     build: ./php
     working_dir: /app/public
     volumes:
-      - "../:/app"
+      - "../:/app:ro"
+      - "../data:/app/data"
+      - "../vendor:/app/vendor"
     ports:
       - "${PORT}:80"
     command: ['php', 'index.php']

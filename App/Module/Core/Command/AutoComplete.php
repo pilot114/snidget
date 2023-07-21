@@ -3,10 +3,10 @@
 namespace App\Module\Core\Command;
 
 use App\Module\Core\Schema\Command\AutoCompleteInput;
-use Snidget\Attribute\Command;
-use Snidget\AttributeLoader;
-use Snidget\CommandHandler;
-use Snidget\Schema\Config\AppPaths;
+use Snidget\CLI\Command;
+use Snidget\CLI\CommandHandler;
+use Snidget\Kernel\AttributeLoader;
+use Snidget\Kernel\Typing\Config\AppPaths;
 
 class AutoComplete
 {

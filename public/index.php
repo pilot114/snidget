@@ -1,7 +1,7 @@
 <?php
 
 use App\Module\Async\AsyncKernel;
-use Snidget\Kernel;
+use Snidget\Kernel\Kernel;
 
 include_once '../vendor/autoload.php';
 

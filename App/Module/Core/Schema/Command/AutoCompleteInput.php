@@ -2,8 +2,8 @@
 
 namespace App\Module\Core\Schema\Command;
 
-use Snidget\Attribute\Arg;
-use Snidget\Typing\Type;
+use Snidget\CLI\Arg;
+use Snidget\Kernel\Typing\Type;
 
 class AutoCompleteInput extends Type
 {
