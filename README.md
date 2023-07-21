@@ -17,3 +17,5 @@ best known for early use in the wizarding game of Quidditch, eventually being re
 - compatibility with PSR
 - advanced code generation
 - encourages the use of effective algorithms and patterns
+
+// TODO: src/Core src/HTTP src/CLI

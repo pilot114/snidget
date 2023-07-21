@@ -1,5 +1,4 @@
 .idea
-data
 vendor
 tests/coverage
 .phpunit.result.cache
