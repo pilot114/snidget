@@ -4,10 +4,10 @@ parameters:
 	level: 8
 	paths:
 		- src
-	# отключаем "строгие" дженерики (ReflectionClass<Foo> вместо ReflectionClass)
+    # дженерики
 	checkGenericClassInNonGenericObjectType: false
 	ignoreErrors:
-		# типы для массивов указывать излишне, т.к. для этих целей есть Collection
+		# типы для массивов указывать излишне
 		- '#no value type specified in iterable type array#'
 		# дженерики
 		- '#expects class-string#'

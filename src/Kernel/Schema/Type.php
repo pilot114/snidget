@@ -27,7 +27,7 @@ abstract class Type implements JsonSerializable
                 $this->$key = $value;
             } catch (TypeError $e) {
                 $message = sprintf("Не удалось установить в поле %s::%s значение %s", static::class, $key, $value ?? 'null');
-                throw new TypeError($message);
+                throw new TypeError($message, $e->getCode(), $e);
             }
         }
         return $this;
@@ -70,7 +70,7 @@ abstract class Type implements JsonSerializable
                 preg_match('#\$\S+ (\S+)\[]#', $doc, $match);
                 $itemClass = $match[1] ?? null;
                 if ($itemClass) {
-                    return (new Collection($value))->map(fn($x) => new $itemClass($x));
+                    return (new Collection($value))->map(fn($x): object => new $itemClass($x));
                 }
             }
             if ($value) {
@@ -99,14 +99,17 @@ abstract class Type implements JsonSerializable
     protected function getUsedPublic(): \Generator
     {
         foreach ((new Reflection($this))->getPublicProperties() as $property) {
-            if (!$property->isPublic() || !in_array($property->getName(), array_flip($this->useFields))) {
+            if (!$property->isPublic()) {
+                continue;
+            }
+            if (!in_array($property->getName(), array_flip($this->useFields))) {
                 continue;
             }
             try {
                 yield $property->getName() => $this->{$property->getName()};
             } catch (Error $e) {
                 $message = sprintf("Не удалось прочитать поле %s::%s", static::class, $property->getName());
-                throw new TypeError($message);
+                throw new TypeError($message, $e->getCode(), $e);
             }
         }
     }

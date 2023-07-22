@@ -83,14 +83,14 @@ class Kernel
 
     protected function unexpectedErrorHandler(): void
     {
-        register_shutdown_function(function () {
+        register_shutdown_function(function (): void {
             if ($this->displayAllErrors && $error = error_get_last()) {
                 dump(sprintf('Fatal %s: %s', $error['type'], $error['message']));
                 dump($error['file'] . ':' . $error['line']);
             }
             $this->eventManager->emit(KernelEvent::FINISH);
         });
-        set_exception_handler(function (Throwable $exception) {
+        set_exception_handler(function (Throwable $exception): void {
             $this->eventManager->emit(KernelEvent::EXCEPTION, $exception);
 
             if ($this->displayAllErrors) {

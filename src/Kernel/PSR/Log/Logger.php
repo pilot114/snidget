@@ -10,7 +10,7 @@ class Logger implements LoggerInterface
 
     public function __toString(): string
     {
-        return implode("\n", array_map(fn($x) => sprintf("%s: %s %s (%s)", ...$x), $this->log));
+        return implode("\n", array_map(fn($x): string => sprintf("%s: %s %s (%s)", ...$x), $this->log));
     }
 
     public function emergency(string|\Stringable $message, array $context = []): void

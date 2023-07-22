@@ -20,7 +20,7 @@ class MemoryCache implements CacheInterface
     public function set(string $key, mixed $value, null|int|\DateInterval $ttl = null): bool
     {
         $this->checkCacheKey($key);
-        if (key_exists($key, $this->values)) {
+        if (array_key_exists($key, $this->values)) {
             return false;
         }
         if ($ttl instanceof \DateInterval) {
@@ -37,7 +37,7 @@ class MemoryCache implements CacheInterface
     public function delete(string $key): bool
     {
         $this->checkCacheKey($key);
-        if (!key_exists($key, $this->values)) {
+        if (!array_key_exists($key, $this->values)) {
             return false;
         }
         unset($this->values[$key]);
@@ -56,7 +56,7 @@ class MemoryCache implements CacheInterface
     {
         array_map(fn($key) => $this->checkCacheKey($key), (array)$keys);
         $keys = array_flip((array)$keys);
-        foreach ($keys as $key => $v) {
+        foreach (array_keys($keys) as $key) {
             $keys[$key] = $this->get($key, $default);
         }
         return $keys;
@@ -89,7 +89,7 @@ class MemoryCache implements CacheInterface
     public function has(string $key): bool
     {
         $this->deleteIfExpired($key);
-        return key_exists($key, $this->values);
+        return array_key_exists($key, $this->values);
     }
 
     protected function deleteIfExpired(string $key): void
@@ -101,7 +101,9 @@ class MemoryCache implements CacheInterface
         [$startTs, $duration] = explode(':', $this->timers[$key]);
         $duration = (int)$duration;
         $isExpired = $duration && (time() - (int)$startTs) >= $duration;
-        $isExpired && $this->delete($key);
+        if ($isExpired) {
+            $this->delete($key);
+        }
     }
 
     protected function checkCacheKey(string $key): void

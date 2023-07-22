@@ -23,7 +23,7 @@ class Request
         $this->method = $_SERVER['REQUEST_METHOD'];
         $this->requestTimeMs = $_SERVER['REQUEST_TIME_FLOAT'];
 
-        $http = array_filter($_SERVER, fn($key) => str_starts_with($key, 'HTTP_'), ARRAY_FILTER_USE_KEY);
+        $http = array_filter($_SERVER, fn($key): bool => str_starts_with($key, 'HTTP_'), ARRAY_FILTER_USE_KEY);
         foreach ($http as $headerName => $header) {
             $this->headers[str_replace('HTTP_', '', $headerName)] = $header;
         }
@@ -36,7 +36,9 @@ class Request
             return $this;
         }
         [$headers, $body] = str_contains($request, "\n\n") ? explode("\n\n", $request) : [$request, ''];
-        $this->payload = $body ? json_decode($body, true) : $body;
+        if (!empty($body)) {
+            $this->payload = json_decode($body, true);
+        }
         $this->requestTimeMs = round($startTimeNs / 1_000_000, 4);
         $this->parseHeaders($headers);
         return $this;
@@ -44,7 +46,7 @@ class Request
 
     protected function parseHeaders(string $headers): void
     {
-        $headers = array_filter(explode("\n", $headers), fn($x) => trim($x));
+        $headers = array_filter(explode("\n", $headers), fn($x): string => trim($x));
         [$this->method, $uri] = explode(' ', array_shift($headers) ?? '');
         $this->uri = trim($uri, '/');
 

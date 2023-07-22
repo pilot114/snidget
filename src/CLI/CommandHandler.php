@@ -52,7 +52,10 @@ class CommandHandler
     {
         array_shift($this->args);
         $command = array_shift($this->args);
-        if (!$command || !str_contains($command, ':')) {
+        if (!$command) {
+            return [];
+        }
+        if (!str_contains($command, ':')) {
             return [];
         }
         [$command, $subCommand] = explode(':', $command);
@@ -64,7 +67,6 @@ class CommandHandler
         $data = [];
         foreach (AttributeLoader::getArgs($dtoName) as $prop => $attribute) {
             $name = $prop->getName();
-            $desc = $attribute->getDescription();
             // number | string | array. bool equal EXIST
             $type = $prop->getType()->getName();
             $isArray = $type === 'array';

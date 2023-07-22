@@ -16,15 +16,18 @@
     "require-dev": {
         "ext-xdebug": "*",
         "phpstan/phpstan": "^1.10",
+        "rector/rector": "^0.15",
         "phploc/phploc": "^7.0",
-        "phpunit/phpunit": "^9.5",
+        "phpunit/phpunit": "^9.6",
         "league/commonmark": "^2.4"
     },
     "scripts": {
-        "phpstan": "phpstan analyse -c phpstan.neon",
-        "tests": "XDEBUG_MODE=coverage phpunit tests --coverage-html tests/coverage --coverage-filter src --order-by random -v --bootstrap tests/bootstrap.php",
-        "phploc": "phploc src | grep 'LOC'",
-        "hook-install" : "git config core.hooksPath ./.git-hooks"
+        "hook-install" : "git config core.hooksPath ./.git-hooks",
+        "tests"        : "XDEBUG_MODE=coverage phpunit tests --coverage-html tests/coverage --coverage-filter src --order-by random -v --bootstrap tests/bootstrap.php",
+        "phploc"       : "phploc src | grep 'LOC'",
+        "phpstan"      : "phpstan analyse -c phpstan.neon",
+        "rector-lint"  : "rector process --dry-run",
+        "rector-fix"   : "rector process"
     },
     "autoload": {
         "psr-4": {

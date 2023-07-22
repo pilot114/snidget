@@ -18,3 +18,4 @@ services:
       - "../:/app:ro"
       - "../data:/app/data"
       - "../vendor:/app/vendor"
+      - "../tests/coverage:/app/tests/coverage"

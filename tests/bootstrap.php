@@ -1,6 +1,6 @@
 <?php
 
-include './src/Kernel.php';
+include __DIR__ . '/../src/Kernel/Kernel.php';
 
 // Recommended by phpUnit
 ini_set('memory_limit', -1);

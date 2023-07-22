@@ -24,7 +24,7 @@ class Router
         foreach ($this->routes as $pattern => $fqn) {
             if (preg_match("#^$pattern$#i", $request->uri, $matches)) {
                 $names = array_filter(array_keys($matches), is_string(...));
-                $matchesNamed = array_filter($matches, fn($x) => in_array($x, $names), ARRAY_FILTER_USE_KEY);
+                $matchesNamed = array_filter($matches, fn($x): bool => in_array($x, $names), ARRAY_FILTER_USE_KEY);
                 return $this->route = [...explode('::', $fqn), $matchesNamed];
             }
         }

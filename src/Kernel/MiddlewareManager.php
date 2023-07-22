@@ -27,7 +27,9 @@ class MiddlewareManager
     {
         $binds = iterator_to_array($this->getMiddlewareBinds($controller, $action));
         foreach (AttributeLoader::getBindsByAction($controller, $action) as $attribute) {
-            [$c, $m, $priority] = [$attribute->getClass(), $attribute->getMethod(), $attribute->getPriority()];
+            $c = $attribute->getClass();
+            $m = $attribute->getMethod();
+            $priority = $attribute->getPriority();
             $mwFqn = $m ? ($c . '::' . $m) : $c;
             $binds[$mwFqn] = $priority;
         }
@@ -40,7 +42,7 @@ class MiddlewareManager
     {
         return array_reduce(
             array_reverse($this->middlewares),
-            fn($nextLayer, $layer) => $this->createLayer($nextLayer, $layer),
+            fn($nextLayer, $layer): \Closure => $this->createLayer($nextLayer, $layer),
             fn($object) => $core($object)
         )($request);
     }
@@ -48,7 +50,9 @@ class MiddlewareManager
     protected function getMiddlewareBinds(string $controller, string $action): \Generator
     {
         foreach ($this->allMiddlewares as $mwFqn => $attribute) {
-            [$c, $m, $priority] = [$attribute->getClass(), $attribute->getMethod(), $attribute->getPriority()];
+            $c = $attribute->getClass();
+            $m = $attribute->getMethod();
+            $priority = $attribute->getPriority();
             if (!$c || (!$m && $c === $controller) || ($m === $action && $c === $controller)) {
                 if (str_contains($mwFqn, '::')) {
                     yield $mwFqn => $priority;

@@ -10,7 +10,6 @@ use Snidget\Kernel\Reflection;
 use Snidget\Kernel\SnidgetException;
 
 /**
- * interface for user-space usage
  * @template T
  */
 class Container implements ContainerInterface
@@ -25,8 +24,8 @@ class Container implements ContainerInterface
     }
 
     /**
-     * @param object|class-string<T> $instance
-     * @throws SnidgetException|ReflectionException
+     * @param object | class-string<T> $instance
+     * @throws SnidgetException | ReflectionException
      */
     public function call(object|string $instance, string $methodName, array $params = []): mixed
     {
@@ -45,7 +44,7 @@ class Container implements ContainerInterface
     /**
      * @param class-string<T> $origId
      * @return T
-     * @throws SnidgetException|ReflectionException
+     * @throws SnidgetException | ReflectionException
      */
     public function make(string $origId, array $params = [])
     {
@@ -60,7 +59,7 @@ class Container implements ContainerInterface
     /**
      * @param class-string<T> $id
      * @return T
-     * @throws SnidgetException|ReflectionException
+     * @throws SnidgetException | ReflectionException
      */
     public function get(string $id, array $params = [])
     {
@@ -89,7 +88,7 @@ class Container implements ContainerInterface
     }
 
     /**
-     * @throws ReflectionException|SnidgetException
+     * @throws ReflectionException | SnidgetException
      */
     protected function getParams(object|string $instance, string $methodName, array $params): \Generator
     {
@@ -109,7 +108,7 @@ class Container implements ContainerInterface
     }
 
     /**
-     * @throws ReflectionException|SnidgetException
+     * @throws ReflectionException | SnidgetException
      */
     protected function getValue(ReflectionParameter $param): mixed
     {
@@ -117,7 +116,7 @@ class Container implements ContainerInterface
          * @var ?ReflectionNamedType $type
          */
         $type = $param->getType();
-        $typeName = $type ? $type->getName() : 'mixed';
+        $typeName = is_null($type) ? 'mixed' : $type->getName();
         if (class_exists($typeName)) {
             return $this->get($typeName);
         }

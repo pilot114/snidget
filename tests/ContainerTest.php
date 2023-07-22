@@ -22,7 +22,7 @@ class ContainerTest extends TestCase
         yield [Iguana::class,    ['genome' => 4], null];
         yield [Animal::class,    ['genome' => 5], Chameleon::class];
         yield [Reptile::class,   ['genome' => 6], Chameleon::class];
-        yield [Lizard::class,    ['genome' => 7], fn() => Iguana::class];
+        yield [Lizard::class,    ['genome' => 7], fn(): string => Iguana::class];
     }
 
     protected function getClassesAndInterfacesByMethod(): Generator

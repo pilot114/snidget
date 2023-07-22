@@ -114,9 +114,13 @@ class AttributeLoader
             if ($isOption && $firstAttr->isOption()) {
                 yield $prop => $firstAttr;
             }
-            if (!$isOption && !$firstAttr->isOption()) {
-                yield $prop => $firstAttr;
+            if ($isOption) {
+                continue;
             }
+            if ($firstAttr->isOption()) {
+                continue;
+            }
+            yield $prop => $firstAttr;
         }
     }
 

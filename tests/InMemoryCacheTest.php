@@ -80,7 +80,7 @@ class InMemoryCacheTest extends TestCase
     public function testMultiple(): void
     {
         $values = iterator_to_array($this->values());
-        $values = array_map(fn($x) => $x[0], $values);
+        $values = array_map(fn($x): mixed => $x[0], $values);
         $keys = array_keys($values);
 
         array_map(fn($k) => $this->assertFalse($this->cache->has($k)), $keys);
