@@ -20,7 +20,5 @@ best known for early use in the wizarding game of Quidditch, eventually being re
 
 # Roadmap
 
-- support using git in container (already installed - need only in dev!)
-- composer.json link to bin? need run all 'scripts' without `cd`
-- set prod environment (for example, vendor dir its read-only volume, data its optional)
+- set prod environment (for example, vendor dir its read-only volume, data its optional, other - read only!, working_dir: /app/bin)
 - create interface for Driver and Module?

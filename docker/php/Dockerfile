@@ -23,6 +23,9 @@ COPY --from=build /usr/bin/sudo /usr/bin/sudo
 COPY --from=build /usr/lib/sudo /usr/lib/sudo
 COPY --from=build /usr/local /usr/local
 
+# colored pager instead busybox-less
+RUN apk --no-cache add less
+
 ### custom user ###
 
 ARG PUID=1000
