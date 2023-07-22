@@ -4,7 +4,7 @@ namespace Snidget\Database\SQL;
 
 use Snidget\Database\SqlitePDO;
 use Snidget\Kernel\AttributeLoader;
-use Snidget\Kernel\Typing\Type;
+use Snidget\Kernel\Schema\Type;
 
 class Table
 {

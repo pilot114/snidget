@@ -1,6 +1,6 @@
 <?php
 
-namespace Snidget\Kernel\Typing;
+namespace Snidget\Kernel\Schema;
 
 use DateTimeInterface;
 use Error;

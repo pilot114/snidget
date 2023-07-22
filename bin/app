@@ -7,7 +7,7 @@
 
 use Snidget\CLI\CommandHandler;
 use Snidget\Kernel\PSR\Container;
-use Snidget\Kernel\Typing\Config\AppPaths;
+use Snidget\Kernel\Schema\AppPaths;
 
 include_once __DIR__ . '/../vendor/autoload.php';
 

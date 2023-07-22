@@ -1,9 +1,9 @@
 <?php
 
-namespace Snidget\Kernel;
+namespace Snidget\Kernel\PSR\Event;
 
 // все системные события должно отправлять Kernel
-enum SystemEvent
+enum KernelEvent
 {
     // вызывается при старте фреймворка
     case START;

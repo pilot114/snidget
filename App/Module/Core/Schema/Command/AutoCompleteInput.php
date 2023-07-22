@@ -3,7 +3,7 @@
 namespace App\Module\Core\Schema\Command;
 
 use Snidget\CLI\Arg;
-use Snidget\Kernel\Typing\Type;
+use Snidget\Kernel\Schema\Type;
 
 class AutoCompleteInput extends Type
 {

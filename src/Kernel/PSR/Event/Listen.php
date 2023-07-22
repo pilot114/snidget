@@ -1,6 +1,6 @@
 <?php
 
-namespace Snidget\Kernel;
+namespace Snidget\Kernel\PSR\Event;
 
 use Attribute;
 use UnitEnum;

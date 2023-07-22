@@ -3,7 +3,7 @@
 namespace App\Schema\API;
 
 use Snidget\Kernel\Assert;
-use Snidget\Kernel\Typing\Type;
+use Snidget\Kernel\Schema\Type;
 
 class UserLogin extends Type
 {

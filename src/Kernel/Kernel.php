@@ -6,8 +6,9 @@ use Snidget\HTTP\Request;
 use Snidget\HTTP\Response;
 use Snidget\HTTP\Router;
 use Snidget\Kernel\PSR\Container;
-use Snidget\Kernel\PSR\EventManager;
-use Snidget\Kernel\Typing\Config\AppPaths;
+use Snidget\Kernel\PSR\Event\EventManager;
+use Snidget\Kernel\PSR\Event\KernelEvent;
+use Snidget\Kernel\Schema\AppPaths;
 use Throwable;
 
 class Kernel
@@ -25,10 +26,10 @@ class Kernel
         $this->container = new Container();
         $eventManager = $this->container->get(EventManager::class);
         $eventManager->register(self::$appPath);
-        $eventManager->emit(SystemEvent::START);
+        $eventManager->emit(KernelEvent::START);
         if ($emitRequest) {
             $eventManager->emit(
-                SystemEvent::REQUEST,
+                KernelEvent::REQUEST,
                 $this->container->get(Request::class)->fromGlobal()
             );
         }
@@ -76,7 +77,7 @@ class Kernel
         $data = $middlewareManager
             ->match($controller, $action)
             ->handle($request, fn() => $this->container->call($this->container->get($controller), $action, $params));
-        $this->eventManager->emit(SystemEvent::RESPONSE, $data);
+        $this->eventManager->emit(KernelEvent::RESPONSE, $data);
         return $data;
     }
 
@@ -87,10 +88,10 @@ class Kernel
                 dump(sprintf('Fatal %s: %s', $error['type'], $error['message']));
                 dump($error['file'] . ':' . $error['line']);
             }
-            $this->eventManager->emit(SystemEvent::FINISH);
+            $this->eventManager->emit(KernelEvent::FINISH);
         });
         set_exception_handler(function (Throwable $exception) {
-            $this->eventManager->emit(SystemEvent::EXCEPTION, $exception);
+            $this->eventManager->emit(KernelEvent::EXCEPTION, $exception);
 
             if ($this->displayAllErrors) {
                 dump(get_class($exception) . ': ' . $exception->getMessage());

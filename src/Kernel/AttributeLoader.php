@@ -7,7 +7,8 @@ use Snidget\CLI\Command;
 use Snidget\Database\Column;
 use Snidget\HTTP\Bind;
 use Snidget\HTTP\Route;
-use Snidget\Kernel\Typing\Type;
+use Snidget\Kernel\PSR\Event\Listen;
+use Snidget\Kernel\Schema\Type;
 
 class AttributeLoader
 {

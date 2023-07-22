@@ -3,7 +3,7 @@
 namespace Snidget\Database;
 
 use Attribute;
-use Snidget\Kernel\Typing\Type;
+use Snidget\Kernel\Schema\Type;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
 class Column

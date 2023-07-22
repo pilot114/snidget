@@ -1,6 +1,6 @@
 <?php
 
-namespace Snidget\Kernel\PSR;
+namespace Snidget\Kernel\PSR\Log;
 
 use Psr\Log\LoggerInterface;
 

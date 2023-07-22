@@ -1,6 +1,6 @@
 <?php
 
-namespace Snidget\Kernel\Typing\Config;
+namespace Snidget\Kernel\Schema;
 
 class AppPaths
 {

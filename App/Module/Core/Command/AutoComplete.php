@@ -6,7 +6,7 @@ use App\Module\Core\Schema\Command\AutoCompleteInput;
 use Snidget\CLI\Command;
 use Snidget\CLI\CommandHandler;
 use Snidget\Kernel\AttributeLoader;
-use Snidget\Kernel\Typing\Config\AppPaths;
+use Snidget\Kernel\Schema\AppPaths;
 
 class AutoComplete
 {

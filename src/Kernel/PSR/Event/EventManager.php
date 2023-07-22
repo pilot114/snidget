@@ -1,9 +1,11 @@
 <?php
 
-namespace Snidget\Kernel\PSR;
+namespace Snidget\Kernel\PSR\Event;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Snidget\Kernel\AttributeLoader;
+use Snidget\Kernel\PSR\Container;
+use Snidget\Kernel\PSR\Log\Logger;
 use UnitEnum;
 
 class EventManager implements EventDispatcherInterface

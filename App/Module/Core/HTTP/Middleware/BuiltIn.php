@@ -4,7 +4,7 @@ namespace App\Module\Core\HTTP\Middleware;
 
 use App\Module\Core\Domain\Duck;
 use Closure;
-use Snidget\{HTTP\Request, Kernel\Typing\Config\AppPaths};
+use Snidget\{HTTP\Request, Kernel\Schema\AppPaths};
 use Snidget\HTTP\Bind;
 
 #[Bind(priority: PHP_INT_MAX)]

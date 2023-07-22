@@ -4,7 +4,7 @@ namespace App\Schema\Database;
 
 use Snidget\Database\Column;
 use Snidget\Database\SQLiteType;
-use Snidget\Kernel\Typing\Type;
+use Snidget\Kernel\Schema\Type;
 
 class People extends Type
 {
