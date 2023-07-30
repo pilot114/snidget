@@ -25,6 +25,7 @@ class Kernel
         $this->container = new Container();
 
         $this->eventManager = $this->container->get(EventManager::class);
+        $this->eventManager->register(__DIR__, 'Snidget');
         $this->eventManager->register(self::$appPath);
         $this->eventManager->emit(KernelEvent::START);
 
@@ -67,11 +68,10 @@ class Kernel
 
     protected function setErrorReportingSettings(): void
     {
-        ini_set('display_errors', 1);
-        ini_set('display_startup_errors', 1);
+        ini_set('display_errors', 0);
+        ini_set('display_startup_errors', 0);
         error_reporting(E_ALL);
 
-        // hack for PHP error system
         set_error_handler(function (int $severity, string $message, string $file, int $line): bool {
             $this->eventManager->emit(KernelEvent::ERROR, new \ErrorException($message, 0, $severity, $file, $line));
             return true;

@@ -4,7 +4,7 @@ namespace Snidget\HTTP;
 
 class Request
 {
-    public string $url;
+    public string $uri;
     public string $method = 'GET';
     public array $headers = [];
     public mixed $payload;
@@ -12,7 +12,7 @@ class Request
 
     public function fromGlobal(): self
     {
-        $this->url = trim(parse_url($_SERVER['REQUEST_URI'])['path'] ?? '', '/');
+        $this->uri = trim(parse_url($_SERVER['REQUEST_URI'])['path'] ?? '', '/');
         $this->payload = json_decode(file_get_contents('php://input') ?: '', true);
         $this->method = $_SERVER['REQUEST_METHOD'];
         $this->requestTimeMs = $_SERVER['REQUEST_TIME_FLOAT'];
@@ -39,7 +39,7 @@ class Request
     {
         $headers = array_filter(explode("\n", $headers), fn($x): string => trim($x));
         [$this->method, $uri] = explode(' ', array_shift($headers) ?? '');
-        $this->url = trim($uri, '/');
+        $this->uri = trim($uri, '/');
 
         foreach ($headers as $header) {
             $header = explode(':', $header);

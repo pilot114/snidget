@@ -57,9 +57,9 @@ class AttributeLoader
         );
     }
 
-    public static function getListeners(array $listenerPaths): \Generator
+    public static function getListeners(array $listenerPaths, ?string $alias = null): \Generator
     {
-        foreach (psrIterator($listenerPaths, true) as $className) {
+        foreach (psrIterator($listenerPaths, true, $alias) as $className) {
             if (!class_exists($className)) {
                 continue;
             }

@@ -6,7 +6,7 @@ use Snidget\Kernel\Kernel;
 function request(string $url, string $method, array $data): never
 {
     $request = new Request();
-    $request->url = $url;
+    $request->uri = $url;
     $request->method = $method;
     $request->payload = $data;
     (new Kernel())->run($request);
@@ -41,17 +41,20 @@ function autoload(string $prefix, string $baseDir): void
 }
 
 /**
- * @return iterable<string>
+ * @return Generator<string>
  */
-function psrIterator(array $classPaths, bool $recursive = false): iterable
+function psrIterator(array $classPaths, bool $recursive = false, ?string $alias = null): \Generator
 {
     foreach ($classPaths as $classPath) {
         $relPath = substr($classPath, strlen(dirname(__DIR__)) + 1);
         $parts = array_filter(explode('/', $relPath));
+        if ($alias) {
+            $parts[0] = $alias;
+        }
         $classNamespace = '\\' . implode('\\', array_map(ucfirst(...), $parts)) . '\\';
         foreach (glob($classPath . '/*') ?: [] as $file) {
             if ($recursive && is_dir($file)) {
-                yield from psrIterator([$file], true);
+                yield from psrIterator([$file], true, $alias);
                 continue;
             }
             preg_match("#/(?<className>\w+)\.php#i", $file, $matches);
