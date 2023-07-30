@@ -76,12 +76,12 @@ class Server
         $request = self::$request->fromString($request, $start);
 
         // static and separate php scripts
-        if (in_array($request->uri, self::$serveFiles)) {
-            if (str_ends_with($request->uri, '.php')) {
+        if (in_array($request->url, self::$serveFiles)) {
+            if (str_ends_with($request->url, '.php')) {
                 // TODO: handle output and terminate in current process
-                $responseString = shell_exec('php ' . $request->uri);
+                $responseString = shell_exec('php ' . $request->url);
             } else {
-                $responseString = file_get_contents($request->uri);
+                $responseString = file_get_contents($request->url);
             }
         } else {
             $responseString = (self::$kernelHandler)($request);

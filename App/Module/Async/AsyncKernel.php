@@ -2,19 +2,17 @@
 
 namespace App\Module\Async;
 
+use Snidget\HTTP\Request;
 use Snidget\Kernel\Kernel;
 use Snidget\Kernel\PSR\Event\KernelEvent;
 
 class AsyncKernel extends Kernel
 {
-    public function __construct(?string $appPath = null)
+    public function run(?Request $request = null): never
     {
-        parent::__construct($appPath, emitRequest: false);
-    }
+        [$router, $middlewareManager] = $this->prepare();
+        $request = $this->container->get(Request::class);
 
-    public function run(): never
-    {
-        [$router, $middlewareManager, $request] = $this->prepare();
         $this->eventManager->emit(KernelEvent::REQUEST, $request);
 
         Server::$kernelHandler = fn($request) => $this->handle($router, $middlewareManager, $request);

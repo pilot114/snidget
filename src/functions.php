@@ -1,10 +1,15 @@
 <?php
 
+use Snidget\HTTP\Request;
+use Snidget\Kernel\Kernel;
+
 function request(string $url, string $method, array $data): never
 {
-    (new \Snidget\Kernel\Kernel())
-        ->overrideRequest($url, $method, $data)
-        ->run();
+    $request = new Request();
+    $request->url = $url;
+    $request->method = $method;
+    $request->payload = $data;
+    (new Kernel())->run($request);
 }
 
 function isCli(): bool

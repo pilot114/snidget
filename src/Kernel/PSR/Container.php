@@ -10,6 +10,8 @@ use Snidget\Kernel\Reflection;
 use Snidget\Kernel\SnidgetException;
 
 /**
+ * TODO: https://php.watch/articles/practical-weakmap
+ *
  * @template T
  */
 class Container implements ContainerInterface

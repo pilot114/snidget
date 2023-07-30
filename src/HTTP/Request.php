@@ -4,21 +4,15 @@ namespace Snidget\HTTP;
 
 class Request
 {
-    public string $uri;
+    public string $url;
     public string $method = 'GET';
     public array $headers = [];
     public mixed $payload;
     public float $requestTimeMs;
 
-    public bool $isOverride = false;
-
     public function fromGlobal(): self
     {
-        if ($this->isOverride) {
-            return $this;
-        }
-
-        $this->uri = trim(parse_url($_SERVER['REQUEST_URI'])['path'] ?? '', '/');
+        $this->url = trim(parse_url($_SERVER['REQUEST_URI'])['path'] ?? '', '/');
         $this->payload = json_decode(file_get_contents('php://input') ?: '', true);
         $this->method = $_SERVER['REQUEST_METHOD'];
         $this->requestTimeMs = $_SERVER['REQUEST_TIME_FLOAT'];
@@ -32,9 +26,6 @@ class Request
 
     public function fromString(string $request, float $startTimeNs): self
     {
-        if ($this->isOverride) {
-            return $this;
-        }
         [$headers, $body] = str_contains($request, "\n\n") ? explode("\n\n", $request) : [$request, ''];
         if (!empty($body)) {
             $this->payload = json_decode($body, true);
@@ -48,7 +39,7 @@ class Request
     {
         $headers = array_filter(explode("\n", $headers), fn($x): string => trim($x));
         [$this->method, $uri] = explode(' ', array_shift($headers) ?? '');
-        $this->uri = trim($uri, '/');
+        $this->url = trim($uri, '/');
 
         foreach ($headers as $header) {
             $header = explode(':', $header);

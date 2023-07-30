@@ -21,4 +21,5 @@ best known for early use in the wizarding game of Quidditch, eventually being re
 # Roadmap
 
 - set prod environment (for example, vendor dir its read-only volume, data its optional, other - read only!, working_dir: /app/bin)
+for prod may use this article https://www.aleksanderwons.com/building-the-smallest-and-more-secure-php-docker-image/
 - create interface for Driver and Module?
