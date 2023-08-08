@@ -14,7 +14,7 @@ class Admin
         '/admin/routes'   => 'Endpoints',
         '/admin/domain'   => 'Domain',
         '/admin/database' => 'Database',
-        '/?SPX_UI_URI=/'  => 'Profiler',
+        '/?SPX_KEY=dev&SPX_UI_URI=/'  => 'Profiler',
     ];
 
     #[Route(regex: '')]
