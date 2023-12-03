@@ -22,10 +22,10 @@
         "league/commonmark": "^2.4"
     },
     "scripts": {
-        "hook-install" : "git config core.hooksPath /app/.git-hooks",
+        "hook-install" : "git config core.hooksPath /app/dev/git-hooks",
         "tests"        : "XDEBUG_MODE=coverage phpunit tests --coverage-html tests/coverage --coverage-filter src --order-by random -v --bootstrap tests/bootstrap.php",
         "phploc"       : "phploc src | grep 'LOC'",
-        "phpstan"      : "phpstan analyse -c phpstan.neon",
+        "phpstan"      : "phpstan analyse -c ./dev/phpstan.neon",
         "rector-lint"  : "rector process --dry-run",
         "rector-fix"   : "rector process"
     },

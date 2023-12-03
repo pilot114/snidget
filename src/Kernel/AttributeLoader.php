@@ -4,7 +4,7 @@ namespace Snidget\Kernel;
 
 use Snidget\CLI\Arg;
 use Snidget\CLI\Command;
-use Snidget\Database\Column;
+use Snidget\Database\SQLite\Column;
 use Snidget\HTTP\Bind;
 use Snidget\HTTP\Route;
 use Snidget\Kernel\PSR\Event\Listen;

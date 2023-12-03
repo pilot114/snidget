@@ -1,7 +1,7 @@
 <?php
 
 use App\Schema\Database\People;
-use Snidget\Database\SQL\Table;
+use Snidget\Database\SQLite\Table;
 use Snidget\Kernel\PSR\Container;
 
 return [

@@ -1,8 +1,8 @@
 <?php
 
-namespace Snidget\Database;
+namespace Snidget\Database\SQLite;
 
-enum SQLiteType
+enum Type
 {
     case NULL;
     case INTEGER;

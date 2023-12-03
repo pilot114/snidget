@@ -2,9 +2,9 @@
 
 namespace Snidget\Database;
 
-class PdoConnect
+class ConnectConfig
 {
-    public string $dsn = 'sqlite:../data/snidget'; // sqlite::memory:
+    public string $dsn = 'sqlite:/app/data/snidget'; // sqlite::memory:
     public string $user = '';
     public string $password = '';
 }

@@ -2,24 +2,24 @@
 
 namespace Snidget\Database;
 
-use PDO as NativePDO;
+use PDO;
 use PDOStatement;
 use Snidget\Kernel\SnidgetException;
 
-abstract class PDO
+abstract class AbstractDriver
 {
-    protected NativePDO $connection;
+    protected PDO $connection;
 
-    public function __construct(PdoConnect $config)
+    public function __construct(ConnectConfig $config)
     {
-        $this->connection = new NativePDO(
+        $this->connection = new PDO(
             $config->dsn,
             $config->user,
             $config->password,
             [
-                NativePDO::ATTR_EMULATE_PREPARES => false,
-                NativePDO::ATTR_ERRMODE => NativePDO::ERRMODE_EXCEPTION,
-                NativePDO::ATTR_DEFAULT_FETCH_MODE => NativePDO::FETCH_ASSOC,
+                PDO::ATTR_EMULATE_PREPARES => false,
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             ]
         );
     }

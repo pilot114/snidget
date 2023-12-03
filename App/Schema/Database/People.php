@@ -2,13 +2,13 @@
 
 namespace App\Schema\Database;
 
-use Snidget\Database\Column;
-use Snidget\Database\SQLiteType;
-use Snidget\Kernel\Schema\Type;
+use Snidget\Database\SQLite\Column;
+use Snidget\Database\SQLite\Type;
+use Snidget\Kernel\Schema\Type as BaseType;
 
-class People extends Type
+class People extends BaseType
 {
-    #[Column(name: 'id', type: SQLiteType::INTEGER, autoincrement: true)]
+    #[Column(name: 'id', type: Type::INTEGER, autoincrement: true)]
     public ?int $id;
     #[Column(name: 'name')]
     public ?string $name = 'test';

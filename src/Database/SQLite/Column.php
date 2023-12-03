@@ -1,21 +1,20 @@
 <?php
 
-namespace Snidget\Database;
+namespace Snidget\Database\SQLite;
 
 use Attribute;
-use Snidget\Kernel\Schema\Type;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
 class Column
 {
     public function __construct(
         public string $name,
-        public SQLiteType $type = SQLiteType::TEXT,
-        public bool $isNull = false,
-        public bool $autoincrement = false,
-        public bool $isUnsigned = false,
-        public mixed $default = null,
-        public ?int $length = null
+        public Type   $type = Type::TEXT,
+        public bool   $isNull = false,
+        public bool   $autoincrement = false,
+        public bool   $isUnsigned = false,
+        public mixed  $default = null,
+        public ?int   $length = null
     ) {
     }
 
@@ -35,7 +34,7 @@ class Column
     public function getInsertDefinition(Type $data): string
     {
         $value = $data->{$this->name};
-        if (is_string($value) && $this->type === SQLiteType::TEXT) {
+        if (is_string($value) && $this->type === Type::TEXT) {
             return "'$value'";
         }
         return (string)$value;

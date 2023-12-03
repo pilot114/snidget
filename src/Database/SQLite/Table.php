@@ -1,17 +1,16 @@
 <?php
 
-namespace Snidget\Database\SQL;
+namespace Snidget\Database\SQLite;
 
-use Snidget\Database\SqlitePDO;
 use Snidget\Kernel\AttributeLoader;
 use Snidget\Kernel\Schema\Type;
 
 class Table
 {
     public function __construct(
-        protected SqlitePDO $db,
+        protected Driver $db,
         protected string $name,
-        protected Type $type
+        protected Type   $type
     ) {
     }
 
@@ -21,16 +20,14 @@ class Table
         return (bool)$this->db->query($sql);
     }
 
-    public function copy(string $from): bool
+    public function create(?string $from = null): bool
     {
-        $sql = "create table {$this->name} select * from $from";
-        return $this->db->execute($sql);
-    }
-
-    public function create(): bool
-    {
-        $definition = AttributeLoader::getDbTypeDefinition($this->type::class);
-        $sql = "create table {$this->name} ($definition)";
+        if ($from === null) {
+            $definition = AttributeLoader::getDbTypeDefinition($this->type::class);
+            $sql = "create table {$this->name} ($definition)";
+        } else {
+            $sql = "create table {$this->name} select * from $from";
+        }
         return $this->db->execute($sql);
     }
 
