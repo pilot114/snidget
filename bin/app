@@ -9,7 +9,7 @@ use Snidget\CLI\CommandHandler;
 use Snidget\Kernel\PSR\Container;
 use Snidget\Kernel\Schema\AppPaths;
 
-include_once __DIR__ . '/../vendor/autoload.php';
+include_once '/app/vendor/autoload.php';
 
 // ./app Test:run -a hello -a world -b=test -de one --gamma test2 two three1 three2
 

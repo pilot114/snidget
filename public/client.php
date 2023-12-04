@@ -1,6 +1,6 @@
 <?php
 
-include_once '../vendor/autoload.php';
+include_once '/app/vendor/autoload.php';
 
 request(
     url: 'post',

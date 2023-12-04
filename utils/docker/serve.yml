@@ -7,7 +7,7 @@ services:
       - "${PORT}:80"
     volumes:
       - "./nginx/site.conf:/etc/nginx/conf.d/default.conf"
-      - "../public:/app/public:ro"
+      - "../../public:/app/public:ro"
     command: ['nginx', '-g', 'daemon off;']
   php:
     build: php
@@ -15,9 +15,9 @@ services:
     environment:
       PHP_IDE_CONFIG: "serverName=Docker"
     volumes:
-      - "../:/app"
-      - "../data:/app/data"
-      - "../vendor:/app/vendor"
-      - "../tests/coverage:/app/tests/coverage"
+      - "../../:/app"
+#      - "../../data:/app/data"
+#      - "../../vendor:/app/vendor"
+#      - "../../tests/coverage:/app/utils/tests/coverage"
       - "${HOME}/.ssh:/home/workspace/.ssh"
       - "${HOME}/.gitconfig:/home/workspace/.gitconfig"

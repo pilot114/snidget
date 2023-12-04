@@ -3,7 +3,7 @@
 
 use League\CommonMark\CommonMarkConverter as CommonMarkConverterAlias;
 
-include_once __DIR__ . '/../vendor/autoload.php';
+include_once '/app/vendor/autoload.php';
 
 $converter = new CommonMarkConverterAlias([
     'html_input' => 'allow',
@@ -12,7 +12,7 @@ $converter = new CommonMarkConverterAlias([
 
 function load(string $filename): string {
     global $converter;
-    $md = file_get_contents(__DIR__ . '/../docs/md/' . $filename);
+    $md = file_get_contents('/app/utils/docs/md/' . $filename);
     return $converter->convert($md);
 }
 
@@ -60,6 +60,6 @@ $pages = [
     ],
 ];
 
-$template = file_get_contents(__DIR__ . '/../docs/index.template.html');
+$template = file_get_contents('/app/utils/docs/index.template.html');
 $content = str_replace('%pages%', json_encode($pages), $template);
-file_put_contents(__DIR__ . '/../docs/index.html', $content);
+file_put_contents('/app/utils/docs/index.html', $content);
