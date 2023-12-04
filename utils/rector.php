@@ -11,13 +11,13 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->cacheClass(MemoryCacheStorage::class);
 
     $rectorConfig->paths([
-        __DIR__ . '/src',
-        __DIR__ . '/tests',
+        '/app/src',
+        '/app/utils/tests',
     ]);
 
     $rectorConfig->skip([
-        __DIR__ . '/src/functions.php',
-        __DIR__ . '/tests/fixtures',
+        '/app/src/functions.php',
+        '/app/utils/tests/fixtures',
     ]);
 
     $rectorConfig->sets([

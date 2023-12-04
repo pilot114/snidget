@@ -1,9 +1,9 @@
 parameters:
 	scanFiles:
-		- tests/fixtures/ClassesAndInterfaces.php
+		- /app/utils/tests/fixtures/ClassesAndInterfaces.php
 	level: 8
 	paths:
-		- src
+		- /app/src
     # дженерики
 	checkGenericClassInNonGenericObjectType: false
 	ignoreErrors:
