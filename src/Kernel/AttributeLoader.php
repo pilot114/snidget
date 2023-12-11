@@ -92,9 +92,11 @@ class AttributeLoader
 
     public static function getDtoInfoByCommandName(array $commandPaths, string $command, string $subCommand): array
     {
+        $result = [];
         foreach (AttributeLoader::getCommands($commandPaths) as $fqn => $attr) {
             [$class, $method] = explode('::', $fqn);
             if (str_ends_with($class, $command) && $method === $subCommand) {
+                $result = [$class, $method, null];
                 foreach ((new Reflection($class))->getParams($method) as $param) {
                     $paramTypeName = $param->getType()->getName();
                     if (is_subclass_of($paramTypeName, Type::class)) {
@@ -103,7 +105,7 @@ class AttributeLoader
                 }
             }
         }
-        return [];
+        return $result;
     }
 
     public static function getArgs(string $dtoName, bool $isOption = true): \Generator

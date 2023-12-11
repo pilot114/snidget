@@ -27,6 +27,9 @@ class CommandHandler
         }
 
         [$commandClassName, $commandMethodName, $dtoName] = $data;
+        if ($dtoName === null) {
+            return [null, null, $commandClassName, $commandMethodName];
+        }
         $data = $this->parse($dtoName, $this->args);
         return [$dtoName, $data, $commandClassName, $commandMethodName];
     }

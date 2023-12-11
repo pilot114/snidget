@@ -25,6 +25,8 @@ if ($commandData === []) {
     $handler->default($paths);
 } else {
     [$dtoName, $data, $commandClassName, $commandMethodName] = $commandData;
-    $container->get($dtoName, ['array' => $data]);
+    if ($dtoName !== null) {
+        $container->get($dtoName, ['array' => $data]);
+    }
     $container->call($commandClassName, $commandMethodName);
 }

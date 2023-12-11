@@ -2,11 +2,11 @@
 
 namespace Snidget\Database\SQLite;
 
-enum Type
+enum Type: string
 {
-    case NULL;
-    case INTEGER;
-    case REAL;
-    case TEXT;
-    case BLOB;
+    case NULL = 'NULL';
+    case INTEGER = 'INTEGER';
+    case REAL = 'REAL';
+    case TEXT = 'TEXT';
+    case BLOB = 'BLOB';
 }

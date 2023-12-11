@@ -7,6 +7,8 @@ use Attribute;
 #[Attribute(Attribute::TARGET_PROPERTY)]
 class Column
 {
+    public ?string $ref = null;
+
     public function __construct(
         public string $name,
         public Type   $type = Type::TEXT,
