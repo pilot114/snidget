@@ -18,19 +18,17 @@ class Kernel
     protected EventManager $eventManager;
     protected AppPaths $config;
 
-    public function __construct(?string $appPath = null)
+    public function __construct()
     {
-        self::$appPath = $appPath ?? dirname(__DIR__, 2) . '/App';
-
+        self::$srcPath = '/app/src';
         $this->container = new Container();
 
         $this->eventManager = $this->container->get(EventManager::class);
         $this->eventManager->register(__DIR__, 'Snidget');
-        $this->eventManager->register(self::$appPath);
+        $this->eventManager->register(self::$srcPath);
         $this->eventManager->emit(KernelEvent::START);
 
-        $this->config = $this->container->get(AppPaths::class, ['appPath' => self::$appPath]);
-
+        $this->config = $this->container->get(AppPaths::class, ['appPath' => self::$srcPath]);
         $this->setErrorReportingSettings();
         register_shutdown_function(fn() => $this->eventManager->emit(KernelEvent::FINISH));
     }
