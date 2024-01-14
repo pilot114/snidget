@@ -13,7 +13,7 @@ use Throwable;
 
 class Kernel
 {
-    public static string $appPath;
+    public static string $srcPath;
     protected Container $container;
     protected EventManager $eventManager;
     protected AppPaths $config;
