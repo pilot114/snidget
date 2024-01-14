@@ -1,8 +1,9 @@
 {
-    "name": "wshell/snidget",
+    "name": "pilot114/snidget",
     "description": "snidget framework",
-    "type": "project",
+    "type": "library",
     "license": "MIT",
+    "minimum-stability": "dev",
     "require": {
         "ext-pdo": "*",
         "ext-mbstring": "*",
