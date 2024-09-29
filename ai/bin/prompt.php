@@ -1,0 +1,100 @@
+<?php
+
+include __DIR__ . '/../vendor/autoload.php';
+
+/**
+ * Скрипт для рекурсивного обхода директории с возможностью пропуска определенных папок.
+ * Выводит структуру каталогов и содержимое файлов без комментариев и операторов 'use'.
+ */
+
+class Prompt
+{
+    public string $structureBuffer = '';
+    public string $contentBuffer = '';
+
+    public function traverseDirectory(string $dir, array $skip = [], string $indent = ''): void
+    {
+        foreach (new DirectoryIterator($dir) as $fileInfo) {
+            $filename = $fileInfo->getFilename();
+            if ($filename === '.' || $filename === '..' || in_array($filename, $skip)) {
+                continue;
+            }
+
+            $filePath = $fileInfo->getPathname();
+            $this->structureBuffer .= $indent . $filename . PHP_EOL;
+
+            if ($fileInfo->isDir()) {
+                $this->traverseDirectory($filePath, $skip, $indent . '    ');
+                continue;
+            }
+
+            $content = file_get_contents($filePath);
+            $processedContent = $this->removeUseless($content);
+
+            $this->contentBuffer .= $indent . '--- Start of ' . $filename . ' ---' . PHP_EOL;
+            $this->contentBuffer .= trim($processedContent) . PHP_EOL;
+            $this->contentBuffer .= $indent . '--- End of ' . $filename . ' ---' . PHP_EOL;
+        }
+    }
+
+    private function removeUseless(string $code): string
+    {
+        preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $code);
+        $tokens = token_get_all($code);
+        $cleanedCode = '';
+
+        $skipTokens = [T_COMMENT, T_DOC_COMMENT, T_USE];
+
+        $i = 0;
+        $count = count($tokens);
+
+        while ($i < $count) {
+            $token = $tokens[$i];
+
+            if (is_array($token)) {
+                if (in_array($token[0], $skipTokens)) {
+                    if ($token[0] === T_USE) {
+                        // Пропускаем оператор 'use' до точки с запятой или открывающей фигурной скобки
+                        while ($i < $count && $tokens[$i] !== ';' && $tokens[$i] !== '{') {
+                            $i++;
+                        }
+                    }
+                    $i++;
+                    continue;
+                } else {
+                    $cleanedCode .= $token[1];
+                }
+            } else {
+                $cleanedCode .= $token;
+            }
+            $i++;
+        }
+
+        $nonEmptyLines = [];
+        foreach (explode("\n", $cleanedCode) as $line) {
+            if (trim($line) !== '') {
+                $nonEmptyLines[] = $line;
+            }
+        }
+        return implode("\n", $nonEmptyLines);
+    }
+}
+
+
+
+$prompt = new Prompt();
+$prompt->traverseDirectory(
+    dir: __DIR__ . '/..',
+    skip: ['vendor', '.git', 'composer.lock']
+);
+
+//echo "Размер: " . strlen($prompt->structureBuffer . $prompt->contentBuffer);
+//exit;
+
+echo "Текущее состояние:\n\n";
+echo "\nСтруктура:\n";
+echo $prompt->structureBuffer;
+echo "\nКонтент:\n";
+echo $prompt->contentBuffer;
+
+echo "Предложи следующие шаги для улучшения";
