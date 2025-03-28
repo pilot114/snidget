@@ -17,11 +17,11 @@
     },
     "require-dev": {
         "ext-xdebug": "*",
-        "phpstan/phpstan": "^1.10",
-        "rector/rector": "^0.15",
+        "phpstan/phpstan": "^2.1",
+        "rector/rector": "^2.0",
         "phploc/phploc": "^7.0",
         "phpunit/phpunit": "^9.6",
-        "league/commonmark": "^2.4"
+        "league/commonmark": "^2.6"
     },
     "scripts": {
         "hook-install" : "git config core.hooksPath /app/utils/git-hooks",

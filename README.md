@@ -1,4 +1,4 @@
-Snidget - idiomatic and smart php microframework
+Snidget - idiomatic and smart php microframework, created for educational purposes.
 
 # What is a "Snidget" ?
 
