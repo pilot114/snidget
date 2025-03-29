@@ -4,8 +4,6 @@ parameters:
 	level: 8
 	paths:
 		- /app/src
-    # дженерики
-	checkGenericClassInNonGenericObjectType: false
 	ignoreErrors:
 		# типы для массивов указывать излишне
 		- '#no value type specified in iterable type array#'

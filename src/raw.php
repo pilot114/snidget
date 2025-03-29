@@ -31,7 +31,6 @@ class ICMPPacket
 
     /**
      * Рассчитывает контрольную сумму ICMP-пакета
-     * @return int
      */
     private function calculateChecksum(): int
     {
@@ -147,7 +146,7 @@ class BinarySerializer
     private static function getPropertyFormat(ReflectionProperty $property): ?string
     {
         $attributes = $property->getAttributes(Binary::class);
-        if (!empty($attributes)) {
+        if ($attributes !== []) {
             return $attributes[0]->newInstance()->format;
         }
         return null;

@@ -81,7 +81,7 @@ class CommandHandler
             foreach ($argv as $i => $arg) {
                 preg_match("#^-([a-z]{2,})$#", $arg, $matches);
                 if (count($matches) === 2) {
-                    $tmp = array_map(fn($x) => "-$x", str_split($matches[1]));
+                    $tmp = array_map(fn($x): string => "-$x", str_split($matches[1]));
                     array_push($shortOptions, ...$tmp);
                     unset($argv[$i]);
                 }

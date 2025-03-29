@@ -24,10 +24,8 @@ return static function (RectorConfig $rectorConfig): void {
         SetList::DEAD_CODE,
         SetList::CODE_QUALITY,
         SetList::PHP_82,
-        SetList::PSR_4,
         SetList::TYPE_DECLARATION,
         SetList::EARLY_RETURN,
-        PHPUnitSetList::PHPUNIT_91,
     ]);
 
     $rectorConfig->importNames();

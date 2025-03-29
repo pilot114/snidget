@@ -13,22 +13,21 @@ use Throwable;
 
 class Kernel
 {
-    public static string $srcPath;
     protected Container $container;
     protected EventManager $eventManager;
     protected AppPaths $config;
 
     public function __construct()
     {
-        self::$srcPath = '/app/src';
+        $appPath = '/app/App';
         $this->container = new Container();
 
         $this->eventManager = $this->container->get(EventManager::class);
         $this->eventManager->register(__DIR__, 'Snidget');
-        $this->eventManager->register(self::$srcPath);
+        $this->eventManager->register($appPath);
         $this->eventManager->emit(KernelEvent::START);
 
-        $this->config = $this->container->get(AppPaths::class, ['appPath' => self::$srcPath]);
+        $this->config = $this->container->get(AppPaths::class, ['appPath' => $appPath]);
         $this->setErrorReportingSettings();
         register_shutdown_function(fn() => $this->eventManager->emit(KernelEvent::FINISH));
     }
@@ -59,7 +58,7 @@ class Kernel
         [$controller, $action, $params] = $router->match($request);
         $data = $middlewareManager
             ->match($controller, $action)
-            ->handle($request, fn() => $this->container->call($this->container->get($controller), $action, $params));
+            ->handle($request, fn(): mixed => $this->container->call($this->container->get($controller), $action, $params));
         $this->eventManager->emit(KernelEvent::RESPONSE, $data);
         return $data;
     }

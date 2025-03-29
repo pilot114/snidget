@@ -10,10 +10,10 @@ class Route
 {
     public function __construct(protected string $regex = '', protected string $prefix = '')
     {
-        if (empty($this->prefix)) {
+        if ($this->prefix === '' || $this->prefix === '0') {
             return;
         }
-        if (empty($this->regex)) {
+        if ($this->regex === '' || $this->regex === '0') {
             return;
         }
         throw new SnidgetException('Для аттрибута Route нельзя задать вместе prefix и regex');

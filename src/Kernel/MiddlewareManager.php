@@ -69,6 +69,6 @@ class MiddlewareManager
     {
         [$class, $method] = $layer;
         $class = $this->container->get($class);
-        return fn($x) => $this->container->call($class, $method, ['request' => $x, 'next' => $nextLayer]);
+        return fn($x): mixed => $this->container->call($class, $method, ['request' => $x, 'next' => $nextLayer]);
     }
 }

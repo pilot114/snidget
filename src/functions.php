@@ -45,22 +45,19 @@ function autoload(string $prefix, string $baseDir): void
  *
  * @return Generator<string>
  */
-function psrIterator(array $classPaths, bool $recursive = false, ?string $namespaceRoot = null): \Generator
+function psrIterator(array $classPaths, bool $recursive = false, ?string $alias = null): \Generator
 {
-    $composerData = json_decode(file_get_contents('/app/composer.json'), true);
-    $appNamespaceRoot = array_key_first($composerData['autoload']['psr-4']);
-    $appNamespaceRoot = str_replace('\\', '', $appNamespaceRoot);
-
     foreach ($classPaths as $classPath) {
-        $split = explode('src', $classPath);
-        $parts = array_filter(explode('/', $split[1]));
-        $parts = [$namespaceRoot ?: $appNamespaceRoot, ...$parts];
-
+        $relPath = substr($classPath, strlen(dirname(__DIR__)) + 1);
+        $parts = array_filter(explode('/', $relPath));
+        if ($alias) {
+            $parts[0] = $alias;
+        }
         $classNamespace = '\\' . implode('\\', array_map(ucfirst(...), $parts)) . '\\';
 
         foreach (glob($classPath . '/*') ?: [] as $file) {
             if ($recursive && is_dir($file)) {
-                yield from psrIterator([$file], true, $namespaceRoot);
+                yield from psrIterator([$file], true, $alias);
                 continue;
             }
             preg_match("#/(?<className>\w+)\.php#i", $file, $matches);

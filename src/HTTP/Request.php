@@ -27,7 +27,7 @@ class Request
     public function fromString(string $request, float $startTimeNs): self
     {
         [$headers, $body] = str_contains($request, "\n\n") ? explode("\n\n", $request) : [$request, ''];
-        if (!empty($body)) {
+        if ($body !== '' && $body !== '0') {
             $this->payload = json_decode($body, true);
         }
         $this->requestTimeMs = round($startTimeNs / 1_000_000, 4);

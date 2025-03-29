@@ -8,7 +8,7 @@ class Meta
         protected Driver $driver,
     ) {}
 
-    public function getInfo()
+    public function getInfo(): void
     {
         $tablesInfo = $this->driver->query("select tbl_name, sql from sqlite_schema where type = 'table'");
 

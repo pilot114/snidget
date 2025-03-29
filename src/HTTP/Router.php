@@ -28,6 +28,6 @@ class Router
                 return $this->route = [...explode('::', $fqn), $matchesNamed];
             }
         }
-        throw new SnidgetException('Не найден роут для URI: ' . $request->uri);
+        throw new SnidgetException("Не найден роут для URI: '$request->uri'");
     }
 }

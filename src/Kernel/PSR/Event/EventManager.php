@@ -17,6 +17,9 @@ class EventManager implements EventDispatcherInterface
 
     public function register(string $appPath, ?string $alias = null): void
     {
+        /**
+         * @var Listen $listener
+         */
         foreach (AttributeLoader::getListeners([$appPath], $alias) as $fqn => $listener) {
             $this->listeners[$listener->getEvent()->name][] = $fqn;
         }
