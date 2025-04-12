@@ -37,3 +37,11 @@
 
     composer create-project pilot114/snidget example
     cd example/docker && make serve
+
+ПРИМЕР  
+Install Context Generator  
+Download and install the tool using our installation script:
+  
+    curl -sSL https://raw.githubusercontent.com/context-hub/generator/main/download-latest.sh | sh
+
+This installs the ctx command to your system (typically in /usr/local/bin).
