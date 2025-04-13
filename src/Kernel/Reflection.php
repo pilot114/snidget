@@ -56,9 +56,9 @@ class Reflection
     /**
      * @template T
      * @param class-string<T> $attrName
-     * @return Generator?<string, T>
+     * @return Generator<string, T>
      */
-    public function getAttributes(int $type, string $attrName): iterable
+    public function getAttributes(int $type, string $attrName): Generator
     {
         $tmp = match ($type) {
             self::ATTR_PROPERTY => $this->getPublicProperties(),

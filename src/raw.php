@@ -152,7 +152,7 @@ class BinarySerializer
         return null;
     }
 
-    private static function getFormatSize(string $format, $value = null): int
+    private static function getFormatSize(string $format, ?string $value = null): int
     {
         return match ($format) {
             'C' => 1,
@@ -164,7 +164,7 @@ class BinarySerializer
     }
 }
 
-function sendICMPRequest(string $host, ICMPPacket $packet): ?array
+function sendICMPRequest(string $host, ICMPPacket $packet): array
 {
     // Проверяем привилегии для сырого сокета
     if (posix_geteuid() != 0) {

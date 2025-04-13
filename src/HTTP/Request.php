@@ -37,7 +37,7 @@ class Request
 
     protected function parseHeaders(string $headers): void
     {
-        $headers = array_filter(explode("\n", $headers), fn($x): string => trim($x));
+        $headers = array_filter(explode("\n", $headers), fn($line): bool => trim($line) !== '');
         [$this->method, $uri] = explode(' ', array_shift($headers) ?? '');
         $this->uri = trim($uri, '/');
 

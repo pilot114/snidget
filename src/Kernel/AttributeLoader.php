@@ -5,10 +5,10 @@ namespace Snidget\Kernel;
 use Snidget\CLI\Arg;
 use Snidget\CLI\Command;
 use Snidget\Database\SQLite\Column;
+use Snidget\Database\SQLite\Type;
 use Snidget\HTTP\Bind;
 use Snidget\HTTP\Route;
 use Snidget\Kernel\PSR\Event\Listen;
-use Snidget\Kernel\Schema\Type;
 
 class AttributeLoader
 {
@@ -72,7 +72,9 @@ class AttributeLoader
     {
         foreach (psrIterator($controllerPaths) as $className) {
             $ref = new Reflection($className);
-            $prefix = $ref->getAttributes(Reflection::ATTR_CLASS, Route::class)->current()?->getPrefix();
+            /** @var ?Route $route */
+            $route = $ref->getAttributes(Reflection::ATTR_CLASS, Route::class)->current();
+            $prefix = $route?->getPrefix();
             foreach ($ref->getAttributes(Reflection::ATTR_METHOD, Route::class) as $fqn => $attribute) {
                 $regex = $attribute->getRegex();
                 $regex = ($prefix && $regex) ? "$prefix/$regex" : ($prefix ?? $regex);

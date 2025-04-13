@@ -13,7 +13,7 @@ class Scheduler
     protected array $waitingWrite = [];
     protected array $waitingDelay = [];
 
-    public function __construct(array $cbs, Debug $debug = null)
+    public function __construct(array $cbs, ?Debug $debug = null)
     {
         if ($debug) {
             $this->debug = $debug;

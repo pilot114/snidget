@@ -1,4 +1,4 @@
-FROM php:8.2-fpm-alpine3.16 as build
+FROM php:8.4-fpm-alpine3.21 as build
 
 ### deps
 
@@ -10,7 +10,7 @@ RUN docker-php-ext-install pcntl && docker-php-ext-enable pcntl
 
 ### php dev-modules
 
-RUN pecl install xdebug-3.2.2 && docker-php-ext-enable xdebug
+RUN pecl install xdebug-3.4.2 && docker-php-ext-enable xdebug
 
 RUN git clone https://github.com/NoiseByNorthwest/php-spx.git  \
     --depth 1 --single-branch --branch master /usr/src/php/ext/spx && \
@@ -18,7 +18,7 @@ RUN git clone https://github.com/NoiseByNorthwest/php-spx.git  \
 
 # only builded files
 
-FROM php:8.2-fpm-alpine3.16 as dev
+FROM php:8.4-fpm-alpine3.21 as dev
 COPY --from=build /usr/bin/sudo /usr/bin/sudo
 COPY --from=build /usr/lib/sudo /usr/lib/sudo
 COPY --from=build /usr/local /usr/local
@@ -42,11 +42,11 @@ USER workspace
 
 ### user-level deps
 
-RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.5/zsh-in-docker.sh)" -- \
+RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.2.1/zsh-in-docker.sh)" -- \
     -t robbyrussell \
     -p git
 
-COPY --from=composer/composer:2.5-bin /composer /usr/bin/composer
+COPY --from=composer/composer:2.8-bin /composer /usr/bin/composer
 
 ADD xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 ADD spx.ini /usr/local/etc/php/conf.d/docker-php-ext-spx.ini

@@ -3,7 +3,6 @@
 namespace Snidget\Database\SQLite;
 
 use Snidget\Kernel\AttributeLoader;
-use Snidget\Kernel\Schema\Type;
 
 class Table
 {

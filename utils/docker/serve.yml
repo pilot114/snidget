@@ -1,6 +1,6 @@
 services:
   nginx:
-    image: nginx:1.23
+    image: nginx:1.27
     ports:
       - "${PORT}:80"
     volumes:

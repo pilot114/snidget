@@ -851,12 +851,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/utils.git",
-                "reference": "3bd46c910e048403dcc9a75e7c40cd714b53caaf"
+                "reference": "2d3e496c5cb2a7189e3f746c644fceb4f5f88add"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/utils/zipball/3bd46c910e048403dcc9a75e7c40cd714b53caaf",
-                "reference": "3bd46c910e048403dcc9a75e7c40cd714b53caaf",
+                "url": "https://api.github.com/repos/nette/utils/zipball/2d3e496c5cb2a7189e3f746c644fceb4f5f88add",
+                "reference": "2d3e496c5cb2a7189e3f746c644fceb4f5f88add",
                 "shasum": ""
             },
             "require": {
@@ -930,7 +930,7 @@
                 "issues": "https://github.com/nette/utils/issues",
                 "source": "https://github.com/nette/utils/tree/master"
             },
-            "time": "2025-03-17T01:00:38+00:00"
+            "time": "2025-04-05T17:09:45+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -1176,12 +1176,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "da71dcbd5deecd83964b48a8c9b0ca5fb61ba275"
+                "reference": "a84860ff6cd5bbf5b2d0bf1027634a4d40d11e83"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/da71dcbd5deecd83964b48a8c9b0ca5fb61ba275",
-                "reference": "da71dcbd5deecd83964b48a8c9b0ca5fb61ba275",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/a84860ff6cd5bbf5b2d0bf1027634a4d40d11e83",
+                "reference": "a84860ff6cd5bbf5b2d0bf1027634a4d40d11e83",
                 "shasum": ""
             },
             "require": {
@@ -1227,7 +1227,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-03-28T13:49:12+00:00"
+            "time": "2025-04-12T10:07:15+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -1554,12 +1554,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "fbe37c3c4de3db3114c0d3569494ab6b871d0a67"
+                "reference": "2565e7de866b4bf5af08c3304e11f51ec3ace488"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/fbe37c3c4de3db3114c0d3569494ab6b871d0a67",
-                "reference": "fbe37c3c4de3db3114c0d3569494ab6b871d0a67",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/2565e7de866b4bf5af08c3304e11f51ec3ace488",
+                "reference": "2565e7de866b4bf5af08c3304e11f51ec3ace488",
                 "shasum": ""
             },
             "require": {
@@ -1649,7 +1649,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-03-23T08:41:34+00:00"
+            "time": "2025-04-05T07:33:47+00:00"
         },
         {
             "name": "rector/rector",
@@ -2876,7 +2876,7 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
@@ -2887,5 +2887,5 @@
     "platform-dev": {
         "ext-xdebug": "*"
     },
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }

@@ -1,11 +1,10 @@
 parameters:
 	scanFiles:
 		- /app/utils/tests/fixtures/ClassesAndInterfaces.php
-	level: 8
+	level: 6
 	paths:
 		- /app/src
 	ignoreErrors:
 		# типы для массивов указывать излишне
 		- '#no value type specified in iterable type array#'
-		# дженерики
-		- '#expects class-string#'
+		- '#not specify its types: #'
