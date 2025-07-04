@@ -3,7 +3,7 @@
     "description": "snidget framework",
     "type": "library",
     "license": "MIT",
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "require": {
         "ext-pdo": "*",
         "ext-mbstring": "*",

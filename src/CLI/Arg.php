@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Snidget\CLI;
 
 use Attribute;
@@ -8,24 +10,9 @@ use Attribute;
 class Arg
 {
     public function __construct(
-        protected string $description,
-        protected bool $isOption = true,
-        protected ?string $short = null,
+        public readonly string $description,
+        public readonly bool $isOption = true,
+        public readonly ?string $short = null,
     ) {
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function isOption(): bool
-    {
-        return $this->isOption;
-    }
-
-    public function getShort(): ?string
-    {
-        return $this->short;
     }
 }

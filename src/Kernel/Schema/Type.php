@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Snidget\Kernel\Schema;
 
 use DateTimeInterface;
@@ -73,8 +75,8 @@ abstract class Type implements JsonSerializable
                     return (new Collection($value))->map(fn($x): object => new $itemClass($x));
                 }
             }
-            if ($value) {
-                return is_object($value) ? $value : new $className($value);
+            if ($value && !is_object($value)) {
+                return new $className($value);
             }
         }
         return $value;
@@ -83,9 +85,6 @@ abstract class Type implements JsonSerializable
     protected function getDefaultPublicFields(): \Generator
     {
         foreach ((new Reflection($this))->getPublicProperties() as $property) {
-            if (!$property->isPublic()) {
-                continue;
-            }
             $value = $this->{$property->getName()} ?? null;
             $type = $property->getType();
 
@@ -99,9 +98,6 @@ abstract class Type implements JsonSerializable
     protected function getUsedPublic(): \Generator
     {
         foreach ((new Reflection($this))->getPublicProperties() as $property) {
-            if (!$property->isPublic()) {
-                continue;
-            }
             if (!in_array($property->getName(), array_flip($this->useFields))) {
                 continue;
             }

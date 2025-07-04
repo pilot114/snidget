@@ -3,6 +3,6 @@
 echo committing as $(git config user.name)
 
 composer phpstan
-composer tests
+composer test
 composer phploc
-composer rector-lint
+composer lint
