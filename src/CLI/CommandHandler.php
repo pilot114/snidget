@@ -68,100 +68,70 @@ class CommandHandler
     protected function parse(string $dtoName, array $argv): array
     {
         $data = [];
+        $shortOpts = '';
+        $longOpts = [];
+        $propMap = [];
+
         foreach (AttributeLoader::getArgs($dtoName) as $prop => $attribute) {
             $name = $prop->getName();
-            // number | string | array. bool equal EXIST
             $type = $prop->getType()->getName();
             $isArray = $type === 'array';
             $isBool = $type === 'bool';
             $short = $attribute->getShort();
 
-            // multi-option
-            $shortOptions = [];
-            foreach ($argv as $i => $arg) {
-                preg_match("#^-([a-z]{2,})$#", $arg, $matches);
-                if (count($matches) === 2) {
-                    $tmp = array_map(fn($x): string => "-$x", str_split($matches[1]));
-                    array_push($shortOptions, ...$tmp);
-                    unset($argv[$i]);
-                }
-            }
-            array_push($argv, ...$shortOptions);
-
-            // TODO: typing on add to $data
-            // TODO: quoted strings
-
             if (!$prop->getType()->allowsNull() && !$isArray && !$isBool) {
                 throw new SnidgetException("опция $name должна быть указана как необязательная");
             }
-            foreach ($argv as $i => $arg) {
-                preg_match("#^--$name=(.*)$#", $arg, $matches);
-                if (count($matches) === 2) {
-                    if ($isArray) {
-                        $data[$name][] = $matches[1];
-                    } else {
-                        $data[$name] = $isBool ? true : $matches[1];
-                    }
-                    unset($argv[$i]);
-                    if (!$isArray) {
-                        continue 2;
-                    }
-                }
-                if ($arg === "--$name") {
-                    if ($isArray) {
-                        $data[$name][] = ($argv[$i+1] ?? null);
-                    } else {
-                        $data[$name] = $isBool ? true : ($argv[$i+1] ?? null);
-                    }
-                    unset($argv[$i], $argv[$i+1]);
-                    if (!$isArray) {
-                        continue 2;
-                    }
-                }
-            }
 
             if ($short) {
-                foreach ($argv as $i => $arg) {
-                    preg_match("#^-$short=(.*)$#", $arg, $matches);
-                    if (count($matches) === 2) {
-                        if ($isArray) {
-                            $data[$name][] = $matches[1];
-                        } else {
-                            $data[$name] = $isBool ? true : $matches[1];
-                        }
-                        unset($argv[$i]);
-                        if (!$isArray) {
-                            continue 2;
-                        }
-                    }
-                    if ($arg === "-$short") {
-                        if ($isArray) {
-                            $data[$name][] = ($argv[$i+1] ?? null);
-                        } else {
-                            $data[$name] = $isBool ? true : ($argv[$i+1] ?? null);
-                        }
-                        unset($argv[$i]);
-                        if (!$isBool) {
-                            unset($argv[$i+1]);
-                        }
-                        if (!$isArray) {
-                            continue 2;
-                        }
-                    }
+                $shortOpts .= $short . ($isBool ? '' : ':');
+                $propMap[$short] = $name;
+            }
+
+            $longOpts[] = $name . ($isBool ? '' : ':');
+            $propMap[$name] = $name;
+        }
+
+        $optind = null;
+        $options = getopt($shortOpts, $longOpts, $optind);
+
+        foreach (AttributeLoader::getArgs($dtoName) as $prop => $attribute) {
+            $name = $prop->getName();
+            $type = $prop->getType()->getName();
+            $isArray = $type === 'array';
+            $isBool = $type === 'bool';
+            $short = $attribute->getShort();
+
+            $value = null;
+            if (isset($options[$name])) {
+                $value = $options[$name];
+            } elseif ($short && isset($options[$short])) {
+                $value = $options[$short];
+            }
+
+            if ($value !== null) {
+                if ($isArray) {
+                    $data[$name] = is_array($value) ? $value : [$value];
+                } elseif ($isBool) {
+                    $data[$name] = true;
+                } else {
+                    $data[$name] = is_array($value) ? end($value) : $value;
                 }
             }
         }
+
+        $positionalArgs = array_slice($argv, $optind);
         foreach (AttributeLoader::getArgs($dtoName, false) as $prop => $attribute) {
             $name = $prop->getName();
             $type = $prop->getType()->getName();
             if ($type !== 'array') {
-                $data[$name] = array_shift($argv);
-            }
-            if ($type === 'array') {
-                $data[$name] = $argv;
-                $argv = [];
+                $data[$name] = array_shift($positionalArgs);
+            } else {
+                $data[$name] = $positionalArgs;
+                $positionalArgs = [];
             }
         }
+
         return $data;
     }
 }
