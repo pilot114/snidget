@@ -16,7 +16,7 @@ maintaining high performance and flexibility.
     - Identify the core entities (e.g., users, products, orders) relevant to the system.
     - Each entity should be represented as a class, encapsulating its properties and behaviors.
 
-4. **Use PHP 8.3 Features:**
+4. **Use PHP 8.4 Features:**
     - Utilize **Constructor Property Promotion** to streamline class constructors and reduce redundancy.
     - Apply **Named Arguments** to make class instantiation clearer and more maintainable.
 

@@ -7,7 +7,7 @@ documentation with comprehensive examples of usage, focusing on every detail and
    Configuration, Contribution Guidelines, and License.
 2. **Provide clear and precise descriptions for all parameters** used in the project, making sure they are easy to
    understand.
-3. **Use PHP 8.3**, implementing Constructor property promotion and named arguments. Avoid using annotations.
+3. **Use PHP 8.4**, implementing Constructor property promotion and named arguments. Avoid using annotations.
 
 **Structure:**
 

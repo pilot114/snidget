@@ -11,7 +11,7 @@ below.
 - List **five potential use cases** where this feature could be applied.
 - For each use case:
     - Include a short code example demonstrating its implementation.
-    - Ensure the code examples use **PHP 8.3 features** such as **Constructor Property Promotion** and
+    - Ensure the code examples use **PHP 8.4 features** such as **Constructor Property Promotion** and
       **Named Arguments**, following the latest best practices.
 
 3. Configuration Options
@@ -19,7 +19,7 @@ below.
 - Offer a detailed description of the available configuration options in the code.
 - For each option:
     - Mention the default value.
-    - Provide code snippets showing how the option can be configured, utilizing PHP 8.3 features where appropriate.
+    - Provide code snippets showing how the option can be configured, utilizing PHP 8.4 features where appropriate.
 
 4. Related Classes
 
@@ -35,10 +35,10 @@ below.
 
 **Guidelines:**
 
-- **PHP 8.3 Features to Use:**
+- **PHP 8.4 Features to Use:**
     - **Constructor Property Promotion:** Simplify property declarations in constructors using promoted properties.
     - **Named Arguments:** Use named arguments when invoking methods or constructing objects in code examples.
 
 - **Best Practices:**
     - Avoid using annotations.
-    - Structure the code according to the latest best practices in PHP 8.3.
+    - Structure the code according to the latest best practices in PHP 8.4.
