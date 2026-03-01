@@ -18,6 +18,7 @@ class Container implements ContainerInterface
 {
     protected array $pool = [];
     protected array $map = [];
+    protected array $resolving = [];
 
     public function __construct()
     {
@@ -34,7 +35,7 @@ class Container implements ContainerInterface
         $instance = is_string($instance) ? $this->getRealId($instance) : $instance;
         $realParams = $this->getParams($instance, $methodName, $params);
 
-        if ((new Reflection($instance))->getMethod($methodName)->isStatic()) {
+        if (new Reflection($instance)->getMethod($methodName)->isStatic()) {
             return $instance::{$methodName}(...$realParams);
         }
         if (is_string($instance)) {
@@ -51,11 +52,22 @@ class Container implements ContainerInterface
     public function make(string $origId, array $params = [])
     {
         $id = $this->getRealId($origId);
-        if ((new Reflection($id))->isAbstract()) {
+        if (new Reflection($id)->isAbstract()) {
             throw new SnidgetException("Невозможно инcтанцировать абстрактный класс $id");
         }
-        /** @var class-string<T> $id */
-        return $this->pool[$origId] = $this->pool[$id] = new $id(...$this->getParams($id, '__construct', $params));
+        if (in_array($id, $this->resolving, true)) {
+            $chain = implode(' → ', [...$this->resolving, $id]);
+            throw new SnidgetException("Обнаружена циклическая зависимость: $chain");
+        }
+        $this->resolving[] = $id;
+        try {
+            /** @var class-string<T> $id */
+            $instance = new $id(...$this->getParams($id, '__construct', $params));
+            $this->pool[$origId] = $this->pool[$id] = $instance;
+            return $instance;
+        } finally {
+            array_pop($this->resolving);
+        }
     }
 
     /**
@@ -94,7 +106,7 @@ class Container implements ContainerInterface
      */
     protected function getParams(object|string $instance, string $methodName, array $params): \Generator
     {
-        foreach ((new Reflection($instance))->getParams($methodName) as $param) {
+        foreach (new Reflection($instance)->getParams($methodName) as $param) {
             $paramName = $param->getName();
             $value = $params[$paramName] ?? $this->getValue($param);
             if (is_null($value) && !$param->allowsNull()) {

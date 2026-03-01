@@ -9,7 +9,7 @@ class Driver extends AbstractDriver
 {
     public function __construct(ConnectConfig $config)
     {
-        if (!file_exists($config->dsn)) {
+        if ($config->dsn !== 'sqlite::memory:' && !file_exists($config->dsn)) {
             touch(str_replace('sqlite:', '', $config->dsn));
         }
         parent::__construct($config);

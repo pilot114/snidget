@@ -8,8 +8,11 @@ use Snidget\Kernel\SnidgetException;
 #[Attribute(Attribute::TARGET_METHOD | Attribute::TARGET_CLASS)]
 class Route
 {
-    public function __construct(protected string $regex = '', protected string $prefix = '')
-    {
+    public function __construct(
+        protected string $regex = '',
+        protected string $prefix = '',
+        protected string $method = 'GET',
+    ) {
         if ($this->prefix === '' || $this->prefix === '0') {
             return;
         }
@@ -27,5 +30,10 @@ class Route
     public function getPrefix(): string
     {
         return $this->prefix;
+    }
+
+    public function getMethod(): string
+    {
+        return $this->method;
     }
 }

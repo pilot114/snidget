@@ -55,7 +55,15 @@ class Logger implements LoggerInterface
 
     public function log($level, string|\Stringable $message, array $context = []): void
     {
+        if (is_string($level)) {
+            $level = LogLevel::from(strtoupper($level));
+        }
         $this->push($level, (string)$message, $context);
+    }
+
+    public function getLog(): array
+    {
+        return $this->log;
     }
 
     protected function push(LogLevel $level, string $message, array $context = []): void

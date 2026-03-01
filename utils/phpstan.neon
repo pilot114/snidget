@@ -1,9 +1,9 @@
 parameters:
 	scanFiles:
-		- /app/utils/tests/fixtures/ClassesAndInterfaces.php
+		- %currentWorkingDirectory%/utils/tests/fixtures/ClassesAndInterfaces.php
 	level: 6
 	paths:
-		- /app/src
+		- %currentWorkingDirectory%/src
 	ignoreErrors:
 		# типы для массивов указывать излишне
 		- '#no value type specified in iterable type array#'

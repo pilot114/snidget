@@ -113,7 +113,7 @@ class BinarySerializer
     public static function pack(object $object): string
     {
         $binaryData = '';
-        foreach ((new ReflectionClass($object))->getProperties() as $property) {
+        foreach (new ReflectionClass($object)->getProperties() as $property) {
             $format = self::getPropertyFormat($property);
             if ($format === null) {
                 throw new Exception("Format for property '{$property->getName()}' is not defined.");

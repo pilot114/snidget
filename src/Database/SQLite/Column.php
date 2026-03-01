@@ -32,13 +32,4 @@ class Column
             $this->default ? ' DEFAULT ' . $this->default : ''
         );
     }
-
-    public function getInsertDefinition(Type $data): string
-    {
-        $value = $data->{$this->name};
-        if (is_string($value) && $this->type === Type::TEXT) {
-            return "'$value'";
-        }
-        return (string)$value;
-    }
 }

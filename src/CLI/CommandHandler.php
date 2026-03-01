@@ -77,7 +77,7 @@ class CommandHandler
             $type = $prop->getType()->getName();
             $isArray = $type === 'array';
             $isBool = $type === 'bool';
-            $short = $attribute->getShort();
+            $short = $attribute->short;
 
             if (!$prop->getType()->allowsNull() && !$isArray && !$isBool) {
                 throw new SnidgetException("опция $name должна быть указана как необязательная");
@@ -100,7 +100,7 @@ class CommandHandler
             $type = $prop->getType()->getName();
             $isArray = $type === 'array';
             $isBool = $type === 'bool';
-            $short = $attribute->getShort();
+            $short = $attribute->short;
 
             $value = null;
             if (isset($options[$name])) {

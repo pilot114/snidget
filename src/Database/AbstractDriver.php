@@ -50,6 +50,37 @@ abstract class AbstractDriver
         return $stmt->execute($params) ? (int)$stmt->fetchColumn() : 0;
     }
 
+    public function beginTransaction(): bool
+    {
+        return $this->connection->beginTransaction();
+    }
+
+    public function commit(): bool
+    {
+        return $this->connection->commit();
+    }
+
+    public function rollback(): bool
+    {
+        return $this->connection->rollBack();
+    }
+
+    /**
+     * @throws SnidgetException
+     */
+    public function transaction(callable $callback): mixed
+    {
+        $this->beginTransaction();
+        try {
+            $result = $callback($this);
+            $this->commit();
+            return $result;
+        } catch (\Throwable $e) {
+            $this->rollback();
+            throw new SnidgetException("Ошибка транзакции: {$e->getMessage()}", 0, $e);
+        }
+    }
+
     /**
      * @throws SnidgetException
      */

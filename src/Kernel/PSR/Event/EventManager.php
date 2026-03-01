@@ -2,6 +2,7 @@
 
 namespace Snidget\Kernel\PSR\Event;
 
+use Psr\EventDispatcher\StoppableEventInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Snidget\Kernel\AttributeLoader;
 use Snidget\Kernel\PSR\Container;
@@ -34,13 +35,21 @@ class EventManager implements EventDispatcherInterface
         }
     }
 
-    /**
-     * @param UnitEnum $event
-     * @return UnitEnum
-     */
-    public function dispatch(object $event)
+    public function dispatch(object $event): object
     {
-        // TODO
+        if ($event instanceof UnitEnum) {
+            $this->emit($event);
+            return $event;
+        }
+
+        $eventName = $event::class;
+        foreach ($this->listeners[$eventName] ?? [] as $listener) {
+            if ($event instanceof StoppableEventInterface && $event->isPropagationStopped()) {
+                break;
+            }
+            [$class, $method] = explode('::', $listener);
+            $this->container->call($class, $method, ['event' => $event]);
+        }
         return $event;
     }
 }

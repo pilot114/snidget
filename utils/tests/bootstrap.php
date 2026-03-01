@@ -1,6 +1,6 @@
 <?php
 
-include '/app/src/Kernel/Kernel.php';
+include dirname(__DIR__, 2) . '/vendor/autoload.php';
 
 // Recommended by phpUnit
 ini_set('memory_limit', -1);

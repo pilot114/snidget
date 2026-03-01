@@ -9,6 +9,8 @@ class Request
     public array $headers = [];
     public mixed $payload;
     public float $requestTimeMs;
+    public array $query = [];
+    public array $cookies = [];
 
     public function fromGlobal(): self
     {
@@ -16,6 +18,8 @@ class Request
         $this->payload = json_decode(file_get_contents('php://input') ?: '', true);
         $this->method = $_SERVER['REQUEST_METHOD'];
         $this->requestTimeMs = $_SERVER['REQUEST_TIME_FLOAT'];
+        $this->query = $_GET;
+        $this->cookies = $_COOKIE;
 
         $http = array_filter($_SERVER, fn($key): bool => str_starts_with($key, 'HTTP_'), ARRAY_FILTER_USE_KEY);
         foreach ($http as $headerName => $header) {
@@ -26,13 +30,19 @@ class Request
 
     public function fromString(string $request, float $startTimeNs): self
     {
-        [$headers, $body] = str_contains($request, "\n\n") ? explode("\n\n", $request) : [$request, ''];
+        [$headers, $body] = str_contains($request, "\n\n") ? explode("\n\n", $request, 2) : [$request, ''];
         if ($body !== '' && $body !== '0') {
             $this->payload = json_decode($body, true);
         }
         $this->requestTimeMs = round($startTimeNs / 1_000_000, 4);
         $this->parseHeaders($headers);
         return $this;
+    }
+
+    public function getHeader(string $name): ?string
+    {
+        $name = strtoupper($name);
+        return $this->headers[$name] ?? null;
     }
 
     protected function parseHeaders(string $headers): void
@@ -44,7 +54,7 @@ class Request
         foreach ($headers as $header) {
             $header = explode(':', $header);
             $headerName = strtoupper(array_shift($header));
-            $this->headers[$headerName] = implode(':', $header);
+            $this->headers[$headerName] = trim(implode(':', $header));
         }
     }
 }

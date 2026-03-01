@@ -38,7 +38,7 @@ class MiddlewareManager
         return $this;
     }
 
-    public function handle(Request $request, Closure $core): string
+    public function handle(Request $request, Closure $core): mixed
     {
         return array_reduce(
             array_reverse($this->middlewares),
@@ -57,7 +57,7 @@ class MiddlewareManager
                 if (str_contains($mwFqn, '::')) {
                     yield $mwFqn => $priority;
                 } else {
-                    foreach ((new Reflection($mwFqn))->getMethods() as $method) {
+                    foreach (new Reflection($mwFqn)->getMethods() as $method) {
                         yield $mwFqn . '::' . $method->getName() => $priority;
                     }
                 }

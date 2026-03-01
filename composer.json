@@ -25,12 +25,12 @@
         "league/commonmark": "^2.6"
     },
     "scripts": {
-        "hook-install" : "git config core.hooksPath /app/utils/git-hooks",
-        "test"         : "XDEBUG_MODE=coverage phpunit /app/utils/tests --coverage-html /app/utils/tests/coverage --coverage-filter src --order-by random -v --bootstrap /app/utils/tests/bootstrap.php",
+        "hook-install" : "git config core.hooksPath utils/git-hooks",
+        "test"         : "XDEBUG_MODE=coverage phpunit utils/tests --coverage-html utils/tests/coverage --coverage-filter src --order-by random -v --bootstrap utils/tests/bootstrap.php",
         "phploc"       : "phploc src | grep 'LOC'",
-        "phpstan"      : "phpstan analyse -c /app/utils/phpstan.neon --memory-limit 256M",
-        "lint"         : "rector process --dry-run --config /app/utils/rector.php",
-        "fix"          : "rector process --config /app/utils/rector.php"
+        "phpstan"      : "phpstan analyse -c utils/phpstan.neon --memory-limit 256M",
+        "lint"         : "rector process --dry-run --config utils/rector.php",
+        "fix"          : "rector process --config utils/rector.php"
     },
     "autoload": {
         "psr-4": {

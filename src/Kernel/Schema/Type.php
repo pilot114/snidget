@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Snidget\Kernel\Schema;
 
 use DateTimeInterface;
-use Error;
 use JsonSerializable;
 use Snidget\Kernel\Reflection;
 use TypeError;
@@ -13,8 +12,6 @@ use TypeError;
 abstract class Type implements JsonSerializable
 {
     protected string $dateFormat = 'd.m.Y H:i:s';
-    protected array $useFields = [];
-
     public function __construct(array $array = [])
     {
         $this->fromArray($array);
@@ -38,12 +35,13 @@ abstract class Type implements JsonSerializable
     public function toArray(): array
     {
         $array = [];
-        foreach ($this->getUsedPublic() as $key => $el) {
-            if ($el instanceof Type || $el instanceof Collection) {
+        foreach ($this->getDefaultPublicFields() as $key => $el) {
+            if ($el instanceof self || $el instanceof Collection) {
                 $array[$key] = $el->toArray();
-            }
-            if ($el instanceof DateTimeInterface) {
+            } elseif ($el instanceof DateTimeInterface) {
                 $array[$key] = $el->format($this->dateFormat);
+            } else {
+                $array[$key] = $el;
             }
         }
         return $array;
@@ -61,7 +59,7 @@ abstract class Type implements JsonSerializable
 
     protected function getValue(string $key, mixed $value): mixed
     {
-        $prop = (new Reflection($this))->getProperty($key);
+        $prop = new Reflection($this)->getProperty($key);
         /** @var \ReflectionNamedType|null $type */
         $type = $prop->getType();
 
@@ -72,7 +70,7 @@ abstract class Type implements JsonSerializable
                 preg_match('#\$\S+ (\S+)\[]#', $doc, $match);
                 $itemClass = $match[1] ?? null;
                 if ($itemClass) {
-                    return (new Collection($value))->map(fn($x): object => new $itemClass($x));
+                    return new Collection($value)->map(fn($x): object => new $itemClass($x));
                 }
             }
             if ($value && !is_object($value)) {
@@ -84,7 +82,7 @@ abstract class Type implements JsonSerializable
 
     protected function getDefaultPublicFields(): \Generator
     {
-        foreach ((new Reflection($this))->getPublicProperties() as $property) {
+        foreach (new Reflection($this)->getPublicProperties() as $property) {
             $value = $this->{$property->getName()} ?? null;
             $type = $property->getType();
 
@@ -92,21 +90,6 @@ abstract class Type implements JsonSerializable
                 $value = [];
             }
             yield $property->getName() => $value;
-        }
-    }
-
-    protected function getUsedPublic(): \Generator
-    {
-        foreach ((new Reflection($this))->getPublicProperties() as $property) {
-            if (!in_array($property->getName(), array_flip($this->useFields))) {
-                continue;
-            }
-            try {
-                yield $property->getName() => $this->{$property->getName()};
-            } catch (Error $e) {
-                $message = sprintf("Не удалось прочитать поле %s::%s", static::class, $property->getName());
-                throw new TypeError($message, $e->getCode(), $e);
-            }
         }
     }
 }

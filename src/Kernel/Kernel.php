@@ -19,7 +19,7 @@ class Kernel
 
     public function __construct()
     {
-        $appPath = '/app/App';
+        $appPath = dirname(__DIR__, 2) . '/App';
         $this->container = new Container();
 
         $this->eventManager = $this->container->get(EventManager::class);
@@ -37,22 +37,23 @@ class Kernel
         [$router, $middlewareManager] = $this->prepare();
         $request ??= $this->container->get(Request::class)->fromGlobal();
         $data = $this->handle($router, $middlewareManager, $request);
-        (new Response($data))->send();
+        $response = $data instanceof Response ? $data : new Response($data);
+        $response->send();
         exit;
     }
 
     public function prepare(): array
     {
         $router = $this->container->get(Router::class);
-        foreach (AttributeLoader::getRoutes($this->config->getControllerPaths()) as $regex => $fqn) {
-            $router->register($regex, $fqn);
+        foreach (AttributeLoader::getRoutes($this->config->getControllerPaths()) as $regex => $routeData) {
+            $router->register($regex, $routeData['fqn'], $routeData['method']);
         }
         $middlewareManager = $this->container
             ->get(MiddlewareManager::class, ['middlewarePaths' => $this->config->getMiddlewarePaths()]);
         return [$router, $middlewareManager];
     }
 
-    protected function handle(Router $router, MiddlewareManager $middlewareManager, Request $request): string
+    protected function handle(Router $router, MiddlewareManager $middlewareManager, Request $request): string|Response
     {
         $this->eventManager->emit(KernelEvent::REQUEST, $request);
         [$controller, $action, $params] = $router->match($request);

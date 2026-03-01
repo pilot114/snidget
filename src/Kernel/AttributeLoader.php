@@ -5,7 +5,7 @@ namespace Snidget\Kernel;
 use Snidget\CLI\Arg;
 use Snidget\CLI\Command;
 use Snidget\Database\SQLite\Column;
-use Snidget\Database\SQLite\Type;
+use Snidget\Kernel\Schema\Type as SchemaType;
 use Snidget\HTTP\Bind;
 use Snidget\HTTP\Route;
 use Snidget\Kernel\PSR\Event\Listen;
@@ -14,7 +14,7 @@ class AttributeLoader
 {
     public static function getAssertions(string $typeName): \Generator
     {
-        yield from (new Reflection($typeName))->getAttributes(Reflection::ATTR_PROPERTY, Assert::class);
+        yield from new Reflection($typeName)->getAttributes(Reflection::ATTR_PROPERTY, Assert::class);
     }
 
     static function getBindsByAction(string $controllerName, string $actionName): \Generator
@@ -41,20 +41,24 @@ class AttributeLoader
         return implode(', ', $definitions);
     }
 
-    public static function getDbTypeInsertDefinition(string $typeName, Type $data): string
+    /**
+     * @return array{columns: string[], values: mixed[]}
+     */
+    public static function getDbTypeInsertDefinition(string $typeName, SchemaType $data): array
     {
-        $definitions = [];
+        $columns = [];
+        $values = [];
         $ref = new Reflection($typeName);
         foreach ($ref->getAttributes(Reflection::ATTR_PROPERTY, Column::class) as $fqn => $attribute) {
             $propName = explode('::', $fqn)[1];
-            $definitions[$propName] = $attribute->getInsertDefinition($data);
+            $value = $data->{$attribute->name};
+            if ($value === null) {
+                continue;
+            }
+            $columns[] = $attribute->name;
+            $values[] = $value;
         }
-        $definitions = array_filter($definitions);
-        return sprintf(
-            '(%s) values (%s)',
-            implode(', ', array_keys($definitions)),
-            implode(', ', array_values($definitions)),
-        );
+        return ['columns' => $columns, 'values' => $values];
     }
 
     public static function getListeners(array $listenerPaths, ?string $alias = null): \Generator
@@ -78,7 +82,7 @@ class AttributeLoader
             foreach ($ref->getAttributes(Reflection::ATTR_METHOD, Route::class) as $fqn => $attribute) {
                 $regex = $attribute->getRegex();
                 $regex = ($prefix && $regex) ? "$prefix/$regex" : ($prefix ?? $regex);
-                yield $regex => $fqn;
+                yield $regex => ['fqn' => $fqn, 'method' => $attribute->getMethod()];
             }
         }
     }
@@ -99,9 +103,9 @@ class AttributeLoader
             [$class, $method] = explode('::', $fqn);
             if (str_ends_with($class, $command) && $method === $subCommand) {
                 $result = [$class, $method, null];
-                foreach ((new Reflection($class))->getParams($method) as $param) {
+                foreach (new Reflection($class)->getParams($method) as $param) {
                     $paramTypeName = $param->getType()->getName();
-                    if (is_subclass_of($paramTypeName, Type::class)) {
+                    if (is_subclass_of($paramTypeName, SchemaType::class)) {
                         return [$class, $method, $paramTypeName];
                     }
                 }
@@ -114,14 +118,18 @@ class AttributeLoader
     {
         $refDto = new Reflection($dtoName);
         foreach ($refDto->getPublicProperties() as $prop) {
-            $firstAttr = $refDto->getPropAttributes($prop->getName(), Arg::class)[0]->newInstance();
-            if ($isOption && $firstAttr->isOption()) {
+            $attrs = $refDto->getPropAttributes($prop->getName(), Arg::class);
+            if ($attrs === []) {
+                continue;
+            }
+            $firstAttr = $attrs[0]->newInstance();
+            if ($isOption && $firstAttr->isOption) {
                 yield $prop => $firstAttr;
             }
             if ($isOption) {
                 continue;
             }
-            if ($firstAttr->isOption()) {
+            if ($firstAttr->isOption) {
                 continue;
             }
             yield $prop => $firstAttr;

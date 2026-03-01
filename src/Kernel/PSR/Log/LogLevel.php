@@ -2,14 +2,14 @@
 
 namespace Snidget\Kernel\PSR\Log;
 
-enum LogLevel
+enum LogLevel: string
 {
-    case EMERGENCY;
-    case ALERT;
-    case CRITICAL;
-    case ERROR;
-    case WARNING;
-    case NOTICE;
-    case INFO;
-    case DEBUG;
+    case EMERGENCY = 'EMERGENCY';
+    case ALERT = 'ALERT';
+    case CRITICAL = 'CRITICAL';
+    case ERROR = 'ERROR';
+    case WARNING = 'WARNING';
+    case NOTICE = 'NOTICE';
+    case INFO = 'INFO';
+    case DEBUG = 'DEBUG';
 }

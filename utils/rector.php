@@ -10,19 +10,19 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->cacheClass(MemoryCacheStorage::class);
 
     $rectorConfig->paths([
-        '/app/src',
-        '/app/utils/tests',
+        __DIR__ . '/../src',
+        __DIR__ . '/tests',
     ]);
 
     $rectorConfig->skip([
-        '/app/src/functions.php',
-        '/app/utils/tests/fixtures',
+        __DIR__ . '/../src/functions.php',
+        __DIR__ . '/tests/fixtures',
     ]);
 
     $rectorConfig->sets([
         SetList::DEAD_CODE,
         SetList::CODE_QUALITY,
-        SetList::PHP_82,
+        SetList::PHP_84,
         SetList::TYPE_DECLARATION,
         SetList::EARLY_RETURN,
     ]);
