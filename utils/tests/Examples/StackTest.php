@@ -1,5 +1,6 @@
 <?php declare(strict_types=1);
 
+use PHPUnit\Framework\Attributes\Depends;
 use PHPUnit\Framework\TestCase;
 
 final class StackTest extends TestCase
@@ -12,7 +13,7 @@ final class StackTest extends TestCase
         return $stack;
     }
 
-    #[\PHPUnit\Framework\Attributes\Depends('testEmpty')]
+    #[Depends('testEmpty')]
     public function testPush(array $stack): array
     {
         $stack[] = 'foo';
@@ -22,7 +23,7 @@ final class StackTest extends TestCase
         return $stack;
     }
 
-    #[\PHPUnit\Framework\Attributes\Depends('testPush')]
+    #[Depends('testPush')]
     public function testPop(array $stack): void
     {
         $this->assertSame('foo', array_pop($stack));
