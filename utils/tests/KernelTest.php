@@ -22,10 +22,10 @@ class KernelTest extends TestCase
         $this->assertNotEmpty($controllerPaths);
         $this->assertNotEmpty($commandPaths);
 
-        $existingPaths = array_filter($controllerPaths, 'is_dir');
+        $existingPaths = array_filter($controllerPaths, is_dir(...));
         $this->assertNotEmpty($existingPaths, 'Должны быть найдены директории контроллеров');
 
-        $existingCommands = array_filter($commandPaths, 'is_dir');
+        $existingCommands = array_filter($commandPaths, is_dir(...));
         $this->assertNotEmpty($existingCommands, 'Должны быть найдены директории команд');
     }
 }

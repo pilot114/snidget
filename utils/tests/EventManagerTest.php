@@ -8,6 +8,7 @@ use Snidget\Kernel\PSR\Event\KernelEvent;
 class EventManagerTest extends TestCase
 {
     protected EventManager $eventManager;
+
     protected Container $container;
 
     protected function setUp(): void

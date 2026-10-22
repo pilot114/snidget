@@ -10,7 +10,8 @@ class AppPaths
         protected string $middlewarePath = 'HTTP/Middleware',
         protected string $schemaPath = 'Schema/API',
         protected string $commandPath = 'Command',
-    ) {}
+    ) {
+    }
 
     public function getCommandPaths(): array
     {

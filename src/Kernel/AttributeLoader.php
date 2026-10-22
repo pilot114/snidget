@@ -17,12 +17,13 @@ class AttributeLoader
         yield from new Reflection($typeName)->getAttributes(Reflection::ATTR_PROPERTY, Assert::class);
     }
 
-    static function getBindsByAction(string $controllerName, string $actionName): \Generator
+    public static function getBindsByAction(string $controllerName, string $actionName): \Generator
     {
         $ref = new Reflection($controllerName);
         foreach ($ref->getAttributes(Reflection::ATTR_CLASS, Bind::class) as $fqn => $attribute) {
             yield $fqn => $attribute;
         }
+
         foreach ($ref->getAttributes(Reflection::ATTR_METHOD, Bind::class) as $fqn => $attribute) {
             $method = explode('::', $fqn)[1];
             if ($method === $actionName) {
@@ -38,6 +39,7 @@ class AttributeLoader
         foreach ($ref->getAttributes(Reflection::ATTR_PROPERTY, Column::class) as $attribute) {
             $definitions[] = $attribute->getDefinition();
         }
+
         return implode(', ', $definitions);
     }
 
@@ -55,9 +57,11 @@ class AttributeLoader
             if ($value === null) {
                 continue;
             }
+
             $columns[] = $attribute->name;
             $values[] = $value;
         }
+
         return ['columns' => $columns, 'values' => $values];
     }
 
@@ -67,6 +71,7 @@ class AttributeLoader
             if (!class_exists($className)) {
                 continue;
             }
+
             $ref = new Reflection($className);
             yield from $ref->getAttributes(Reflection::ATTR_METHOD, Listen::class);
         }
@@ -111,6 +116,7 @@ class AttributeLoader
                 }
             }
         }
+
         return $result;
     }
 
@@ -122,16 +128,20 @@ class AttributeLoader
             if ($attrs === []) {
                 continue;
             }
+
             $firstAttr = $attrs[0]->newInstance();
             if ($isOption && $firstAttr->isOption) {
                 yield $prop => $firstAttr;
             }
+
             if ($isOption) {
                 continue;
             }
+
             if ($firstAttr->isOption) {
                 continue;
             }
+
             yield $prop => $firstAttr;
         }
     }

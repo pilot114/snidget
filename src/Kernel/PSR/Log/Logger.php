@@ -4,7 +4,7 @@ namespace Snidget\Kernel\PSR\Log;
 
 use Psr\Log\LoggerInterface;
 
-class Logger implements LoggerInterface
+class Logger implements LoggerInterface, \Stringable
 {
     protected array $log = [];
 
@@ -58,6 +58,7 @@ class Logger implements LoggerInterface
         if (is_string($level)) {
             $level = LogLevel::from(strtoupper($level));
         }
+
         $this->push($level, (string)$message, $context);
     }
 

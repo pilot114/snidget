@@ -11,12 +11,12 @@ class Column
 
     public function __construct(
         public string $name,
-        public Type   $type = Type::TEXT,
-        public bool   $isNull = false,
-        public bool   $autoincrement = false,
-        public bool   $isUnsigned = false,
-        public mixed  $default = null,
-        public ?int   $length = null
+        public Type $type = Type::TEXT,
+        public bool $isNull = false,
+        public bool $autoincrement = false,
+        public bool $isUnsigned = false,
+        public mixed $default = null,
+        public ?int $length = null
     ) {
     }
 

@@ -9,6 +9,7 @@ use Snidget\Kernel\PSR\Container;
 class MiddlewareManager
 {
     protected array $allMiddlewares = [];
+
     protected array $middlewares = [];
 
     public function __construct(
@@ -33,6 +34,7 @@ class MiddlewareManager
             $mwFqn = $m ? ($c . '::' . $m) : $c;
             $binds[$mwFqn] = $priority;
         }
+
         arsort($binds);
         $this->middlewares = array_map(fn($x) => explode('::', $x), array_keys($binds));
         return $this;
@@ -42,7 +44,7 @@ class MiddlewareManager
     {
         return array_reduce(
             array_reverse($this->middlewares),
-            fn($nextLayer, $layer): \Closure => $this->createLayer($nextLayer, $layer),
+            $this->createLayer(...),
             fn($object) => $core($object)
         )($request);
     }

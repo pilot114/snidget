@@ -11,7 +11,8 @@ class Collection implements Countable, IteratorAggregate
 {
     public function __construct(
         protected array $items = []
-    ) {}
+    ) {
+    }
 
     public function toArray(): array
     {
@@ -48,6 +49,7 @@ class Collection implements Countable, IteratorAggregate
                 return $item;
             }
         }
+
         return null;
     }
 
@@ -56,6 +58,7 @@ class Collection implements Countable, IteratorAggregate
         if ($this->items === []) {
             return null;
         }
+
         return $this->items[array_key_first($this->items)];
     }
 
@@ -64,6 +67,7 @@ class Collection implements Countable, IteratorAggregate
         if ($this->items === []) {
             return null;
         }
+
         return $this->items[array_key_last($this->items)];
     }
 
@@ -82,6 +86,7 @@ class Collection implements Countable, IteratorAggregate
         foreach ($this->items as $key => $item) {
             $callback($item, $key);
         }
+
         return $this;
     }
 

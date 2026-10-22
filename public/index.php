@@ -12,6 +12,7 @@ include_once __DIR__ . '/../vendor/autoload.php';
 
 // TODO: index file override
 if (isset($_ENV['ASYNC'])) {
-    (new AsyncKernel())->run();
+    new AsyncKernel()->run();
 }
-(new Kernel())->run();
+
+new Kernel()->run();

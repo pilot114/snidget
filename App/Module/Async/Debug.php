@@ -7,9 +7,13 @@ use Fiber;
 class Debug
 {
     protected int $start = 0;
+
     protected array $fiberTicks = [];
+
     protected array $impactTime = [];
+
     protected int $startFiberNs;
+
     protected int $currentFiberId;
 
     public function __construct(
@@ -31,6 +35,7 @@ class Debug
                 $skipCount++;
                 continue;
             }
+
             $currentIteration = hrtime(true);
             $ns = ($currentIteration - $prevIteration) / $skipCount;
             $ms = $currentMs;
@@ -59,6 +64,7 @@ class Debug
             echo sprintf("FIBERS> start %s\n", $fiberId);
             $this->fiberTicks[$fiberId] = 0;
         }
+
         $this->fiberTicks[$fiberId]++;
 
         $this->startFiberNs = $tsNs;
@@ -75,6 +81,7 @@ class Debug
         if ($fiber->isTerminated()) {
             echo sprintf("FIBERS> terminate %s\n", $fiberId);
         }
+
         $this->impactTime[$this->currentFiberId] += $finishFiberNs - $this->startFiberNs;
     }
 }

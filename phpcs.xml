@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<ruleset name="snidget">
+    <description>Стиль кода snidget: PSR-12, как в pretty-php</description>
+
+    <file>src</file>
+    <file>App</file>
+    <file>public</file>
+    <file>utils/tests</file>
+
+    <arg value="p"/>
+    <arg name="colors"/>
+    <arg name="extensions" value="php"/>
+
+    <rule ref="PSR12"/>
+
+    <!-- Длинные строки — предупреждение, а не ошибка: в коде много текстов по-русски,
+         их не переносят. Предупреждения видны в отчёте, но check не роняют. -->
+    <config name="ignore_warnings_on_exit" value="1"/>
+    <rule ref="Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="120"/>
+            <property name="absoluteLineLimit" value="0"/>
+        </properties>
+    </rule>
+
+    <!-- Тесты и фикстуры — без пространств имён и по нескольку классов в файле, как в pretty-php. -->
+    <rule ref="PSR1.Classes.ClassDeclaration"><exclude-pattern>utils/tests/*</exclude-pattern></rule>
+    <exclude-pattern>utils/tests/coverage/*</exclude-pattern>
+    <!-- Фреймворк: middleware в одном файле, сырой скрипт-пример. -->
+    <rule ref="PSR1.Classes.ClassDeclaration.MultipleClasses"><exclude-pattern>App/Module/Core/HTTP/Middleware/BuiltIn.php</exclude-pattern></rule>
+    <rule ref="PSR12.Namespaces.CompoundNamespaceDepth"><exclude-pattern>App/Module/Core/HTTP/Middleware/BuiltIn.php</exclude-pattern></rule>
+    <!-- Черновик разбора ICMP: набросок, а не часть фреймворка. -->
+    <exclude-pattern>src/raw.php</exclude-pattern>
+</ruleset>

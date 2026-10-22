@@ -12,6 +12,7 @@ use TypeError;
 abstract class Type implements JsonSerializable
 {
     protected string $dateFormat = 'd.m.Y H:i:s';
+
     public function __construct(array $array = [])
     {
         $this->fromArray($array);
@@ -29,6 +30,7 @@ abstract class Type implements JsonSerializable
                 throw new TypeError($message, $e->getCode(), $e);
             }
         }
+
         return $this;
     }
 
@@ -44,6 +46,7 @@ abstract class Type implements JsonSerializable
                 $array[$key] = $el;
             }
         }
+
         return $array;
     }
 
@@ -73,10 +76,12 @@ abstract class Type implements JsonSerializable
                     return new Collection($value)->map(fn($x): object => new $itemClass($x));
                 }
             }
+
             if ($value && !is_object($value)) {
                 return new $className($value);
             }
         }
+
         return $value;
     }
 
@@ -89,6 +94,7 @@ abstract class Type implements JsonSerializable
             if ($type && !$value && $type->getName() === 'array') {
                 $value = [];
             }
+
             yield $property->getName() => $value;
         }
     }

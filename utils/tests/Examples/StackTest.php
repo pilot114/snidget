@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use PHPUnit\Framework\Attributes\Depends;
 use PHPUnit\Framework\TestCase;
@@ -17,7 +19,7 @@ final class StackTest extends TestCase
     public function testPush(array $stack): array
     {
         $stack[] = 'foo';
-        $this->assertSame('foo', $stack[count($stack)-1]);
+        $this->assertSame('foo', $stack[count($stack) - 1]);
         $this->assertNotEmpty($stack);
 
         return $stack;

@@ -31,6 +31,7 @@ class Table
             self::validateIdentifier($from);
             $sql = "CREATE TABLE {$this->name} AS SELECT * FROM $from";
         }
+
         return $this->db->execute($sql);
     }
 

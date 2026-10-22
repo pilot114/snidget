@@ -47,6 +47,7 @@ class Admin
                 'Middlewares' => implode('<br>', $routeMw),
             ];
         }
+
         return $this->template(
             $this->links(),
             $this->table('All register routes in load order', $actions)
@@ -103,6 +104,7 @@ class Admin
         foreach ($this->links as $url => $name) {
             $out .= "<li><a href='$url'>$name</a></li>";
         }
+
         $out .= '</ul>';
         return $out;
     }
@@ -114,14 +116,17 @@ class Admin
         foreach (array_keys($data[0] ?? []) as $header) {
             $out .= "<th>$header</th>";
         }
+
         $out .= '</tr></thead><tbody>';
         foreach ($data as $row) {
             $out .= '<tr>';
             foreach ($row as $value) {
                 $out .= "<td>$value</td>";
             }
+
             $out .= '</tr>';
         }
+
         $out .= '</tbody></table>';
         return $out;
     }

@@ -10,7 +10,7 @@ class InMemoryCacheTest extends TestCase
 {
     protected CacheInterface $cache;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->cache = new MemoryCache();
     }
@@ -57,6 +57,7 @@ class InMemoryCacheTest extends TestCase
             yield ['delete', $key];
             yield ['has', $key];
         }
+
         yield ['getMultiple', $keys];
         yield ['setMultiple', array_combine($keys, $keys)];
         yield ['deleteMultiple', $keys];
@@ -66,39 +67,40 @@ class InMemoryCacheTest extends TestCase
     public function testBase(mixed $value): void
     {
         $key = 'testKeyValue';
-        $this->assertFalse($this->cache->has($key),          'Не должно быть значения в кеше');
-        $this->assertTrue($this->cache->set($key, $value),   'Запись в кэш должна быть успешна');
-        $this->assertTrue($this->cache->has($key),           'Должно быть значение в кеше');
-        $this->assertFalse($this->cache->set($key, $value),  'Запись в кэш должна быть неуспешна');
+        $this->assertFalse($this->cache->has($key), 'Не должно быть значения в кеше');
+        $this->assertTrue($this->cache->set($key, $value), 'Запись в кэш должна быть успешна');
+        $this->assertTrue($this->cache->has($key), 'Должно быть значение в кеше');
+        $this->assertFalse($this->cache->set($key, $value), 'Запись в кэш должна быть неуспешна');
         $this->assertEquals($value, $this->cache->get($key), 'Полученое значение должно быть равно записанному');
-        $this->assertTrue($this->cache->delete($key),        'Должно быть упешное удаление');
-        $this->assertFalse($this->cache->delete($key),       'Должно быть неупешное удаление');
-        $this->assertFalse($this->cache->has($key),          'Не должно быть значения в кеше');
+        $this->assertTrue($this->cache->delete($key), 'Должно быть упешное удаление');
+        $this->assertFalse($this->cache->delete($key), 'Должно быть неупешное удаление');
+        $this->assertFalse($this->cache->has($key), 'Не должно быть значения в кеше');
     }
 
     public function testMultiple(): void
     {
         $values = iterator_to_array($this->values());
         $values = array_map(fn(array $x): mixed => $x[0], $values);
+
         $keys = array_keys($values);
 
         array_map(fn(int|string $k) => $this->assertFalse($this->cache->has($k)), $keys);
-        $this->assertTrue($this->cache->setMultiple($values),    'Запись в кэш должна быть успешна');
+        $this->assertTrue($this->cache->setMultiple($values), 'Запись в кэш должна быть успешна');
         array_map(fn(int|string $k) => $this->assertTrue($this->cache->has($k)), $keys);
-        $this->assertFalse($this->cache->setMultiple($values),  'Запись в кэш должна быть неуспешна');
+        $this->assertFalse($this->cache->setMultiple($values), 'Запись в кэш должна быть неуспешна');
         $this->assertEquals(
             $values,
             $this->cache->getMultiple($keys),
             'Полученое значение должно быть равно записанному'
         );
-        $this->assertTrue($this->cache->deleteMultiple($keys),  'Должно быть упешное удаление');
+        $this->assertTrue($this->cache->deleteMultiple($keys), 'Должно быть упешное удаление');
         array_map(fn(int|string $k) => $this->assertFalse($this->cache->has($k)), $keys);
         $this->assertFalse($this->cache->deleteMultiple($keys), 'Должно быть неупешное удаление');
 
         // удаление через clear
-        $this->assertTrue($this->cache->setMultiple($values),  'Запись в кэш должна быть успешна');
+        $this->assertTrue($this->cache->setMultiple($values), 'Запись в кэш должна быть успешна');
         array_map(fn(int|string $k) => $this->assertTrue($this->cache->has($k)), $keys);
-        $this->assertTrue($this->cache->clear(),               'Очистка кэша должна быть успешна');
+        $this->assertTrue($this->cache->clear(), 'Очистка кэша должна быть успешна');
         array_map(fn(int|string $k) => $this->assertFalse($this->cache->has($k)), $keys);
     }
 

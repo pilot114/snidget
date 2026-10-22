@@ -21,16 +21,18 @@ class Duck
     {
         $hash = serialize(array_keys($data));
         foreach (psrIterator($this->schemaPaths) as $className) {
-            $props = (new Reflection($className))->getPublicProperties();
+            $props = new Reflection($className)->getPublicProperties();
             $typeHash = serialize(array_map(fn($x) => $x->getName(), $props));
             if (isset(self::$cache[$typeHash])) {
                 throw new SnidgetException("Совпадающие схемы: $className - " . self::$cache[$typeHash]);
             }
+
             self::$cache[$typeHash] = $className;
             if ($typeHash === $hash) {
                 return $className;
             }
         }
+
         throw new SnidgetException("Не найдено схемы, соответствующее хешу $hash");
     }
 

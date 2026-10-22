@@ -5,11 +5,17 @@ namespace Snidget\HTTP;
 class Request
 {
     public string $uri;
+
     public string $method = 'GET';
+
     public array $headers = [];
+
     public mixed $payload;
+
     public float $requestTimeMs;
+
     public array $query = [];
+
     public array $cookies = [];
 
     public function fromGlobal(): self
@@ -25,6 +31,7 @@ class Request
         foreach ($http as $headerName => $header) {
             $this->headers[str_replace('HTTP_', '', $headerName)] = $header;
         }
+
         return $this;
     }
 
@@ -34,6 +41,7 @@ class Request
         if ($body !== '' && $body !== '0') {
             $this->payload = json_decode($body, true);
         }
+
         $this->requestTimeMs = round($startTimeNs / 1_000_000, 4);
         $this->parseHeaders($headers);
         return $this;

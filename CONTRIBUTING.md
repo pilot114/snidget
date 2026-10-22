@@ -79,9 +79,9 @@ composer tests
 
 Snidget uses the following tools to ensure code quality:
 
-* PHPStan for static analysis: `composer phpstan`
-* Rector for automated code refactoring: `composer rector-lint` (check) or `composer rector-fix` (apply)
-* PHPLOC for code metrics: `composer phploc`
+* `composer check` — PHPStan (level max, existing errors in `phpstan-baseline.neon`), Rector dry-run, PHPCS (PSR-12)
+* `composer fix` — Rector and PHPCBF apply their fixes
+* `composer test` — PHPUnit
 
 ## Attributes
 

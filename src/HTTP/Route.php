@@ -16,9 +16,11 @@ class Route
         if ($this->prefix === '' || $this->prefix === '0') {
             return;
         }
+
         if ($this->regex === '' || $this->regex === '0') {
             return;
         }
+
         throw new SnidgetException('Для аттрибута Route нельзя задать вместе prefix и regex');
     }
 

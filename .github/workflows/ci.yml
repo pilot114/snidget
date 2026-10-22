@@ -26,8 +26,5 @@ jobs:
       - name: Run tests
         run: composer test
 
-      - name: Run PHPStan
-        run: composer phpstan
-
-      - name: Run Rector lint
-        run: composer lint
+      - name: Check (phpstan, rector, phpcs)
+        run: composer check

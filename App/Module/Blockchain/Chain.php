@@ -21,7 +21,8 @@ class Chain
 
     public function isChainValid(): bool
     {
-        for ($i = 1; $i < count($this->chain); $i++) {
+        $counter = count($this->chain);
+        for ($i = 1; $i < $counter; $i++) {
             $currentBlock = $this->chain[$i];
             $previousBlock = $this->chain[$i - 1];
 

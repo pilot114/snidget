@@ -23,7 +23,8 @@ class BuiltIn
             foreach ($duck->layAnEgg($request->payload) as $name => $errors) {
                 $messages[] = sprintf("Поле %s не прошло валидацию: %s", $name, implode('|', $errors));
             }
-            if ($messages) {
+
+            if ($messages !== []) {
                 dump($messages);
                 die();
             }

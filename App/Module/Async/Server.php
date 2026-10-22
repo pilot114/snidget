@@ -8,9 +8,11 @@ use Snidget\Kernel\SnidgetException;
 class Server
 {
     const HOST = '0.0.0.0';
+
     const PORT = 80;
 
     public static \Closure $kernelHandler;
+
     public static Request $request;
 
     protected static array $serveFiles = [];
@@ -44,12 +46,13 @@ class Server
                 throw new SnidgetException("Не удалось создать клиентский сокет");
             }
 
-            Scheduler::fork(function () use ($clientSocket) {
+            Scheduler::fork(function () use ($clientSocket): void {
                 Scheduler::suspend(Wait::READ, $clientSocket);
                 $request = fread($clientSocket, 8192);
                 if (!$request) {
                     throw new SnidgetException("Не удалось прочитать данные из клиентского сокета");
                 }
+
                 $response = self::httpHandle($request);
 
                 Scheduler::suspend(Wait::WRITE, $clientSocket);
@@ -67,7 +70,8 @@ class Server
             $dirFiles = self::getPublicFiles($dir);
             $files = array_merge($files, $dirFiles);
         }
-        return array_filter($files, fn($x) => is_file($x));
+
+        return array_filter($files, is_file(...));
     }
 
     protected static function httpHandle(string $request): string

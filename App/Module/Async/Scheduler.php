@@ -8,17 +8,22 @@ use SplQueue;
 class Scheduler
 {
     public SplQueue $fibers;
+
     protected ?Debug $debug;
+
     protected array $waitingRead = [];
+
     protected array $waitingWrite = [];
+
     protected array $waitingDelay = [];
 
     public function __construct(array $cbs, ?Debug $debug = null)
     {
-        if ($debug) {
+        if ($debug instanceof Debug) {
             $this->debug = $debug;
             $cbs[] = $debug->print(...);
         }
+
         $cbs[] = $this->ioPoll(...);
         $cbs[] = $this->delayPoll(...);
 
@@ -33,7 +38,7 @@ class Scheduler
     {
         pcntl_async_signals(true);
         $isTerminate = false;
-        pcntl_signal(SIGTERM, function () use (&$isTerminate) {
+        pcntl_signal(SIGTERM, function () use (&$isTerminate): void {
             $isTerminate = true;
         });
 
@@ -44,15 +49,18 @@ class Scheduler
             if ($fiber->isTerminated()) {
                 continue;
             }
+
             $result = $this->execute($fiber);
 
             if (is_callable($result)) {
                 $this->fibers->enqueue(new Fiber($result));
                 $result = [Wait::ASAP];
             }
+
             if (!is_array($result)) {
                 continue;
             }
+
             match ($result[0]) {
                 Wait::ASAP  => $this->fibers->enqueue($fiber),
                 Wait::READ  => $this->wait($fiber, $this->waitingRead, $result[1], (int)$result[1]),
@@ -64,18 +72,26 @@ class Scheduler
                 default => null,
             };
         }
+
         exit("fibers queue empty. exit...\n");
     }
 
     protected function execute(Fiber $fiber): mixed
     {
-        $this->debug && $this->debug->beforeFiber(hrtime(true), $fiber);
+        if ($this->debug instanceof Debug) {
+            $this->debug->beforeFiber(hrtime(true), $fiber);
+        }
+
         if ($fiber->isStarted()) {
             $result = $fiber->isSuspended() ? $fiber->resume() : null;
         } else {
             $result = $fiber->start();
         }
-        $this->debug && $this->debug->afterFiber(hrtime(true), $fiber);
+
+        if ($this->debug instanceof Debug) {
+            $this->debug->afterFiber(hrtime(true), $fiber);
+        }
+
         return $result;
     }
 
@@ -92,7 +108,7 @@ class Scheduler
 
     protected function wait(Fiber $fiber, array &$wait, mixed $payload, ?int $id = null): void
     {
-        $id = $id ?? count($wait);
+        $id ??= count($wait);
         $wait[$id] ??= [$payload, []];
         $wait[$id][1][] = $fiber;
     }
@@ -108,8 +124,8 @@ class Scheduler
                 continue;
             }
 
-            $rSocks = array_map(fn($x) => $x[0], $this->waitingRead);
-            $wSocks = array_map(fn($x) => $x[0], $this->waitingWrite);
+            $rSocks = array_map(fn(array $x) => $x[0], $this->waitingRead);
+            $wSocks = array_map(fn(array $x) => $x[0], $this->waitingWrite);
             $eSocks = [];
 
             $timeout = $this->fibers->isEmpty() ? null : 0;
@@ -118,12 +134,12 @@ class Scheduler
             }
 
             foreach ($rSocks as $socket) {
-                array_map(fn($fiber) => $this->fibers->enqueue($fiber), $this->waitingRead[(int) $socket][1]);
+                array_map($this->fibers->enqueue(...), $this->waitingRead[(int) $socket][1]);
                 unset($this->waitingRead[(int) $socket]);
             }
 
             foreach ($wSocks as $socket) {
-                array_map(fn($fiber) => $this->fibers->enqueue($fiber), $this->waitingWrite[(int) $socket][1]);
+                array_map($this->fibers->enqueue(...), $this->waitingWrite[(int) $socket][1]);
                 unset($this->waitingWrite[(int) $socket]);
             }
         }
@@ -136,6 +152,7 @@ class Scheduler
             if (!$this->waitingDelay) {
                 continue;
             }
+
             $now = (int)floor(microtime(true) * 1000);
             foreach ($this->waitingDelay as $i => $delay) {
                 [$timeout, $ts] = $delay[0];

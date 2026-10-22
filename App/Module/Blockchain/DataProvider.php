@@ -29,6 +29,7 @@ class DataProvider
             echo json_encode($blockchain->getInfo(), JSON_PRETTY_PRINT) . "\n";
             return;
         }
+
         echo "blockchain invalid\n";
     }
 }

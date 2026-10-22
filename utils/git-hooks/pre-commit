@@ -2,7 +2,5 @@
 
 echo committing as $(git config user.name)
 
-composer phpstan
-composer test
-composer phploc
-composer lint
+composer check || exit 1
+composer test || exit 1

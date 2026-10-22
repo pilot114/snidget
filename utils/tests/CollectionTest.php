@@ -81,6 +81,7 @@ class CollectionTest extends TestCase
         foreach ($collection as $item) {
             $result[] = $item;
         }
+
         $this->assertEquals([10, 20, 30], $result);
     }
 

@@ -6,7 +6,8 @@ class Meta
 {
     public function __construct(
         protected Driver $driver,
-    ) {}
+    ) {
+    }
 
     public function getInfo(): void
     {
@@ -42,6 +43,7 @@ class Meta
             if ($words[0] === 'CONSTRAINT') {
                 continue;
             }
+
             if ($words[0] === 'FOREIGN') {
                 array_shift($words);
                 array_shift($words);
@@ -53,12 +55,14 @@ class Meta
                     dump($words);
                     die();
                 }
+
                 $columns[$columnName]->ref = "$refTable.$refColumnName";
                 continue;
             }
+
             $name = trim(array_shift($words), "[]");
             $type = mb_strtoupper(array_shift($words));
-            $type = match(true) {
+            $type = match (true) {
                 str_starts_with($type, 'NVARCHAR') => 'TEXT',
                 str_starts_with($type, 'NUMERIC')  => 'REAL',
                 str_starts_with($type, 'DATETIME') => 'INTEGER',
@@ -73,6 +77,7 @@ class Meta
                 isNull: $isNull,
             );
         }
+
         return $columns;
     }
 }

@@ -2,7 +2,6 @@
 
 use PHPUnit\Framework\TestCase;
 use Snidget\HTTP\Request;
-use Snidget\HTTP\Response;
 use Snidget\Kernel\MiddlewareManager;
 use Snidget\Kernel\PSR\Container;
 

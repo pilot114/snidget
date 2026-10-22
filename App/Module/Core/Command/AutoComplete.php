@@ -25,12 +25,14 @@ class AutoComplete
                 if ($fqn === __METHOD__) {
                     continue;
                 }
-                [$class, $method] = explode('::',$fqn);
+
+                [$class, $method] = explode('::', $fqn);
                 $parts = explode('\\', $class);
                 $name = end($parts);
                 $desc = $attr->getDescription();
                 echo "$name:$method\t$desc\n";
             }
+
             return;
         }
 
@@ -55,4 +57,3 @@ class AutoComplete
         // TODO: values for options and args (ENUM ?)
     }
 }
-

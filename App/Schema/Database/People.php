@@ -9,9 +9,11 @@ use Snidget\Kernel\Schema\Type as BaseType;
 class People extends BaseType
 {
     #[Column(name: 'id', type: Type::INTEGER, autoincrement: true)]
-    public ?int $id;
+    public ?int $id = null;
+
     #[Column(name: 'name')]
     public ?string $name = 'test';
+
     #[Column(name: 'age', isNull: true, default: 18)]
     public int $age = 18;
 }

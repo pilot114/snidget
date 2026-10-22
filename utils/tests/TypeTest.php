@@ -2,7 +2,6 @@
 
 use PHPUnit\Framework\TestCase;
 use Snidget\Tests\Fixtures\SimpleType;
-use Snidget\Tests\Fixtures\AddressType;
 use Snidget\Tests\Fixtures\NestedType;
 use Snidget\Tests\Fixtures\CollectionType;
 

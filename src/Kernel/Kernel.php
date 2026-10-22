@@ -14,7 +14,9 @@ use Throwable;
 class Kernel
 {
     protected Container $container;
+
     protected EventManager $eventManager;
+
     protected AppPaths $config;
 
     public function __construct()
@@ -48,6 +50,7 @@ class Kernel
         foreach (AttributeLoader::getRoutes($this->config->getControllerPaths()) as $regex => $routeData) {
             $router->register($regex, $routeData['fqn'], $routeData['method']);
         }
+
         $middlewareManager = $this->container
             ->get(MiddlewareManager::class, ['middlewarePaths' => $this->config->getMiddlewarePaths()]);
         return [$router, $middlewareManager];

@@ -4,15 +4,8 @@ namespace Snidget\HTTP;
 
 class Response
 {
-    protected int $statusCode;
-    protected array $headers;
-    protected string $body;
-
-    public function __construct(string $body = '', int $statusCode = 200, array $headers = [])
+    public function __construct(protected string $body = '', protected int $statusCode = 200, protected array $headers = [])
     {
-        $this->body = $body;
-        $this->statusCode = $statusCode;
-        $this->headers = $headers;
     }
 
     public function withStatus(int $code): self
@@ -64,9 +57,11 @@ class Response
         foreach ($this->headers as $name => $value) {
             header("$name: $value");
         }
+
         if ($this->headers === [] && $this->isJson($this->body)) {
             header('Content-Type: application/json; charset=utf-8');
         }
+
         echo $this->body;
         if (function_exists('fastcgi_finish_request')) {
             fastcgi_finish_request();
@@ -78,6 +73,7 @@ class Response
         if ($data === '') {
             return false;
         }
+
         json_decode($data);
         return json_last_error() === JSON_ERROR_NONE;
     }

@@ -18,4 +18,3 @@ class Database
         $meta->getInfo();
     }
 }
-

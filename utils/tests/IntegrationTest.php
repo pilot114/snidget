@@ -37,8 +37,8 @@ class IntegrationTest extends TestCase
         try {
             $router->match($this->makeRequest('nonexistent'));
             $this->fail('Ожидалось исключение');
-        } catch (SnidgetException $e) {
-            $this->assertEquals(404, $e->getCode());
+        } catch (SnidgetException $snidgetException) {
+            $this->assertEquals(404, $snidgetException->getCode());
         }
     }
 
@@ -50,8 +50,8 @@ class IntegrationTest extends TestCase
         try {
             $router->match($this->makeRequest('users', 'GET'));
             $this->fail('Ожидалось исключение');
-        } catch (SnidgetException $e) {
-            $this->assertEquals(405, $e->getCode());
+        } catch (SnidgetException $snidgetException) {
+            $this->assertEquals(405, $snidgetException->getCode());
         }
     }
 

@@ -1,0 +1,3007 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Cannot call method count\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: App/HTTP/Controller/Api.php
+
+		-
+			message: '#^Cannot call method create\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: App/HTTP/Controller/Api.php
+
+		-
+			message: '#^Cannot call method exist\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: App/HTTP/Controller/Api.php
+
+		-
+			message: '#^Cannot call method getType\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: App/HTTP/Controller/Api.php
+
+		-
+			message: '#^Cannot call method insert\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: App/HTTP/Controller/Api.php
+
+		-
+			message: '#^Cannot call method like\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: App/HTTP/Controller/Api.php
+
+		-
+			message: '#^Cannot call method read\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: App/HTTP/Controller/Api.php
+
+		-
+			message: '#^Method App\\HTTP\\Controller\\Api\:\:get\(\) has parameter \$container with generic class Snidget\\Kernel\\PSR\\Container but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: App/HTTP/Controller/Api.php
+
+		-
+			message: '#^Method App\\HTTP\\Controller\\Api\:\:get\(\) should return string but returns string\|false\.$#'
+			identifier: return.type
+			count: 1
+			path: App/HTTP/Controller/Api.php
+
+		-
+			message: '#^Method App\\HTTP\\Controller\\Api\:\:list\(\) has parameter \$container with generic class Snidget\\Kernel\\PSR\\Container but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: App/HTTP/Controller/Api.php
+
+		-
+			message: '#^Method App\\HTTP\\Controller\\Api\:\:list\(\) should return string but returns string\|false\.$#'
+			identifier: return.type
+			count: 1
+			path: App/HTTP/Controller/Api.php
+
+		-
+			message: '#^Parameter \#1 \$router of method Snidget\\Kernel\\Kernel\:\:handle\(\) expects Snidget\\HTTP\\Router, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: App/Module/Async/AsyncKernel.php
+
+		-
+			message: '#^Parameter \#2 \$debug of class App\\Module\\Async\\Scheduler constructor expects App\\Module\\Async\\Debug\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: App/Module/Async/AsyncKernel.php
+
+		-
+			message: '#^Parameter \#2 \$middlewareManager of method Snidget\\Kernel\\Kernel\:\:handle\(\) expects Snidget\\Kernel\\MiddlewareManager, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: App/Module/Async/AsyncKernel.php
+
+		-
+			message: '#^Parameter \#3 \$request of method Snidget\\Kernel\\Kernel\:\:handle\(\) expects Snidget\\HTTP\\Request, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: App/Module/Async/AsyncKernel.php
+
+		-
+			message: '#^Static property App\\Module\\Async\\Server\:\:\$request \(Snidget\\HTTP\\Request\) does not accept mixed\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: App/Module/Async/AsyncKernel.php
+
+		-
+			message: '#^Binary operation "\+\=" between mixed and int results in an error\.$#'
+			identifier: assignOp.invalid
+			count: 1
+			path: App/Module/Async/Debug.php
+
+		-
+			message: '#^Cannot use \+\+ on mixed\.$#'
+			identifier: postInc.type
+			count: 1
+			path: App/Module/Async/Debug.php
+
+		-
+			message: '#^Class App\\Module\\Async\\Debug has an uninitialized property \$currentFiberId\. Give it default value or assign it in the constructor\.$#'
+			identifier: property.uninitialized
+			count: 1
+			path: App/Module/Async/Debug.php
+
+		-
+			message: '#^Class App\\Module\\Async\\Debug has an uninitialized property \$startFiberNs\. Give it default value or assign it in the constructor\.$#'
+			identifier: property.uninitialized
+			count: 1
+			path: App/Module/Async/Debug.php
+
+		-
+			message: '#^Method App\\Module\\Async\\Debug\:\:afterFiber\(\) has parameter \$fiber with generic class Fiber but does not specify its types\: TStart, TResume, TReturn, TSuspend$#'
+			identifier: missingType.generics
+			count: 1
+			path: App/Module/Async/Debug.php
+
+		-
+			message: '#^Method App\\Module\\Async\\Debug\:\:beforeFiber\(\) has parameter \$fiber with generic class Fiber but does not specify its types\: TStart, TResume, TReturn, TSuspend$#'
+			identifier: missingType.generics
+			count: 1
+			path: App/Module/Async/Debug.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, int\<0, max\> given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: App/Module/Async/Debug.php
+
+		-
+			message: '#^Property App\\Module\\Async\\Debug\:\:\$fiberTicks type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: App/Module/Async/Debug.php
+
+		-
+			message: '#^Property App\\Module\\Async\\Debug\:\:\$impactTime type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: App/Module/Async/Debug.php
+
+		-
+			message: '#^Property App\\Module\\Async\\Debug\:\:\$start \(int\) does not accept \(float\|int\<1, max\>\)\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: App/Module/Async/Debug.php
+
+		-
+			message: '#^While loop condition is always true\.$#'
+			identifier: while.alwaysTrue
+			count: 1
+			path: App/Module/Async/Debug.php
+
+		-
+			message: '#^Binary operation "\*" between mixed and 1000 results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: App/Module/Async/Scheduler.php
+
+		-
+			message: '#^Cannot access an offset on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: App/Module/Async/Scheduler.php
+
+		-
+			message: '#^Cannot access offset 0 on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: App/Module/Async/Scheduler.php
+
+		-
+			message: '#^Cannot access offset 1 on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 4
+			path: App/Module/Async/Scheduler.php
+
+		-
+			message: '#^Cannot call method isTerminated\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: App/Module/Async/Scheduler.php
+
+		-
+			message: '#^Cannot cast mixed to int\.$#'
+			identifier: cast.int
+			count: 8
+			path: App/Module/Async/Scheduler.php
+
+		-
+			message: '#^Cannot use array destructuring on mixed\.$#'
+			identifier: offsetAccess.nonArray
+			count: 1
+			path: App/Module/Async/Scheduler.php
+
+		-
+			message: '#^Class App\\Module\\Async\\Scheduler has an uninitialized property \$debug\. Give it default value or assign it in the constructor\.$#'
+			identifier: property.uninitialized
+			count: 1
+			path: App/Module/Async/Scheduler.php
+
+		-
+			message: '#^Method App\\Module\\Async\\Scheduler\:\:__construct\(\) has parameter \$cbs with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: App/Module/Async/Scheduler.php
+
+		-
+			message: '#^Method App\\Module\\Async\\Scheduler\:\:execute\(\) has parameter \$fiber with generic class Fiber but does not specify its types\: TStart, TResume, TReturn, TSuspend$#'
+			identifier: missingType.generics
+			count: 1
+			path: App/Module/Async/Scheduler.php
+
+		-
+			message: '#^Method App\\Module\\Async\\Scheduler\:\:fork\(\) has parameter \$cb with no signature specified for callable\.$#'
+			identifier: missingType.callable
+			count: 1
+			path: App/Module/Async/Scheduler.php
+
+		-
+			message: '#^Method App\\Module\\Async\\Scheduler\:\:wait\(\) has parameter \$fiber with generic class Fiber but does not specify its types\: TStart, TResume, TReturn, TSuspend$#'
+			identifier: missingType.generics
+			count: 1
+			path: App/Module/Async/Scheduler.php
+
+		-
+			message: '#^Method App\\Module\\Async\\Scheduler\:\:wait\(\) has parameter \$wait with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: App/Module/Async/Scheduler.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, array given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 3
+			path: App/Module/Async/Scheduler.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, int\<0, max\>\|false given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: App/Module/Async/Scheduler.php
+
+		-
+			message: '#^Only booleans are allowed in a ternary operator condition, mixed given\.$#'
+			identifier: ternary.condNotBoolean
+			count: 1
+			path: App/Module/Async/Scheduler.php
+
+		-
+			message: '#^Parameter \#1 \$callback of class Fiber constructor expects callable\(\)\: mixed, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: App/Module/Async/Scheduler.php
+
+		-
+			message: '#^Parameter \#1 \$callback of function array_map expects \(callable\(mixed\)\: mixed\)\|null, Closure\(array\)\: mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: App/Module/Async/Scheduler.php
+
+		-
+			message: '#^Parameter \#1 \$fiber of method App\\Module\\Async\\Scheduler\:\:execute\(\) expects Fiber, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: App/Module/Async/Scheduler.php
+
+		-
+			message: '#^Parameter \#1 \$fiber of method App\\Module\\Async\\Scheduler\:\:wait\(\) expects Fiber, mixed given\.$#'
+			identifier: argument.type
+			count: 3
+			path: App/Module/Async/Scheduler.php
+
+		-
+			message: '#^Parameter \#1 \$finishFiberNs of method App\\Module\\Async\\Debug\:\:afterFiber\(\) expects int, \(float\|int\<1, max\>\) given\.$#'
+			identifier: argument.type
+			count: 1
+			path: App/Module/Async/Scheduler.php
+
+		-
+			message: '#^Parameter \#1 \$read of function stream_select expects TRead of array\<resource\>\|null, array given\.$#'
+			identifier: argument.type
+			count: 1
+			path: App/Module/Async/Scheduler.php
+
+		-
+			message: '#^Parameter \#1 \$tsNs of method App\\Module\\Async\\Debug\:\:beforeFiber\(\) expects int, \(float\|int\<1, max\>\) given\.$#'
+			identifier: argument.type
+			count: 1
+			path: App/Module/Async/Scheduler.php
+
+		-
+			message: '#^Parameter \#2 \$array of function array_map expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: App/Module/Async/Scheduler.php
+
+		-
+			message: '#^Parameter \#2 \$write of function stream_select expects TWrite of array\<resource\>\|null, array given\.$#'
+			identifier: argument.type
+			count: 1
+			path: App/Module/Async/Scheduler.php
+
+		-
+			message: '#^Property App\\Module\\Async\\Scheduler\:\:\$fibers with generic class SplQueue does not specify its types\: TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: App/Module/Async/Scheduler.php
+
+		-
+			message: '#^Property App\\Module\\Async\\Scheduler\:\:\$waitingDelay type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: App/Module/Async/Scheduler.php
+
+		-
+			message: '#^Property App\\Module\\Async\\Scheduler\:\:\$waitingRead type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: App/Module/Async/Scheduler.php
+
+		-
+			message: '#^Property App\\Module\\Async\\Scheduler\:\:\$waitingWrite type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: App/Module/Async/Scheduler.php
+
+		-
+			message: '#^While loop condition is always true\.$#'
+			identifier: while.alwaysTrue
+			count: 2
+			path: App/Module/Async/Scheduler.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''/'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: App/Module/Async/Server.php
+
+		-
+			message: '#^Call to function in_array\(\) requires parameter \#3 to be set\.$#'
+			identifier: function.strict
+			count: 1
+			path: App/Module/Async/Server.php
+
+		-
+			message: '#^Method App\\Module\\Async\\Server\:\:getPublicFiles\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: App/Module/Async/Server.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, resource\|false given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 2
+			path: App/Module/Async/Server.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, string\|false given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: App/Module/Async/Server.php
+
+		-
+			message: '#^Parameter \#1 \$base of static method App\\Module\\Async\\Server\:\:getPublicFiles\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: App/Module/Async/Server.php
+
+		-
+			message: '#^Parameter \#1 \$json of function json_decode expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: App/Module/Async/Server.php
+
+		-
+			message: '#^Parameter \#1 \$string of function strlen expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: App/Module/Async/Server.php
+
+		-
+			message: '#^Parameter \#2 \$callback of function array_filter expects \(callable\(mixed\)\: bool\)\|null, Closure\(string\)\: bool given\.$#'
+			identifier: argument.type
+			count: 1
+			path: App/Module/Async/Server.php
+
+		-
+			message: '#^Parameter \#3 \$subject of function str_replace expects array\<string\>\|string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: App/Module/Async/Server.php
+
+		-
+			message: '#^Parameter \#4 \.\.\.\$values of function sprintf expects bool\|float\|int\|string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: App/Module/Async/Server.php
+
+		-
+			message: '#^Part \$responseString \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: App/Module/Async/Server.php
+
+		-
+			message: '#^Property App\\Module\\Async\\Server\:\:\$kernelHandler type has no signature specified for Closure\.$#'
+			identifier: missingType.callable
+			count: 1
+			path: App/Module/Async/Server.php
+
+		-
+			message: '#^Property App\\Module\\Async\\Server\:\:\$serveFiles type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: App/Module/Async/Server.php
+
+		-
+			message: '#^Short ternary operator is not allowed\. Use null coalesce operator if applicable or consider using long ternary\.$#'
+			identifier: ternary.shortNotAllowed
+			count: 2
+			path: App/Module/Async/Server.php
+
+		-
+			message: '#^Property App\\Module\\Blockchain\\Block\:\:\$nonce \(string\) does not accept \(float\|int\|string\)\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: App/Module/Blockchain/Block.php
+
+		-
+			message: '#^Property App\\Module\\Blockchain\\Block\:\:\$nonce \(string\) does not accept int\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: App/Module/Blockchain/Block.php
+
+		-
+			message: '#^Cannot access property \$hash on mixed\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: App/Module/Blockchain/Chain.php
+
+		-
+			message: '#^Cannot access property \$previousHash on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: App/Module/Blockchain/Chain.php
+
+		-
+			message: '#^Cannot call method calculateHash\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: App/Module/Blockchain/Chain.php
+
+		-
+			message: '#^Method App\\Module\\Blockchain\\Chain\:\:getInfo\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: App/Module/Blockchain/Chain.php
+
+		-
+			message: '#^Method App\\Module\\Blockchain\\Chain\:\:getLatestBlock\(\) should return App\\Module\\Blockchain\\Block but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: App/Module/Blockchain/Chain.php
+
+		-
+			message: '#^Property App\\Module\\Blockchain\\Chain\:\:\$chain type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: App/Module/Blockchain/Chain.php
+
+		-
+			message: '#^Cannot call method getDescription\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: App/Module/Core/Command/AutoComplete.php
+
+		-
+			message: '#^Cannot call method getName\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: App/Module/Core/Command/AutoComplete.php
+
+		-
+			message: '#^Cannot call method getShort\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: App/Module/Core/Command/AutoComplete.php
+
+		-
+			message: '#^Parameter \#1 \$dtoName of static method Snidget\\Kernel\\AttributeLoader\:\:getArgs\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: App/Module/Core/Command/AutoComplete.php
+
+		-
+			message: '#^Parameter \#2 \$string of function explode expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: App/Module/Core/Command/AutoComplete.php
+
+		-
+			message: '#^Part \$desc \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 3
+			path: App/Module/Core/Command/AutoComplete.php
+
+		-
+			message: '#^Part \$name \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: App/Module/Core/Command/AutoComplete.php
+
+		-
+			message: '#^Part \$short \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: App/Module/Core/Command/AutoComplete.php
+
+		-
+			message: '#^Binary operation "\." between non\-falsy\-string and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: App/Module/Core/Domain/Duck.php
+
+		-
+			message: '#^Cannot call method check\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: App/Module/Core/Domain/Duck.php
+
+		-
+			message: '#^Cannot call method getName\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: App/Module/Core/Domain/Duck.php
+
+		-
+			message: '#^Generator expects key type string, mixed given\.$#'
+			identifier: generator.keyType
+			count: 1
+			path: App/Module/Core/Domain/Duck.php
+
+		-
+			message: '#^Generator expects value type array, mixed given\.$#'
+			identifier: generator.valueType
+			count: 1
+			path: App/Module/Core/Domain/Duck.php
+
+		-
+			message: '#^Method App\\Module\\Core\\Domain\\Duck\:\:__construct\(\) has parameter \$schemaPaths with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: App/Module/Core/Domain/Duck.php
+
+		-
+			message: '#^Method App\\Module\\Core\\Domain\\Duck\:\:layAnEgg\(\) has parameter \$data with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: App/Module/Core/Domain/Duck.php
+
+		-
+			message: '#^Method App\\Module\\Core\\Domain\\Duck\:\:layAnEgg\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: App/Module/Core/Domain/Duck.php
+
+		-
+			message: '#^Method App\\Module\\Core\\Domain\\Duck\:\:quack\(\) has parameter \$data with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: App/Module/Core/Domain/Duck.php
+
+		-
+			message: '#^Parameter \#2 \$string of function explode expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: App/Module/Core/Domain/Duck.php
+
+		-
+			message: '#^Property App\\Module\\Core\\Domain\\Duck\:\:\$cache type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: App/Module/Core/Domain/Duck.php
+
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: App/Module/Core/HTTP/Controller/Admin.php
+
+		-
+			message: '#^Method App\\Module\\Core\\HTTP\\Controller\\Admin\:\:table\(\) has parameter \$data with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: App/Module/Core/HTTP/Controller/Admin.php
+
+		-
+			message: '#^Parameter \#1 \$array of function array_keys expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: App/Module/Core/HTTP/Controller/Admin.php
+
+		-
+			message: '#^Parameter \#1 \$string of function htmlentities expects string, \(int\|string\) given\.$#'
+			identifier: argument.type
+			count: 1
+			path: App/Module/Core/HTTP/Controller/Admin.php
+
+		-
+			message: '#^Parameter \#2 \$array of function implode expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: App/Module/Core/HTTP/Controller/Admin.php
+
+		-
+			message: '#^Parameter \#2 \$string of function explode expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: App/Module/Core/HTTP/Controller/Admin.php
+
+		-
+			message: '#^Parameter \#3 \$subject of function str_replace expects array\<string\>\|string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: App/Module/Core/HTTP/Controller/Admin.php
+
+		-
+			message: '#^Part \$name \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: App/Module/Core/HTTP/Controller/Admin.php
+
+		-
+			message: '#^Part \$value \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: App/Module/Core/HTTP/Controller/Admin.php
+
+		-
+			message: '#^Property App\\Module\\Core\\HTTP\\Controller\\Admin\:\:\$links type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: App/Module/Core/HTTP/Controller/Admin.php
+
+		-
+			message: '#^Method App\\Module\\Core\\HTTP\\Middleware\\BuiltIn\:\:auth\(\) has parameter \$next with no signature specified for Closure\.$#'
+			identifier: missingType.callable
+			count: 1
+			path: App/Module/Core/HTTP/Middleware/BuiltIn.php
+
+		-
+			message: '#^Method App\\Module\\Core\\HTTP\\Middleware\\BuiltIn\:\:duckValidate\(\) has parameter \$next with no signature specified for Closure\.$#'
+			identifier: missingType.callable
+			count: 1
+			path: App/Module/Core/HTTP/Middleware/BuiltIn.php
+
+		-
+			message: '#^Only booleans are allowed in an if condition, mixed given\.$#'
+			identifier: if.condNotBoolean
+			count: 1
+			path: App/Module/Core/HTTP/Middleware/BuiltIn.php
+
+		-
+			message: '#^Parameter \#1 \$data of method App\\Module\\Core\\Domain\\Duck\:\:layAnEgg\(\) expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: App/Module/Core/HTTP/Middleware/BuiltIn.php
+
+		-
+			message: '#^Parameter \#2 \$array of function implode expects array\<string\>, array given\.$#'
+			identifier: argument.type
+			count: 1
+			path: App/Module/Core/HTTP/Middleware/BuiltIn.php
+
+		-
+			message: '#^Property App\\Module\\Core\\Schema\\Command\\AutoCompleteInput\:\:\$input type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: App/Module/Core/Schema/Command/AutoCompleteInput.php
+
+		-
+			message: '#^Class App\\Module\\Core\\Schema\\Command\\TestInput has an uninitialized property \$first\. Give it default value or assign it in the constructor\.$#'
+			identifier: property.uninitialized
+			count: 1
+			path: App/Module/Core/Schema/Command/TestInput.php
+
+		-
+			message: '#^Property App\\Module\\Core\\Schema\\Command\\TestInput\:\:\$alpha type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: App/Module/Core/Schema/Command/TestInput.php
+
+		-
+			message: '#^Property App\\Module\\Core\\Schema\\Command\\TestInput\:\:\$third type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: App/Module/Core/Schema/Command/TestInput.php
+
+		-
+			message: '#^Class App\\Schema\\API\\UserLogin has an uninitialized property \$login\. Give it default value or assign it in the constructor\.$#'
+			identifier: property.uninitialized
+			count: 1
+			path: App/Schema/API/UserLogin.php
+
+		-
+			message: '#^Class App\\Schema\\API\\UserLogin has an uninitialized property \$password\. Give it default value or assign it in the constructor\.$#'
+			identifier: property.uninitialized
+			count: 1
+			path: App/Schema/API/UserLogin.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''''\|''\:'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 2
+			path: src/CLI/CommandHandler.php
+
+		-
+			message: '#^Cannot access property \$short on mixed\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: src/CLI/CommandHandler.php
+
+		-
+			message: '#^Cannot call method allowsNull\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/CLI/CommandHandler.php
+
+		-
+			message: '#^Cannot call method getDescription\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/CLI/CommandHandler.php
+
+		-
+			message: '#^Cannot call method getName\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 6
+			path: src/CLI/CommandHandler.php
+
+		-
+			message: '#^Cannot call method getType\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 4
+			path: src/CLI/CommandHandler.php
+
+		-
+			message: '#^Method Snidget\\CLI\\CommandHandler\:\:__construct\(\) has parameter \$args with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/CLI/CommandHandler.php
+
+		-
+			message: '#^Method Snidget\\CLI\\CommandHandler\:\:default\(\) has parameter \$paths with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/CLI/CommandHandler.php
+
+		-
+			message: '#^Method Snidget\\CLI\\CommandHandler\:\:extractCommand\(\) has parameter \$paths with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/CLI/CommandHandler.php
+
+		-
+			message: '#^Method Snidget\\CLI\\CommandHandler\:\:extractCommand\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/CLI/CommandHandler.php
+
+		-
+			message: '#^Method Snidget\\CLI\\CommandHandler\:\:getCommandInfo\(\) has parameter \$paths with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/CLI/CommandHandler.php
+
+		-
+			message: '#^Method Snidget\\CLI\\CommandHandler\:\:getCommandInfo\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/CLI/CommandHandler.php
+
+		-
+			message: '#^Method Snidget\\CLI\\CommandHandler\:\:parse\(\) has parameter \$argv with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/CLI/CommandHandler.php
+
+		-
+			message: '#^Method Snidget\\CLI\\CommandHandler\:\:parse\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/CLI/CommandHandler.php
+
+		-
+			message: '#^Parameter \#1 \$dtoName of method Snidget\\CLI\\CommandHandler\:\:parse\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/CLI/CommandHandler.php
+
+		-
+			message: '#^Parameter \#1 \$haystack of function str_contains expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/CLI/CommandHandler.php
+
+		-
+			message: '#^Parameter \#2 \$string of function explode expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/CLI/CommandHandler.php
+
+		-
+			message: '#^Part \$desc \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: src/CLI/CommandHandler.php
+
+		-
+			message: '#^Part \$name \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: src/CLI/CommandHandler.php
+
+		-
+			message: '#^Possibly invalid array key type mixed\.$#'
+			identifier: offsetAccess.invalidOffset
+			count: 11
+			path: src/CLI/CommandHandler.php
+
+		-
+			message: '#^Property Snidget\\CLI\\CommandHandler\:\:\$paths type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/CLI/CommandHandler.php
+
+		-
+			message: '#^Method Snidget\\Database\\AbstractDriver\:\:count\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Database/AbstractDriver.php
+
+		-
+			message: '#^Method Snidget\\Database\\AbstractDriver\:\:execute\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Database/AbstractDriver.php
+
+		-
+			message: '#^Method Snidget\\Database\\AbstractDriver\:\:query\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Database/AbstractDriver.php
+
+		-
+			message: '#^Method Snidget\\Database\\AbstractDriver\:\:query\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Database/AbstractDriver.php
+
+		-
+			message: '#^Method Snidget\\Database\\AbstractDriver\:\:transaction\(\) has parameter \$callback with no signature specified for callable\.$#'
+			identifier: missingType.callable
+			count: 1
+			path: src/Database/AbstractDriver.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, \(PDOStatement\|false\) given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: src/Database/AbstractDriver.php
+
+		-
+			message: '#^Binary operation "\." between '' DEFAULT '' and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Database/SQLite/Column.php
+
+		-
+			message: '#^Only booleans are allowed in a ternary operator condition, mixed given\.$#'
+			identifier: ternary.condNotBoolean
+			count: 1
+			path: src/Database/SQLite/Column.php
+
+		-
+			message: '#^Argument of an invalid type list\<string\>\|false supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: src/Database/SQLite/Meta.php
+
+		-
+			message: '#^Call to function array_filter\(\) requires parameter \#2 to be passed to avoid loose comparison semantics\.$#'
+			identifier: arrayFilter.strict
+			count: 1
+			path: src/Database/SQLite/Meta.php
+
+		-
+			message: '#^Cannot access offset ''sql'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Database/SQLite/Meta.php
+
+		-
+			message: '#^Cannot access offset ''tbl_name'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Database/SQLite/Meta.php
+
+		-
+			message: '#^Method Snidget\\Database\\SQLite\\Meta\:\:parseCreateTableSql\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Database/SQLite/Meta.php
+
+		-
+			message: '#^Offset 2 might not exist on array\{\}\|array\{non\-falsy\-string, non\-empty\-string, non\-empty\-string\}\.$#'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: src/Database/SQLite/Meta.php
+
+		-
+			message: '#^Parameter \#1 \$sql of method Snidget\\Database\\SQLite\\Meta\:\:parseCreateTableSql\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Database/SQLite/Meta.php
+
+		-
+			message: '#^Parameter \#1 \$string of function mb_strtoupper expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Database/SQLite/Meta.php
+
+		-
+			message: '#^Parameter \#1 \$string of function trim expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 4
+			path: src/Database/SQLite/Meta.php
+
+		-
+			message: '#^Method Snidget\\Database\\SQLite\\Table\:\:find\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Database/SQLite/Table.php
+
+		-
+			message: '#^Method Snidget\\Database\\SQLite\\Table\:\:like\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Database/SQLite/Table.php
+
+		-
+			message: '#^Method Snidget\\Database\\SQLite\\Table\:\:read\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Database/SQLite/Table.php
+
+		-
+			message: '#^Method Snidget\\Database\\SQLite\\Table\:\:read\(\) should return array but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Database/SQLite/Table.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, int\|false given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: src/Database/SQLite/Table.php
+
+		-
+			message: '#^Class Snidget\\HTTP\\Request has an uninitialized property \$payload\. Give it default value or assign it in the constructor\.$#'
+			identifier: property.uninitialized
+			count: 1
+			path: src/HTTP/Request.php
+
+		-
+			message: '#^Class Snidget\\HTTP\\Request has an uninitialized property \$requestTimeMs\. Give it default value or assign it in the constructor\.$#'
+			identifier: property.uninitialized
+			count: 1
+			path: src/HTTP/Request.php
+
+		-
+			message: '#^Class Snidget\\HTTP\\Request has an uninitialized property \$uri\. Give it default value or assign it in the constructor\.$#'
+			identifier: property.uninitialized
+			count: 1
+			path: src/HTTP/Request.php
+
+		-
+			message: '#^Method Snidget\\HTTP\\Request\:\:getHeader\(\) should return string\|null but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/HTTP/Request.php
+
+		-
+			message: '#^Parameter \#1 \$haystack of function str_starts_with expects string, \(int\|string\) given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/HTTP/Request.php
+
+		-
+			message: '#^Parameter \#1 \$url of function parse_url expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/HTTP/Request.php
+
+		-
+			message: '#^Parameter \#3 \$subject of function str_replace expects array\<string\>\|string, \(int\|string\) given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/HTTP/Request.php
+
+		-
+			message: '#^Property Snidget\\HTTP\\Request\:\:\$cookies type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/HTTP/Request.php
+
+		-
+			message: '#^Property Snidget\\HTTP\\Request\:\:\$headers type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/HTTP/Request.php
+
+		-
+			message: '#^Property Snidget\\HTTP\\Request\:\:\$method \(string\) does not accept mixed\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/HTTP/Request.php
+
+		-
+			message: '#^Property Snidget\\HTTP\\Request\:\:\$query type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/HTTP/Request.php
+
+		-
+			message: '#^Property Snidget\\HTTP\\Request\:\:\$requestTimeMs \(float\) does not accept mixed\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/HTTP/Request.php
+
+		-
+			message: '#^Short ternary operator is not allowed\. Use null coalesce operator if applicable or consider using long ternary\.$#'
+			identifier: ternary.shortNotAllowed
+			count: 1
+			path: src/HTTP/Request.php
+
+		-
+			message: '#^Method Snidget\\HTTP\\Response\:\:__construct\(\) has parameter \$headers with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/HTTP/Response.php
+
+		-
+			message: '#^Method Snidget\\HTTP\\Response\:\:getHeaders\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/HTTP/Response.php
+
+		-
+			message: '#^Part \$value \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: src/HTTP/Response.php
+
+		-
+			message: '#^Call to function in_array\(\) requires parameter \#3 to be set\.$#'
+			identifier: function.strict
+			count: 1
+			path: src/HTTP/Router.php
+
+		-
+			message: '#^Cannot access offset ''fqn'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/HTTP/Router.php
+
+		-
+			message: '#^Cannot access offset ''method'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/HTTP/Router.php
+
+		-
+			message: '#^Cannot access offset ''regex'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/HTTP/Router.php
+
+		-
+			message: '#^Method Snidget\\HTTP\\Router\:\:match\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/HTTP/Router.php
+
+		-
+			message: '#^Method Snidget\\HTTP\\Router\:\:routes\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/HTTP/Router.php
+
+		-
+			message: '#^Only booleans are allowed in an if condition, int\|false given\.$#'
+			identifier: if.condNotBoolean
+			count: 1
+			path: src/HTTP/Router.php
+
+		-
+			message: '#^Parameter \#2 \$string of function explode expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/HTTP/Router.php
+
+		-
+			message: '#^Part \$route\[''regex''\] \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: src/HTTP/Router.php
+
+		-
+			message: '#^Property Snidget\\HTTP\\Router\:\:\$route type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/HTTP/Router.php
+
+		-
+			message: '#^Property Snidget\\HTTP\\Router\:\:\$routes type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/HTTP/Router.php
+
+		-
+			message: '#^Cannot call method check\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Kernel/Assert.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\Assert\:\:check\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/Assert.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\Assert\:\:validateType\(\) should return array\<string, array\<string\>\> but returns array\<string, array\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Kernel/Assert.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, int\|false given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: src/Kernel/Assert.php
+
+		-
+			message: '#^Parameter \#2 \$string of function explode expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Kernel/Assert.php
+
+		-
+			message: '#^Parameter \#2 \.\.\.\$arrays of function array_merge expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Kernel/Assert.php
+
+		-
+			message: '#^Variable property access on Snidget\\Kernel\\Schema\\Type\.$#'
+			identifier: property.dynamicName
+			count: 1
+			path: src/Kernel/Assert.php
+
+		-
+			message: '#^Cannot access property \$isOption on mixed\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: src/Kernel/AttributeLoader.php
+
+		-
+			message: '#^Cannot call method getName\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: src/Kernel/AttributeLoader.php
+
+		-
+			message: '#^Cannot call method getType\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Kernel/AttributeLoader.php
+
+		-
+			message: '#^Cannot call method newInstance\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Kernel/AttributeLoader.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\AttributeLoader\:\:getBinds\(\) has parameter \$classPaths with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/AttributeLoader.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\AttributeLoader\:\:getCommands\(\) has parameter \$commandPaths with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/AttributeLoader.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\AttributeLoader\:\:getDtoInfoByCommandName\(\) has parameter \$commandPaths with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/AttributeLoader.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\AttributeLoader\:\:getDtoInfoByCommandName\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/AttributeLoader.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\AttributeLoader\:\:getListeners\(\) has parameter \$listenerPaths with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/AttributeLoader.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\AttributeLoader\:\:getRoutes\(\) has parameter \$controllerPaths with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/AttributeLoader.php
+
+		-
+			message: '#^Only booleans are allowed in &&, string given on the right side\.$#'
+			identifier: booleanAnd.rightNotBoolean
+			count: 1
+			path: src/Kernel/AttributeLoader.php
+
+		-
+			message: '#^Only booleans are allowed in &&, string\|null given on the left side\.$#'
+			identifier: booleanAnd.leftNotBoolean
+			count: 1
+			path: src/Kernel/AttributeLoader.php
+
+		-
+			message: '#^PHPDoc tag @var with type Snidget\\HTTP\\Route\|null is not subtype of type Snidget\\HTTP\\Route\.$#'
+			identifier: varTag.type
+			count: 1
+			path: src/Kernel/AttributeLoader.php
+
+		-
+			message: '#^Parameter \#1 \$object_or_class of function is_subclass_of expects object\|string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Kernel/AttributeLoader.php
+
+		-
+			message: '#^Parameter \#1 \$propName of method Snidget\\Kernel\\Reflection\:\:getPropAttributes\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Kernel/AttributeLoader.php
+
+		-
+			message: '#^Parameter \#2 \$string of function explode expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Kernel/AttributeLoader.php
+
+		-
+			message: '#^Variable property access on Snidget\\Kernel\\Schema\\Type\.$#'
+			identifier: property.dynamicName
+			count: 1
+			path: src/Kernel/AttributeLoader.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''\: '' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Kernel/ErrorHandler.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''\:'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Kernel/ErrorHandler.php
+
+		-
+			message: '#^Binary operation "\." between non\-falsy\-string and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 2
+			path: src/Kernel/ErrorHandler.php
+
+		-
+			message: '#^Cannot access constant class on mixed\.$#'
+			identifier: classConstant.nonObject
+			count: 1
+			path: src/Kernel/ErrorHandler.php
+
+		-
+			message: '#^Cannot call method getFile\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Kernel/ErrorHandler.php
+
+		-
+			message: '#^Cannot call method getLine\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Kernel/ErrorHandler.php
+
+		-
+			message: '#^Cannot call method getMessage\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Kernel/ErrorHandler.php
+
+		-
+			message: '#^Cannot call method getTraceAsString\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Kernel/ErrorHandler.php
+
+		-
+			message: '#^Only booleans are allowed in an if condition, array\<string, int\|string\>\|null given\.$#'
+			identifier: if.condNotBoolean
+			count: 1
+			path: src/Kernel/ErrorHandler.php
+
+		-
+			message: '#^Property Snidget\\Kernel\\ErrorHandler\:\:\$errors type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/ErrorHandler.php
+
+		-
+			message: '#^Cannot access offset ''fqn'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Kernel/Kernel.php
+
+		-
+			message: '#^Cannot access offset ''method'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Kernel/Kernel.php
+
+		-
+			message: '#^Cannot call method fromGlobal\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Kernel/Kernel.php
+
+		-
+			message: '#^Cannot call method register\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Kernel/Kernel.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\Kernel\:\:handle\(\) should return Snidget\\HTTP\\Response\|string but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Kernel/Kernel.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\Kernel\:\:prepare\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/Kernel.php
+
+		-
+			message: '#^Parameter \#1 \$controller of method Snidget\\Kernel\\MiddlewareManager\:\:match\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Kernel/Kernel.php
+
+		-
+			message: '#^Parameter \#1 \$id of method Snidget\\Kernel\\PSR\\Container\<mixed\>\:\:get\(\) expects class\-string\<mixed\>, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Kernel/Kernel.php
+
+		-
+			message: '#^Parameter \#1 \$instance of method Snidget\\Kernel\\PSR\\Container\<mixed\>\:\:call\(\) expects class\-string\<mixed\>\|object, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Kernel/Kernel.php
+
+		-
+			message: '#^Parameter \#1 \$router of method Snidget\\Kernel\\Kernel\:\:handle\(\) expects Snidget\\HTTP\\Router, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Kernel/Kernel.php
+
+		-
+			message: '#^Parameter \#2 \$action of method Snidget\\Kernel\\MiddlewareManager\:\:match\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Kernel/Kernel.php
+
+		-
+			message: '#^Parameter \#2 \$methodName of method Snidget\\Kernel\\PSR\\Container\<mixed\>\:\:call\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Kernel/Kernel.php
+
+		-
+			message: '#^Parameter \#2 \$middlewareManager of method Snidget\\Kernel\\Kernel\:\:handle\(\) expects Snidget\\Kernel\\MiddlewareManager, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Kernel/Kernel.php
+
+		-
+			message: '#^Parameter \#3 \$params of method Snidget\\Kernel\\PSR\\Container\<mixed\>\:\:call\(\) expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Kernel/Kernel.php
+
+		-
+			message: '#^Parameter \#3 \$request of method Snidget\\Kernel\\Kernel\:\:handle\(\) expects Snidget\\HTTP\\Request, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Kernel/Kernel.php
+
+		-
+			message: '#^Property Snidget\\Kernel\\Kernel\:\:\$config \(Snidget\\Kernel\\Schema\\AppPaths\) does not accept mixed\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Kernel/Kernel.php
+
+		-
+			message: '#^Property Snidget\\Kernel\\Kernel\:\:\$container with generic class Snidget\\Kernel\\PSR\\Container does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Kernel/Kernel.php
+
+		-
+			message: '#^Property Snidget\\Kernel\\Kernel\:\:\$eventManager \(Snidget\\Kernel\\PSR\\Event\\EventManager\) does not accept mixed\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Kernel/Kernel.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''\:\:'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Kernel/MiddlewareManager.php
+
+		-
+			message: '#^Binary operation "\." between non\-falsy\-string and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 2
+			path: src/Kernel/MiddlewareManager.php
+
+		-
+			message: '#^Cannot call method getClass\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: src/Kernel/MiddlewareManager.php
+
+		-
+			message: '#^Cannot call method getMethod\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: src/Kernel/MiddlewareManager.php
+
+		-
+			message: '#^Cannot call method getName\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Kernel/MiddlewareManager.php
+
+		-
+			message: '#^Cannot call method getPriority\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: src/Kernel/MiddlewareManager.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\MiddlewareManager\:\:__construct\(\) has parameter \$container with generic class Snidget\\Kernel\\PSR\\Container but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Kernel/MiddlewareManager.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\MiddlewareManager\:\:__construct\(\) has parameter \$middlewarePaths with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/MiddlewareManager.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\MiddlewareManager\:\:createLayer\(\) has parameter \$layer with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/MiddlewareManager.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\MiddlewareManager\:\:createLayer\(\) has parameter \$nextLayer with no signature specified for Closure\.$#'
+			identifier: missingType.callable
+			count: 1
+			path: src/Kernel/MiddlewareManager.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\MiddlewareManager\:\:createLayer\(\) return type has no signature specified for Closure\.$#'
+			identifier: missingType.callable
+			count: 1
+			path: src/Kernel/MiddlewareManager.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\MiddlewareManager\:\:getMiddlewares\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/MiddlewareManager.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\MiddlewareManager\:\:handle\(\) has parameter \$core with no signature specified for Closure\.$#'
+			identifier: missingType.callable
+			count: 1
+			path: src/Kernel/MiddlewareManager.php
+
+		-
+			message: '#^Parameter \#1 \$class of class Snidget\\Kernel\\Reflection constructor expects object\|string, \(int\|string\) given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Kernel/MiddlewareManager.php
+
+		-
+			message: '#^Parameter \#1 \$haystack of function str_contains expects string, \(int\|string\) given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Kernel/MiddlewareManager.php
+
+		-
+			message: '#^Parameter \#1 \$id of method Snidget\\Kernel\\PSR\\Container\<mixed\>\:\:get\(\) expects class\-string\<mixed\>, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Kernel/MiddlewareManager.php
+
+		-
+			message: '#^Parameter \#1 \$instance of method Snidget\\Kernel\\PSR\\Container\<mixed\>\:\:call\(\) expects class\-string\<mixed\>\|object, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Kernel/MiddlewareManager.php
+
+		-
+			message: '#^Parameter \#2 \$callback of function array_reduce expects callable\(Closure, mixed\)\: Closure, Closure\(Closure, array\)\: Closure given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Kernel/MiddlewareManager.php
+
+		-
+			message: '#^Parameter \#2 \$methodName of method Snidget\\Kernel\\PSR\\Container\<mixed\>\:\:call\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Kernel/MiddlewareManager.php
+
+		-
+			message: '#^Parameter \#2 \$string of function explode expects string, \(int\|string\) given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Kernel/MiddlewareManager.php
+
+		-
+			message: '#^Possibly invalid array key type mixed\.$#'
+			identifier: offsetAccess.invalidOffset
+			count: 1
+			path: src/Kernel/MiddlewareManager.php
+
+		-
+			message: '#^Property Snidget\\Kernel\\MiddlewareManager\:\:\$allMiddlewares type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/MiddlewareManager.php
+
+		-
+			message: '#^Property Snidget\\Kernel\\MiddlewareManager\:\:\$middlewares type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/MiddlewareManager.php
+
+		-
+			message: '#^Only booleans are allowed in &&, int given on the left side\.$#'
+			identifier: booleanAnd.leftNotBoolean
+			count: 1
+			path: src/Kernel/PSR/Cache/MemoryCache.php
+
+		-
+			message: '#^Only booleans are allowed in an if condition, int\|null given\.$#'
+			identifier: if.condNotBoolean
+			count: 1
+			path: src/Kernel/PSR/Cache/MemoryCache.php
+
+		-
+			message: '#^Parameter \#1 \$values \(iterable\<string, mixed\>\) of method Snidget\\Kernel\\PSR\\Cache\\MemoryCache\:\:setMultiple\(\) should be contravariant with parameter \$values \(iterable\) of method Psr\\SimpleCache\\CacheInterface\:\:setMultiple\(\)$#'
+			identifier: method.childParameterType
+			count: 1
+			path: src/Kernel/PSR/Cache/MemoryCache.php
+
+		-
+			message: '#^Parameter \#2 \$string of function explode expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Kernel/PSR/Cache/MemoryCache.php
+
+		-
+			message: '#^Property Snidget\\Kernel\\PSR\\Cache\\MemoryCache\:\:\$timers type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/PSR/Cache/MemoryCache.php
+
+		-
+			message: '#^Property Snidget\\Kernel\\PSR\\Cache\\MemoryCache\:\:\$values type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/PSR/Cache/MemoryCache.php
+
+		-
+			message: '#^Cannot call method allowsNull\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Kernel/PSR/Container.php
+
+		-
+			message: '#^Cannot call method getName\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Kernel/PSR/Container.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\PSR\\Container\:\:call\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/PSR/Container.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\PSR\\Container\:\:get\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/PSR/Container.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\PSR\\Container\:\:getParams\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/PSR/Container.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\PSR\\Container\:\:getRealId\(\) should return string but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Kernel/PSR/Container.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\PSR\\Container\:\:link\(\) has parameter \$target with no signature specified for callable\.$#'
+			identifier: missingType.callable
+			count: 1
+			path: src/Kernel/PSR/Container.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\PSR\\Container\:\:make\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/PSR/Container.php
+
+		-
+			message: '#^Only booleans are allowed in an if condition, \(callable\)\|string\|null given\.$#'
+			identifier: if.condNotBoolean
+			count: 1
+			path: src/Kernel/PSR/Container.php
+
+		-
+			message: '#^Parameter \#1 \$id \(class\-string\<T\>\) of method Snidget\\Kernel\\PSR\\Container\:\:get\(\) should be contravariant with parameter \$id \(string\) of method Psr\\Container\\ContainerInterface\:\:get\(\)$#'
+			identifier: method.childParameterType
+			count: 1
+			path: src/Kernel/PSR/Container.php
+
+		-
+			message: '#^Parameter \#1 \$id of method Snidget\\Kernel\\PSR\\Container\<T\>\:\:get\(\) expects class\-string\<T\>, class\-string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Kernel/PSR/Container.php
+
+		-
+			message: '#^Parameter \#1 \$id of method Snidget\\Kernel\\PSR\\Container\<T\>\:\:get\(\) expects class\-string\<T\>, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Kernel/PSR/Container.php
+
+		-
+			message: '#^Parameter \#1 \$origId of method Snidget\\Kernel\\PSR\\Container\<T\>\:\:make\(\) expects class\-string\<T\>, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Kernel/PSR/Container.php
+
+		-
+			message: '#^Parameter \#1 \$param of method Snidget\\Kernel\\PSR\\Container\<T\>\:\:getValue\(\) expects ReflectionParameter, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Kernel/PSR/Container.php
+
+		-
+			message: '#^Parameter \#2 \$array of function implode expects array\<string\>, array given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Kernel/PSR/Container.php
+
+		-
+			message: '#^Parameter \#2 \.\.\.\$values of function sprintf expects bool\|float\|int\|string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Kernel/PSR/Container.php
+
+		-
+			message: '#^Possibly invalid array key type mixed\.$#'
+			identifier: offsetAccess.invalidOffset
+			count: 1
+			path: src/Kernel/PSR/Container.php
+
+		-
+			message: '#^Property Snidget\\Kernel\\PSR\\Container\:\:\$map type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/PSR/Container.php
+
+		-
+			message: '#^Property Snidget\\Kernel\\PSR\\Container\:\:\$pool type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/PSR/Container.php
+
+		-
+			message: '#^Property Snidget\\Kernel\\PSR\\Container\:\:\$resolving type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/PSR/Container.php
+
+		-
+			message: '#^Variable method call on object\|T\.$#'
+			identifier: method.dynamicName
+			count: 1
+			path: src/Kernel/PSR/Container.php
+
+		-
+			message: '#^Variable static method call on object\|string\.$#'
+			identifier: staticMethod.dynamicName
+			count: 1
+			path: src/Kernel/PSR/Container.php
+
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 2
+			path: src/Kernel/PSR/Event/EventManager.php
+
+		-
+			message: '#^Cannot access an offset on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Kernel/PSR/Event/EventManager.php
+
+		-
+			message: '#^Cannot call method notice\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Kernel/PSR/Event/EventManager.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\PSR\\Event\\EventManager\:\:__construct\(\) has parameter \$container with generic class Snidget\\Kernel\\PSR\\Container but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Kernel/PSR/Event/EventManager.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\PSR\\Event\\EventManager\:\:__construct\(\) has parameter \$listeners with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/PSR/Event/EventManager.php
+
+		-
+			message: '#^Parameter \#1 \$instance of method Snidget\\Kernel\\PSR\\Container\<mixed\>\:\:call\(\) expects class\-string\<mixed\>\|object, string given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Kernel/PSR/Event/EventManager.php
+
+		-
+			message: '#^Parameter \#2 \$string of function explode expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Kernel/PSR/Event/EventManager.php
+
+		-
+			message: '#^Part \$listener \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: src/Kernel/PSR/Event/EventManager.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\PSR\\Log\\Logger\:\:getLog\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/PSR/Log/Logger.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\PSR\\Log\\Logger\:\:push\(\) has parameter \$context with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/PSR/Log/Logger.php
+
+		-
+			message: '#^Only iterables can be unpacked, mixed given in argument \#2\.$#'
+			identifier: argument.unpackNonIterable
+			count: 1
+			path: src/Kernel/PSR/Log/Logger.php
+
+		-
+			message: '#^Parameter \#1 \$level of method Snidget\\Kernel\\PSR\\Log\\Logger\:\:push\(\) expects Snidget\\Kernel\\PSR\\Log\\LogLevel, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Kernel/PSR/Log/Logger.php
+
+		-
+			message: '#^Parameter \#2 \.\.\.\$values of function sprintf expects bool\|float\|int\|string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Kernel/PSR/Log/Logger.php
+
+		-
+			message: '#^Property Snidget\\Kernel\\PSR\\Log\\Logger\:\:\$log type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/PSR/Log/Logger.php
+
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: src/Kernel/Reflection.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''\:\:'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Kernel/Reflection.php
+
+		-
+			message: '#^Cannot call method getAttributes\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Kernel/Reflection.php
+
+		-
+			message: '#^Cannot call method newInstance\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Kernel/Reflection.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\Reflection\:\:getMethods\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/Reflection.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\Reflection\:\:getPropAttributes\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/Reflection.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\Reflection\:\:getPublicProperties\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/Reflection.php
+
+		-
+			message: '#^PHPDoc tag @var for variable \$item contains generic class ReflectionClass but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Kernel/Reflection.php
+
+		-
+			message: '#^Parameter \#1 \$objectOrClass of class ReflectionClass constructor expects class\-string\<T of object\>\|T of object, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Kernel/Reflection.php
+
+		-
+			message: '#^Property Snidget\\Kernel\\Reflection\:\:\$class with generic class ReflectionClass does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Kernel/Reflection.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\Schema\\AppPaths\:\:getCommandPaths\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/Schema/AppPaths.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\Schema\\AppPaths\:\:getControllerPaths\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/Schema/AppPaths.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\Schema\\AppPaths\:\:getMiddlewarePaths\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/Schema/AppPaths.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\Schema\\AppPaths\:\:getPathsByType\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/Schema/AppPaths.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\Schema\\AppPaths\:\:getSchemaPaths\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/Schema/AppPaths.php
+
+		-
+			message: '#^Short ternary operator is not allowed\. Use null coalesce operator if applicable or consider using long ternary\.$#'
+			identifier: ternary.shortNotAllowed
+			count: 1
+			path: src/Kernel/Schema/AppPaths.php
+
+		-
+			message: '#^Class Snidget\\Kernel\\Schema\\Collection implements generic interface IteratorAggregate but does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Kernel/Schema/Collection.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\Schema\\Collection\:\:__construct\(\) has parameter \$items with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/Schema/Collection.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\Schema\\Collection\:\:each\(\) has parameter \$callback with no signature specified for callable\.$#'
+			identifier: missingType.callable
+			count: 1
+			path: src/Kernel/Schema/Collection.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\Schema\\Collection\:\:filter\(\) has parameter \$callback with no signature specified for callable\.$#'
+			identifier: missingType.callable
+			count: 1
+			path: src/Kernel/Schema/Collection.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\Schema\\Collection\:\:find\(\) has parameter \$callback with no signature specified for callable\.$#'
+			identifier: missingType.callable
+			count: 1
+			path: src/Kernel/Schema/Collection.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\Schema\\Collection\:\:map\(\) has parameter \$callback with no signature specified for callable\.$#'
+			identifier: missingType.callable
+			count: 1
+			path: src/Kernel/Schema/Collection.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\Schema\\Collection\:\:reduce\(\) has parameter \$callback with no signature specified for callable\.$#'
+			identifier: missingType.callable
+			count: 1
+			path: src/Kernel/Schema/Collection.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\Schema\\Collection\:\:toArray\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/Schema/Collection.php
+
+		-
+			message: '#^Cannot call method getName\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: src/Kernel/Schema/Type.php
+
+		-
+			message: '#^Cannot call method getType\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Kernel/Schema/Type.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\Schema\\Type\:\:__construct\(\) has parameter \$array with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/Schema/Type.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\Schema\\Type\:\:fromArray\(\) has parameter \$array with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/Schema/Type.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\Schema\\Type\:\:jsonSerialize\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/Schema/Type.php
+
+		-
+			message: '#^Method Snidget\\Kernel\\Schema\\Type\:\:toArray\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Kernel/Schema/Type.php
+
+		-
+			message: '#^Only booleans are allowed in &&, ReflectionNamedType\|null given on the left side\.$#'
+			identifier: booleanAnd.leftNotBoolean
+			count: 1
+			path: src/Kernel/Schema/Type.php
+
+		-
+			message: '#^Only booleans are allowed in &&, mixed given on the left side\.$#'
+			identifier: booleanAnd.leftNotBoolean
+			count: 1
+			path: src/Kernel/Schema/Type.php
+
+		-
+			message: '#^Only booleans are allowed in an if condition, string\|false given\.$#'
+			identifier: if.condNotBoolean
+			count: 1
+			path: src/Kernel/Schema/Type.php
+
+		-
+			message: '#^Only booleans are allowed in an if condition, string\|null given\.$#'
+			identifier: if.condNotBoolean
+			count: 1
+			path: src/Kernel/Schema/Type.php
+
+		-
+			message: '#^Parameter \#1 \$items of class Snidget\\Kernel\\Schema\\Collection constructor expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Kernel/Schema/Type.php
+
+		-
+			message: '#^Parameter \#1 \$key of method Snidget\\Kernel\\Schema\\Type\:\:getValue\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Kernel/Schema/Type.php
+
+		-
+			message: '#^Parameter \#3 \.\.\.\$values of function sprintf expects bool\|float\|int\|string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Kernel/Schema/Type.php
+
+		-
+			message: '#^Parameter \#4 \.\.\.\$values of function sprintf expects bool\|float\|int\|string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Kernel/Schema/Type.php
+
+		-
+			message: '#^Possibly invalid array key type mixed\.$#'
+			identifier: offsetAccess.invalidOffset
+			count: 4
+			path: src/Kernel/Schema/Type.php
+
+		-
+			message: '#^Variable property access on \$this\(Snidget\\Kernel\\Schema\\Type\)\.$#'
+			identifier: property.dynamicName
+			count: 2
+			path: src/Kernel/Schema/Type.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''/\*'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/functions.php
+
+		-
+			message: '#^Call to function array_filter\(\) requires parameter \#2 to be passed to avoid loose comparison semantics\.$#'
+			identifier: arrayFilter.strict
+			count: 1
+			path: src/functions.php
+
+		-
+			message: '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
+			identifier: empty.notAllowed
+			count: 1
+			path: src/functions.php
+
+		-
+			message: '#^Function psrIterator\(\) has parameter \$classPaths with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/functions.php
+
+		-
+			message: '#^Function request\(\) has parameter \$data with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/functions.php
+
+		-
+			message: '#^Only booleans are allowed in &&, float given on the left side\.$#'
+			identifier: booleanAnd.leftNotBoolean
+			count: 5
+			path: src/functions.php
+
+		-
+			message: '#^Only booleans are allowed in &&, int\<\-999, 999\> given on the left side\.$#'
+			identifier: booleanAnd.leftNotBoolean
+			count: 1
+			path: src/functions.php
+
+		-
+			message: '#^Only booleans are allowed in &&, string given on the right side\.$#'
+			identifier: booleanAnd.rightNotBoolean
+			count: 6
+			path: src/functions.php
+
+		-
+			message: '#^Only booleans are allowed in an if condition, string\|null given\.$#'
+			identifier: if.condNotBoolean
+			count: 1
+			path: src/functions.php
+
+		-
+			message: '#^Parameter \#1 \$string of function substr expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/functions.php
+
+		-
+			message: '#^Short ternary operator is not allowed\. Use null coalesce operator if applicable or consider using long ternary\.$#'
+			identifier: ternary.shortNotAllowed
+			count: 1
+			path: src/functions.php
+
+		-
+			message: '#^Binary operation "\." between ''TTL\: '' and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/raw.php
+
+		-
+			message: '#^Binary operation "\." between ''Протокол\: '' and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/raw.php
+
+		-
+			message: '#^Binary operation "\>\>" between mixed and 4 results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/raw.php
+
+		-
+			message: '#^Cannot access offset ''destinationIp'' on array\|false\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/raw.php
+
+		-
+			message: '#^Cannot access offset ''protocol'' on array\|false\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/raw.php
+
+		-
+			message: '#^Cannot access offset ''sourceIp'' on array\|false\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/raw.php
+
+		-
+			message: '#^Cannot access offset ''ttl'' on array\|false\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/raw.php
+
+		-
+			message: '#^Cannot access offset ''versionAndIHL'' on array\|false\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/raw.php
+
+		-
+			message: '#^Cannot access offset 0 on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: src/raw.php
+
+		-
+			message: '#^Function sendICMPRequest\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/raw.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, Socket\|false given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 2
+			path: src/raw.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, int\|false given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 2
+			path: src/raw.php
+
+		-
+			message: '#^Parameter \#1 \$array of function array_values expects array, array\|false given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/raw.php
+
+		-
+			message: '#^Parameter \#1 \$ip of function long2ip expects int, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/raw.php
+
+		-
+			message: '#^Parameter \#1 \$objectOrClass of class ReflectionClass constructor expects class\-string\<T of object\>\|T of object, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/raw.php
+
+		-
+			message: '#^Parameter \#1 \$string of function bin2hex expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/raw.php
+
+		-
+			message: '#^Parameter \#1 \$string of function strlen expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/raw.php
+
+		-
+			message: '#^Parameter \#1 \$string of function strlen expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/raw.php
+
+		-
+			message: '#^Parameter \#1 \$string of function substr expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 3
+			path: src/raw.php
+
+		-
+			message: '#^Parameter \#2 \$value of static method BinarySerializer\:\:getFormatSize\(\) expects string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/raw.php
+
+		-
+			message: '#^Parameter \#3 \$option of function socket_set_option expects int, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/raw.php
+
+		-
+			message: '#^Parameter \$destinationIp of class IPPacket constructor expects int, int\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/raw.php
+
+		-
+			message: '#^Parameter \$sourceIp of class IPPacket constructor expects int, int\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/raw.php
+
+		-
+			message: '#^Part \$sourceAddress \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: src/raw.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertArrayHasKey\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 4
+			path: utils/tests/AssertTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertEmpty\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 5
+			path: utils/tests/AssertTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertNotEmpty\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 8
+			path: utils/tests/AssertTest.php
+
+		-
+			message: '#^Anonymous function should return int but returns \(array\|float\|int\)\.$#'
+			identifier: return.type
+			count: 1
+			path: utils/tests/CollectionTest.php
+
+		-
+			message: '#^Anonymous function should return int but returns \(float\|int\)\.$#'
+			identifier: return.type
+			count: 1
+			path: utils/tests/CollectionTest.php
+
+		-
+			message: '#^Binary operation "\*" between mixed and 2 results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: utils/tests/CollectionTest.php
+
+		-
+			message: '#^Binary operation "\+" between mixed and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: utils/tests/CollectionTest.php
+
+		-
+			message: '#^Binary operation "\+\=" between \(float\|int\) and mixed results in an error\.$#'
+			identifier: assignOp.invalid
+			count: 1
+			path: utils/tests/CollectionTest.php
+
+		-
+			message: '#^Cannot access offset ''name'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: utils/tests/CollectionTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertCount\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: utils/tests/CollectionTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertEquals\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 13
+			path: utils/tests/CollectionTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertFalse\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: utils/tests/CollectionTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertNull\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 3
+			path: utils/tests/CollectionTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertTrue\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: utils/tests/CollectionTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertEquals\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 3
+			path: utils/tests/CommandHandlerTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertNotEmpty\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: utils/tests/CommandHandlerTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertStringContainsString\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: utils/tests/CommandHandlerTest.php
+
+		-
+			message: '#^Parameter \#2 \$haystack of method PHPUnit\\Framework\\Assert\:\:assertStringContainsString\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: utils/tests/CommandHandlerTest.php
+
+		-
+			message: '#^Class ContainerCircularTest has an uninitialized property \$container\. Give it default value or assign it in the constructor\.$#'
+			identifier: property.uninitialized
+			count: 1
+			path: utils/tests/ContainerCircularTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertEquals\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: utils/tests/ContainerCircularTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: utils/tests/ContainerCircularTest.php
+
+		-
+			message: '#^Property ContainerCircularTest\:\:\$container with generic class Snidget\\Kernel\\PSR\\Container does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: utils/tests/ContainerCircularTest.php
+
+		-
+			message: '#^Cannot call method getGenome\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: utils/tests/ContainerTest.php
+
+		-
+			message: '#^Cannot use array destructuring on mixed\.$#'
+			identifier: offsetAccess.nonArray
+			count: 1
+			path: utils/tests/ContainerTest.php
+
+		-
+			message: '#^Class ContainerTest has an uninitialized property \$container\. Give it default value or assign it in the constructor\.$#'
+			identifier: property.uninitialized
+			count: 1
+			path: utils/tests/ContainerTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertCount\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: utils/tests/ContainerTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertEquals\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 3
+			path: utils/tests/ContainerTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertFalse\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: utils/tests/ContainerTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 3
+			path: utils/tests/ContainerTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertTrue\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: utils/tests/ContainerTest.php
+
+		-
+			message: '#^Method ContainerTest\:\:testCall\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: utils/tests/ContainerTest.php
+
+		-
+			message: '#^Method ContainerTest\:\:testCall\(\) has parameter \$target with no signature specified for callable\.$#'
+			identifier: missingType.callable
+			count: 1
+			path: utils/tests/ContainerTest.php
+
+		-
+			message: '#^Method ContainerTest\:\:testHas\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: utils/tests/ContainerTest.php
+
+		-
+			message: '#^Method ContainerTest\:\:testHas\(\) has parameter \$target with no signature specified for callable\.$#'
+			identifier: missingType.callable
+			count: 1
+			path: utils/tests/ContainerTest.php
+
+		-
+			message: '#^Method ContainerTest\:\:testPull\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: utils/tests/ContainerTest.php
+
+		-
+			message: '#^Method ContainerTest\:\:testPull\(\) has parameter \$target with no signature specified for callable\.$#'
+			identifier: missingType.callable
+			count: 1
+			path: utils/tests/ContainerTest.php
+
+		-
+			message: '#^Only booleans are allowed in an if condition, \(callable\)\|string\|null given\.$#'
+			identifier: if.condNotBoolean
+			count: 3
+			path: utils/tests/ContainerTest.php
+
+		-
+			message: '#^Only booleans are allowed in an if condition, mixed given\.$#'
+			identifier: if.condNotBoolean
+			count: 1
+			path: utils/tests/ContainerTest.php
+
+		-
+			message: '#^Only iterables can be unpacked, mixed given\.$#'
+			identifier: arrayUnpacking.nonIterable
+			count: 4
+			path: utils/tests/ContainerTest.php
+
+		-
+			message: '#^Parameter \#1 \$array of function array_unique expects an array of values castable to string, list given\.$#'
+			identifier: argument.type
+			count: 1
+			path: utils/tests/ContainerTest.php
+
+		-
+			message: '#^Parameter \#1 \$id of method Snidget\\Kernel\\PSR\\Container\<mixed\>\:\:get\(\) expects class\-string\<mixed\>, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: utils/tests/ContainerTest.php
+
+		-
+			message: '#^Parameter \#1 \$id of method Snidget\\Kernel\\PSR\\Container\<mixed\>\:\:link\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: utils/tests/ContainerTest.php
+
+		-
+			message: '#^Parameter \#1 \$instance of method Snidget\\Kernel\\PSR\\Container\<mixed\>\:\:call\(\) expects class\-string\<mixed\>\|object, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: utils/tests/ContainerTest.php
+
+		-
+			message: '#^Parameter \#1 \$instance of method Snidget\\Kernel\\PSR\\Container\<mixed\>\:\:call\(\) expects class\-string\<mixed\>\|object, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: utils/tests/ContainerTest.php
+
+		-
+			message: '#^Parameter \#2 \$target of method Snidget\\Kernel\\PSR\\Container\<mixed\>\:\:link\(\) expects \(callable\(\)\: mixed\)\|string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: utils/tests/ContainerTest.php
+
+		-
+			message: '#^Property ContainerTest\:\:\$container with generic class Snidget\\Kernel\\PSR\\Container does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: utils/tests/ContainerTest.php
+
+		-
+			message: '#^Variable method call on Snidget\\Kernel\\PSR\\Container\.$#'
+			identifier: method.dynamicName
+			count: 2
+			path: utils/tests/ContainerTest.php
+
+		-
+			message: '#^Variable method call on Snidget\\Kernel\\PSR\\Container\<mixed\>\.$#'
+			identifier: method.dynamicName
+			count: 1
+			path: utils/tests/ContainerTest.php
+
+		-
+			message: '#^Variable method call on mixed\.$#'
+			identifier: method.dynamicName
+			count: 2
+			path: utils/tests/ContainerTest.php
+
+		-
+			message: '#^Cannot access offset ''name'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 3
+			path: utils/tests/DatabaseTest.php
+
+		-
+			message: '#^Class DatabaseTest has an uninitialized property \$db\. Give it default value or assign it in the constructor\.$#'
+			identifier: property.uninitialized
+			count: 1
+			path: utils/tests/DatabaseTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertCount\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 3
+			path: utils/tests/DatabaseTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertEquals\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 10
+			path: utils/tests/DatabaseTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertFalse\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: utils/tests/DatabaseTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertTrue\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 2
+			path: utils/tests/DatabaseTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertTrue\(\) with true will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 2
+			path: utils/tests/EventManagerTest.php
+
+		-
+			message: '#^Class EventManagerTest has an uninitialized property \$container\. Give it default value or assign it in the constructor\.$#'
+			identifier: property.uninitialized
+			count: 1
+			path: utils/tests/EventManagerTest.php
+
+		-
+			message: '#^Class EventManagerTest has an uninitialized property \$eventManager\. Give it default value or assign it in the constructor\.$#'
+			identifier: property.uninitialized
+			count: 1
+			path: utils/tests/EventManagerTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertSame\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 2
+			path: utils/tests/EventManagerTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertTrue\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 2
+			path: utils/tests/EventManagerTest.php
+
+		-
+			message: '#^Property EventManagerTest\:\:\$container with generic class Snidget\\Kernel\\PSR\\Container does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: utils/tests/EventManagerTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertSame\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: utils/tests/Examples/DataTest.php
+
+		-
+			message: '#^Method DataTest\:\:additionProvider\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: utils/tests/Examples/DataTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertTrue\(\) with true will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 2
+			path: utils/tests/Examples/DependencyAndDataProviderComboTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertContains\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: utils/tests/Examples/DependencyAndDataProviderComboTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertSame\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 2
+			path: utils/tests/Examples/DependencyAndDataProviderComboTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertTrue\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 2
+			path: utils/tests/Examples/DependencyAndDataProviderComboTest.php
+
+		-
+			message: '#^Method DependencyAndDataProviderComboTest\:\:provider1\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: utils/tests/Examples/DependencyAndDataProviderComboTest.php
+
+		-
+			message: '#^Method DependencyAndDataProviderComboTest\:\:provider2\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: utils/tests/Examples/DependencyAndDataProviderComboTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertEmpty\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 2
+			path: utils/tests/Examples/StackTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertNotEmpty\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: utils/tests/Examples/StackTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertSame\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 2
+			path: utils/tests/Examples/StackTest.php
+
+		-
+			message: '#^Method StackTest\:\:testEmpty\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: utils/tests/Examples/StackTest.php
+
+		-
+			message: '#^Method StackTest\:\:testPop\(\) has parameter \$stack with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: utils/tests/Examples/StackTest.php
+
+		-
+			message: '#^Method StackTest\:\:testPush\(\) has parameter \$stack with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: utils/tests/Examples/StackTest.php
+
+		-
+			message: '#^Method StackTest\:\:testPush\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: utils/tests/Examples/StackTest.php
+
+		-
+			message: '#^Class InMemoryCacheTest has an uninitialized property \$cache\. Give it default value or assign it in the constructor\.$#'
+			identifier: property.uninitialized
+			count: 1
+			path: utils/tests/InMemoryCacheTest.php
+
+		-
+			message: '#^Dynamic call to static method InMemoryCacheTest\:\:values\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: utils/tests/InMemoryCacheTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertEquals\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 2
+			path: utils/tests/InMemoryCacheTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertFalse\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 11
+			path: utils/tests/InMemoryCacheTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertTrue\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 10
+			path: utils/tests/InMemoryCacheTest.php
+
+		-
+			message: '#^Parameter \#1 \$callback of function array_map expects \(callable\(mixed\)\: mixed\)\|null, Closure\(array\)\: mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: utils/tests/InMemoryCacheTest.php
+
+		-
+			message: '#^Parameter \#1 \$key of method Psr\\SimpleCache\\CacheInterface\:\:has\(\) expects string, \(int\|string\) given\.$#'
+			identifier: argument.type
+			count: 5
+			path: utils/tests/InMemoryCacheTest.php
+
+		-
+			message: '#^Parameter \#1 \$keys of function array_combine expects an array of values castable to string, list given\.$#'
+			identifier: argument.type
+			count: 1
+			path: utils/tests/InMemoryCacheTest.php
+
+		-
+			message: '#^Parameter \#1 \$keys of function array_combine expects array\<int\|string\>, list given\.$#'
+			identifier: argument.type
+			count: 1
+			path: utils/tests/InMemoryCacheTest.php
+
+		-
+			message: '#^Parameter \#1 \$keys of method Psr\\SimpleCache\\CacheInterface\:\:deleteMultiple\(\) expects iterable\<string\>, list\<\(int\|string\)\> given\.$#'
+			identifier: argument.type
+			count: 2
+			path: utils/tests/InMemoryCacheTest.php
+
+		-
+			message: '#^Parameter \#1 \$keys of method Psr\\SimpleCache\\CacheInterface\:\:getMultiple\(\) expects iterable\<string\>, list\<\(int\|string\)\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: utils/tests/InMemoryCacheTest.php
+
+		-
+			message: '#^Variable method call on Psr\\SimpleCache\\CacheInterface\.$#'
+			identifier: method.dynamicName
+			count: 1
+			path: utils/tests/InMemoryCacheTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertArrayNotHasKey\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: utils/tests/IntegrationTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertEquals\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 8
+			path: utils/tests/IntegrationTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:fail\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 2
+			path: utils/tests/IntegrationTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertDirectoryExists\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: utils/tests/KernelTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertNotEmpty\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 4
+			path: utils/tests/KernelTest.php
+
+		-
+			message: '#^Parameter \#2 \$callback of function array_filter expects \(callable\(mixed\)\: bool\)\|null, Closure\(string\)\: bool given\.$#'
+			identifier: argument.type
+			count: 2
+			path: utils/tests/KernelTest.php
+
+		-
+			message: '#^Cannot access offset 1 on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: utils/tests/LoggerTest.php
+
+		-
+			message: '#^Cannot access offset 2 on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: utils/tests/LoggerTest.php
+
+		-
+			message: '#^Cannot access offset 3 on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: utils/tests/LoggerTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertContains\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 8
+			path: utils/tests/LoggerTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertCount\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 4
+			path: utils/tests/LoggerTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertEquals\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 4
+			path: utils/tests/LoggerTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertStringContainsString\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 2
+			path: utils/tests/LoggerTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertEquals\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 2
+			path: utils/tests/MiddlewareTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: utils/tests/MiddlewareTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertArrayHasKey\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: utils/tests/RequestTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertEquals\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 7
+			path: utils/tests/RequestTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertNull\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: utils/tests/RequestTest.php
+
+		-
+			message: '#^Parameter \#1 \$string of function trim expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: utils/tests/RequestTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertArrayNotHasKey\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: utils/tests/ResponseTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertEquals\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 13
+			path: utils/tests/ResponseTest.php
+
+		-
+			message: '#^Cannot access offset ''id'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: utils/tests/RouterTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertEquals\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 5
+			path: utils/tests/RouterTest.php
+
+		-
+			message: '#^Cannot access offset ''name'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: utils/tests/TypeTest.php
+
+		-
+			message: '#^Cannot access offset 0 on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: utils/tests/TypeTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertCount\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: utils/tests/TypeTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertEquals\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 6
+			path: utils/tests/TypeTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertSame\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 4
+			path: utils/tests/TypeTest.php
+
+		-
+			message: '#^Parameter \#1 \$json of function json_decode expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: utils/tests/TypeTest.php
+
+		-
+			message: '#^Parameter \#2 \$haystack of method PHPUnit\\Framework\\Assert\:\:assertCount\(\) expects Countable\|iterable, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: utils/tests/TypeTest.php
+
+		-
+			message: '#^PHPDoc tag @var for property Snidget\\Tests\\Fixtures\\CollectionType\:\:\$items with type array\<Snidget\\Tests\\Fixtures\\SimpleType\> is incompatible with native type Snidget\\Kernel\\Schema\\Collection\|null\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: utils/tests/fixtures/TestTypes.php

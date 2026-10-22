@@ -11,7 +11,8 @@ class CommandHandler
 
     public function __construct(
         protected array $args,
-    ) {}
+    ) {
+    }
 
     /**
      * @throws SnidgetException
@@ -21,6 +22,7 @@ class CommandHandler
         if (count($this->args) === 1) {
             return [];
         }
+
         $data = $this->getCommandInfo($paths);
         if ($data === []) {
             return [];
@@ -30,6 +32,7 @@ class CommandHandler
         if ($dtoName === null) {
             return [null, null, $commandClassName, $commandMethodName];
         }
+
         $data = $this->parse($dtoName, $this->args);
         return [$dtoName, $data, $commandClassName, $commandMethodName];
     }
@@ -39,10 +42,11 @@ class CommandHandler
     {
         $tmp = [];
         foreach (AttributeLoader::getCommands($paths) as $fqn => $attr) {
-            [$class, $method] = explode('::',$fqn);
+            [$class, $method] = explode('::', $fqn);
             $parts = explode('\\', $class);
             $tmp[end($parts)] = [$method => $attr->getDescription()];
         }
+
         foreach ($tmp as $groupName => $group) {
             echo "$groupName\n";
             foreach ($group as $command => $desc) {
@@ -58,9 +62,11 @@ class CommandHandler
         if (!$command) {
             return [];
         }
+
         if (!str_contains($command, ':')) {
             return [];
         }
+
         [$command, $subCommand] = explode(':', $command);
         return AttributeLoader::getDtoInfoByCommandName($paths, $command, $subCommand);
     }

@@ -118,8 +118,10 @@ class BinarySerializer
             if ($format === null) {
                 throw new Exception("Format for property '{$property->getName()}' is not defined.");
             }
+
             $binaryData .= pack($format, $property->getValue($object));
         }
+
         return $binaryData;
     }
 
@@ -134,6 +136,7 @@ class BinarySerializer
             if ($format === null) {
                 throw new Exception("Format for property '{$property->getName()}' is not defined.");
             }
+
             $value = unpack($format, substr($binaryData, $offset));
             $size = self::getFormatSize($format, array_values($value)[0]);
             $offset += $size;
@@ -149,6 +152,7 @@ class BinarySerializer
         if ($attributes !== []) {
             return $attributes[0]->newInstance()->format;
         }
+
         return null;
     }
 

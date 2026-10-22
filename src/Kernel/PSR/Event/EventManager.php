@@ -14,7 +14,8 @@ class EventManager implements EventDispatcherInterface
     public function __construct(
         protected Container $container,
         protected array $listeners = [],
-    ){}
+    ) {
+    }
 
     public function register(string $appPath, ?string $alias = null): void
     {
@@ -47,9 +48,11 @@ class EventManager implements EventDispatcherInterface
             if ($event instanceof StoppableEventInterface && $event->isPropagationStopped()) {
                 break;
             }
+
             [$class, $method] = explode('::', $listener);
             $this->container->call($class, $method, ['event' => $event]);
         }
+
         return $event;
     }
 }

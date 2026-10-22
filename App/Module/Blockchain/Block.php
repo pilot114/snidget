@@ -5,6 +5,7 @@ namespace App\Module\Blockchain;
 class Block
 {
     public string $hash;
+
     public string $nonce;
 
     public function __construct(
@@ -28,6 +29,7 @@ class Block
             $this->nonce++;
             $this->hash = $this->calculateHash();
         }
+
         return $this->hash;
     }
 }

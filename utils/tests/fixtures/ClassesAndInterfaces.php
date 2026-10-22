@@ -11,7 +11,7 @@ abstract class Reptile implements Animal
     final public function __construct(
         protected int $genome,
         protected Environment $env,
-    ){
+    ) {
 //        dump('__construct ' . static::class . "($genome)");
     }
 
@@ -26,7 +26,7 @@ abstract class Reptile implements Animal
         return $this->genome;
     }
 
-    static public function getName(): string
+    public static function getName(): string
     {
         return static::class;
     }
@@ -52,7 +52,13 @@ abstract class Lizard extends Reptile
     }
 }
 
-class Chameleon extends Lizard {}
-class Iguana extends Lizard {}
+class Chameleon extends Lizard
+{
+}
+class Iguana extends Lizard
+{
+}
 
-class Environment {}
+class Environment
+{
+}

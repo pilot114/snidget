@@ -17,13 +17,15 @@ use Snidget\Kernel\SnidgetException;
 class Container implements ContainerInterface
 {
     protected array $pool = [];
+
     protected array $map = [];
+
     protected array $resolving = [];
 
     public function __construct()
     {
         // self linking for container
-        $this->pool[__CLASS__] = $this;
+        $this->pool[self::class] = $this;
     }
 
     /**
@@ -38,9 +40,11 @@ class Container implements ContainerInterface
         if (new Reflection($instance)->getMethod($methodName)->isStatic()) {
             return $instance::{$methodName}(...$realParams);
         }
+
         if (is_string($instance)) {
             $instance = $this->get($instance);
         }
+
         return $instance->{$methodName}(...$realParams);
     }
 
@@ -55,10 +59,12 @@ class Container implements ContainerInterface
         if (new Reflection($id)->isAbstract()) {
             throw new SnidgetException("Невозможно инcтанцировать абстрактный класс $id");
         }
+
         if (in_array($id, $this->resolving, true)) {
             $chain = implode(' → ', [...$this->resolving, $id]);
             throw new SnidgetException("Обнаружена циклическая зависимость: $chain");
         }
+
         $this->resolving[] = $id;
         try {
             /** @var class-string<T> $id */
@@ -117,6 +123,7 @@ class Container implements ContainerInterface
                     $methodName
                 ));
             }
+
             yield $paramName => $value;
         }
     }
@@ -134,6 +141,7 @@ class Container implements ContainerInterface
         if (class_exists($typeName)) {
             return $this->get($typeName);
         }
+
         return $param->isOptional() ? $param->getDefaultValue() : null;
     }
 }

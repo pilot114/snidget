@@ -4,7 +4,6 @@ use PHPUnit\Framework\TestCase;
 use Snidget\Kernel\PSR\Container;
 use Snidget\Kernel\SnidgetException;
 use Snidget\Tests\Fixtures\CircularA;
-use Snidget\Tests\Fixtures\CircularB;
 use Snidget\Tests\Fixtures\DeepA;
 use Snidget\Tests\Fixtures\NonCircularA;
 

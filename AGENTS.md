@@ -17,10 +17,8 @@ make enter    # Shell into PHP container
 
 # Inside container
 composer test       # PHPUnit with coverage (HTML → utils/tests/coverage/)
-composer phpstan    # Static analysis (level 6)
-composer lint       # Rector dry-run
-composer fix        # Rector auto-fix
-composer phploc     # Code metrics
+composer check      # PHPStan (max + baseline) + Rector dry-run + PHPCS
+composer fix        # Rector + PHPCBF
 ```
 
 ### Running individual tests

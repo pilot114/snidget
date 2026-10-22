@@ -21,14 +21,24 @@
         "phpstan/phpstan": "^2.3",
         "rector/rector": "^2.7",
         "phpunit/phpunit": "^13.4",
-        "league/commonmark": "^2.10"
+        "league/commonmark": "^2.10",
+        "phpstan/extension-installer": "^1.4",
+        "phpstan/phpstan-strict-rules": "^2.1",
+        "phpstan/phpstan-deprecation-rules": "^2.0",
+        "squizlabs/php_codesniffer": "^4.0"
     },
     "scripts": {
         "hook-install": "git config core.hooksPath utils/git-hooks",
         "test": "XDEBUG_MODE=coverage phpunit utils/tests --coverage-html utils/tests/coverage --coverage-filter src --order-by random --bootstrap utils/tests/bootstrap.php",
-        "phpstan": "phpstan analyse -c utils/phpstan.neon --memory-limit 256M",
-        "lint": "rector process --dry-run --config utils/rector.php",
-        "fix": "rector process --config utils/rector.php"
+        "fix": [
+            "rector process",
+            "phpcbf"
+        ],
+        "check": [
+            "phpstan analyse --memory-limit=1G --no-progress",
+            "rector process --dry-run",
+            "phpcs"
+        ]
     },
     "autoload": {
         "psr-4": {
@@ -38,5 +48,10 @@
         "files": [
             "src/functions.php"
         ]
+    },
+    "config": {
+        "allow-plugins": {
+            "phpstan/extension-installer": true
+        }
     }
 }

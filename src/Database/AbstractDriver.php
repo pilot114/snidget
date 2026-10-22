@@ -75,9 +75,9 @@ abstract class AbstractDriver
             $result = $callback($this);
             $this->commit();
             return $result;
-        } catch (\Throwable $e) {
+        } catch (\Throwable $throwable) {
             $this->rollback();
-            throw new SnidgetException("Ошибка транзакции: {$e->getMessage()}", 0, $e);
+            throw new SnidgetException("Ошибка транзакции: {$throwable->getMessage()}", 0, $throwable);
         }
     }
 
@@ -90,6 +90,7 @@ abstract class AbstractDriver
         if (!$stmt) {
             throw new SnidgetException("Не удалось подготовить sql запрос: $sql");
         }
+
         return $stmt;
     }
 }

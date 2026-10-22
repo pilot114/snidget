@@ -65,6 +65,7 @@ class ContainerTest extends TestCase
         if ($target) {
             $this->container->link($className, $target);
         }
+
         $this->container->$method($className, $params);
 
         $this->assertTrue($this->container->has($className), 'Контейнер должен содержать этот класс');
@@ -79,10 +80,11 @@ class ContainerTest extends TestCase
         if ($target) {
             $this->container->link($className, $target);
         }
+
         /** @var Animal $class */
         $class = $this->container->$method($className, $params);
 
-        $this->assertInstanceOf($className,      $class,            'Контейнер не вернул запрошенный класс');
+        $this->assertInstanceOf($className, $class, 'Контейнер не вернул запрошенный класс');
         $this->assertEquals($class->getGenome(), $params['genome'], 'К классу не применились нужные параметры');
     }
 
@@ -96,8 +98,10 @@ class ContainerTest extends TestCase
             if ($target) {
                 $container->link($className, $target);
             }
+
             $ids[] = $container->$method($className, $params)->getGenome();
         }
+
         $this->assertCount($instanceCount, array_unique($ids), 'Неверное кол-во инстансов');
     }
 
@@ -107,6 +111,7 @@ class ContainerTest extends TestCase
         if ($target) {
             $this->container->link($className, $target);
         }
+
         $class = $this->container->get($className, $params);
 
         $result = $this->container->call($class, $method);
