@@ -81,12 +81,16 @@ START → REQUEST → RESPONSE → FINISH (or ERROR). Listeners registered via `
 
 ## Команды
 
+Обслуживание — как в pretty-php: `composer test`, `composer check`, `composer fix`.
+
+- `check` — phpstan (baseline), rector --dry-run, phpcs; ничего не меняет
+- `fix` — rector, phpcbf
+- `test` — phpunit с покрытием
+
 Цели Makefile одинаковые во всех проектах `~/projects` (`make help` — список):
 
 - `make install` — поставить зависимости
 - `make dev` — запустить для разработки
-- `make test` — тесты
-- `make lint` — статический анализ
 - `make build` — сборка
 - `make audit` — уязвимости в зависимостях
 - `make outdated` — устаревшие зависимости

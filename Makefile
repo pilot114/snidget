@@ -14,14 +14,6 @@ install: ## поставить зависимости
 dev: ## запустить для разработки
 	@echo "запускать нечего: это библиотека"
 
-.PHONY: test
-test: ## тесты
-	composer test
-
-.PHONY: lint
-lint: ## статический анализ
-	composer phpstan && composer lint
-
 .PHONY: build
 build: ## сборка
 	@echo "сборки нет"
