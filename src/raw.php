@@ -167,7 +167,7 @@ class BinarySerializer
 function sendICMPRequest(string $host, ICMPPacket $packet): array
 {
     // Проверяем привилегии для сырого сокета
-    if (posix_geteuid() != 0) {
+    if (posix_geteuid() !== 0) {
         die("Этот скрипт нужно запустить с правами суперпользователя (root).\n");
     }
 

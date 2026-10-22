@@ -1,5 +1,6 @@
 <?php
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\SimpleCache\CacheInterface;
 use Snidget\Kernel\PSR\Cache\InvalidCacheKeyException;
@@ -14,7 +15,7 @@ class InMemoryCacheTest extends TestCase
         $this->cache = new MemoryCache();
     }
 
-    protected function values(): Generator
+    public static function values(): Generator
     {
         yield 'null'   => [null];
         yield 'true'   => [true];
@@ -32,13 +33,13 @@ class InMemoryCacheTest extends TestCase
         yield 'object' => [new stdClass()];
     }
 
-    protected function expiredValues(): Generator
+    public static function expiredValues(): Generator
     {
         yield 'interval' => ['value', 'key', new DateInterval('PT1S')];
         yield 'seconds'  => ['value', 'key', 1];
     }
 
-    protected function invalidKeys(): Generator
+    public static function invalidKeys(): Generator
     {
         yield 'empty'    => [''];
         yield 'symbol'   => ['-'];
@@ -46,9 +47,9 @@ class InMemoryCacheTest extends TestCase
         yield 'overflow' => [str_repeat('x', 256)];
     }
 
-    protected function methodsWithInvalidKeys(): Generator
+    public static function methodsWithInvalidKeys(): Generator
     {
-        $keys = array_column(iterator_to_array($this->invalidKeys()), 0);
+        $keys = array_column(iterator_to_array(self::invalidKeys()), 0);
 
         foreach ($keys as $key) {
             yield ['get', $key];
@@ -61,9 +62,7 @@ class InMemoryCacheTest extends TestCase
         yield ['deleteMultiple', $keys];
     }
 
-    /**
-     * @dataProvider values
-     */
+    #[DataProvider('values')]
     public function testBase(mixed $value): void
     {
         $key = 'testKeyValue';
@@ -83,9 +82,9 @@ class InMemoryCacheTest extends TestCase
         $values = array_map(fn(array $x): mixed => $x[0], $values);
         $keys = array_keys($values);
 
-        array_map(fn($k) => $this->assertFalse($this->cache->has($k)), $keys);
+        array_map(fn(int|string $k) => $this->assertFalse($this->cache->has($k)), $keys);
         $this->assertTrue($this->cache->setMultiple($values),    'Запись в кэш должна быть успешна');
-        array_map(fn($k) => $this->assertTrue($this->cache->has($k)), $keys);
+        array_map(fn(int|string $k) => $this->assertTrue($this->cache->has($k)), $keys);
         $this->assertFalse($this->cache->setMultiple($values),  'Запись в кэш должна быть неуспешна');
         $this->assertEquals(
             $values,
@@ -93,19 +92,17 @@ class InMemoryCacheTest extends TestCase
             'Полученое значение должно быть равно записанному'
         );
         $this->assertTrue($this->cache->deleteMultiple($keys),  'Должно быть упешное удаление');
-        array_map(fn($k) => $this->assertFalse($this->cache->has($k)), $keys);
+        array_map(fn(int|string $k) => $this->assertFalse($this->cache->has($k)), $keys);
         $this->assertFalse($this->cache->deleteMultiple($keys), 'Должно быть неупешное удаление');
 
         // удаление через clear
         $this->assertTrue($this->cache->setMultiple($values),  'Запись в кэш должна быть успешна');
-        array_map(fn($k) => $this->assertTrue($this->cache->has($k)), $keys);
+        array_map(fn(int|string $k) => $this->assertTrue($this->cache->has($k)), $keys);
         $this->assertTrue($this->cache->clear(),               'Очистка кэша должна быть успешна');
-        array_map(fn($k) => $this->assertFalse($this->cache->has($k)), $keys);
+        array_map(fn(int|string $k) => $this->assertFalse($this->cache->has($k)), $keys);
     }
 
-    /**
-     * @dataProvider expiredValues
-     */
+    #[DataProvider('expiredValues')]
     public function testExpiredValues(mixed $value, string $key, int|DateInterval $ttl): void
     {
         $this->assertFalse($this->cache->has($key), 'Не должно быть значения в кеше');
@@ -115,9 +112,7 @@ class InMemoryCacheTest extends TestCase
         $this->assertFalse($this->cache->has($key), 'Не должно быть значения в кеше');
     }
 
-    /**
-     * @dataProvider methodsWithInvalidKeys
-     */
+    #[DataProvider('methodsWithInvalidKeys')]
     public function testInvalidCacheKey(string $method, mixed ...$args): void
     {
         $this->expectException(InvalidCacheKeyException::class);

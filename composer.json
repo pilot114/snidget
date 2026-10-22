@@ -12,31 +12,31 @@
         "psr/log": "*",
         "psr/simple-cache": "^3.0",
         "psr/container": "^2.0",
-        "psr/http-message": "^1.0",
+        "psr/http-message": "^2.0",
         "psr/http-server-middleware": "^1.0",
         "psr/event-dispatcher": "^1.0"
     },
     "require-dev": {
         "ext-xdebug": "*",
-        "phpstan/phpstan": "^2.1",
-        "rector/rector": "^2.0",
-        "phploc/phploc": "^7.0",
-        "phpunit/phpunit": "^9.6",
-        "league/commonmark": "^2.6"
+        "phpstan/phpstan": "^2.3",
+        "rector/rector": "^2.7",
+        "phpunit/phpunit": "^13.4",
+        "league/commonmark": "^2.10"
     },
     "scripts": {
-        "hook-install" : "git config core.hooksPath utils/git-hooks",
-        "test"         : "XDEBUG_MODE=coverage phpunit utils/tests --coverage-html utils/tests/coverage --coverage-filter src --order-by random -v --bootstrap utils/tests/bootstrap.php",
-        "phploc"       : "phploc src | grep 'LOC'",
-        "phpstan"      : "phpstan analyse -c utils/phpstan.neon --memory-limit 256M",
-        "lint"         : "rector process --dry-run --config utils/rector.php",
-        "fix"          : "rector process --config utils/rector.php"
+        "hook-install": "git config core.hooksPath utils/git-hooks",
+        "test": "XDEBUG_MODE=coverage phpunit utils/tests --coverage-html utils/tests/coverage --coverage-filter src --order-by random --bootstrap utils/tests/bootstrap.php",
+        "phpstan": "phpstan analyse -c utils/phpstan.neon --memory-limit 256M",
+        "lint": "rector process --dry-run --config utils/rector.php",
+        "fix": "rector process --config utils/rector.php"
     },
     "autoload": {
         "psr-4": {
             "Snidget\\": "src",
             "App\\": "App"
         },
-        "files": ["src/functions.php"]
+        "files": [
+            "src/functions.php"
+        ]
     }
 }

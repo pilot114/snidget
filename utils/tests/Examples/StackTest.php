@@ -12,9 +12,7 @@ final class StackTest extends TestCase
         return $stack;
     }
 
-    /**
-     * @depends testEmpty
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testEmpty')]
     public function testPush(array $stack): array
     {
         $stack[] = 'foo';
@@ -24,9 +22,7 @@ final class StackTest extends TestCase
         return $stack;
     }
 
-    /**
-     * @depends testPush
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testPush')]
     public function testPop(array $stack): void
     {
         $this->assertSame('foo', array_pop($stack));

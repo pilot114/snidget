@@ -1,5 +1,6 @@
 <?php
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Snidget\Kernel\PSR\Container;
 use Snidget\Kernel\SnidgetException;
@@ -14,7 +15,7 @@ class ContainerTest extends TestCase
         include_once __DIR__ . '/fixtures/ClassesAndInterfaces.php';
     }
 
-    protected function getClassesAndInterfaces(): Generator
+    protected static function getClassesAndInterfaces(): Generator
     {
         yield [Chameleon::class, ['genome' => 1], null];
         yield [Chameleon::class, ['genome' => 2], null];
@@ -25,23 +26,23 @@ class ContainerTest extends TestCase
         yield [Lizard::class,    ['genome' => 7], fn(): string => Iguana::class];
     }
 
-    protected function getClassesAndInterfacesByMethod(): Generator
+    public static function getClassesAndInterfacesByMethod(): Generator
     {
-        foreach ($this->getClassesAndInterfaces() as $data) {
+        foreach (self::getClassesAndInterfaces() as $data) {
             yield [...$data, 'get'];
             yield [...$data, 'make'];
         }
     }
 
-    protected function getInstanceCounts(): Generator
+    public static function getInstanceCounts(): Generator
     {
         yield ['get', 2];
         yield ['make', 7];
     }
 
-    protected function getMethods(): Generator
+    public static function getMethods(): Generator
     {
-        foreach ($this->getClassesAndInterfaces() as $data) {
+        foreach (self::getClassesAndInterfaces() as $data) {
             yield [...$data, 'getGenome'];
             yield [...$data, 'getName'];
         }
@@ -55,8 +56,8 @@ class ContainerTest extends TestCase
 
     /**
      * @param class-string $className
-     * @dataProvider getClassesAndInterfacesByMethod
      */
+    #[DataProvider('getClassesAndInterfacesByMethod')]
     public function testHas(string $className, array $params, string|callable|null $target, string $method): void
     {
         $this->assertFalse($this->container->has($className), 'Контейнер не должен содержать этот класс');
@@ -71,8 +72,8 @@ class ContainerTest extends TestCase
 
     /**
      * @param class-string $className
-     * @dataProvider getClassesAndInterfacesByMethod
      */
+    #[DataProvider('getClassesAndInterfacesByMethod')]
     public function testPull(string $className, array $params, string|callable|null $target, string $method): void
     {
         if ($target) {
@@ -85,14 +86,12 @@ class ContainerTest extends TestCase
         $this->assertEquals($class->getGenome(), $params['genome'], 'К классу не применились нужные параметры');
     }
 
-    /**
-     * @dataProvider getInstanceCounts
-     */
+    #[DataProvider('getInstanceCounts')]
     public function testCache(string $method, int $instanceCount): void
     {
         $container = new Container();
         $ids = [];
-        foreach ($this->getClassesAndInterfaces() as $case) {
+        foreach (self::getClassesAndInterfaces() as $case) {
             [$className, $params, $target] = $case;
             if ($target) {
                 $container->link($className, $target);
@@ -102,9 +101,7 @@ class ContainerTest extends TestCase
         $this->assertCount($instanceCount, array_unique($ids), 'Неверное кол-во инстансов');
     }
 
-    /**
-     * @dataProvider getMethods
-     */
+    #[DataProvider('getMethods')]
     public function testCall(string $className, array $params, string|callable|null $target, string $method): void
     {
         if ($target) {
