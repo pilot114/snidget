@@ -1,6 +1,4 @@
-# CLAUDE.md
-
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+# snidget — для агентов
 
 ## Project
 
@@ -82,3 +80,15 @@ START → REQUEST → RESPONSE → FINISH (or ERROR). Listeners registered via `
 - PHPStan level 6
 - Rector for automated refactoring (dead code, code quality, type declarations, early returns)
 - Heavy use of typed properties, return types, enums, constructor property promotion
+
+## Команды
+
+Цели Makefile одинаковые во всех проектах `~/projects` (`make help` — список):
+
+- `make install` — поставить зависимости
+- `make dev` — запустить для разработки
+- `make test` — тесты
+- `make lint` — статический анализ
+- `make build` — сборка
+- `make audit` — уязвимости в зависимостях
+- `make outdated` — устаревшие зависимости
