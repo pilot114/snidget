@@ -2,6 +2,8 @@
 
 namespace Snidget\Database\SQLite;
 
+use Snidget\Kernel\SnidgetException;
+
 class Meta
 {
     public function __construct(
@@ -52,8 +54,7 @@ class Meta
                 $refTable = trim(array_shift($words), '()[]');
                 $refColumnName = trim(array_shift($words), '()[]');
                 if (implode(' ', $words) !== 'ON DELETE NO ACTION ON UPDATE NO ACTION') {
-                    dump($words);
-                    die();
+                    throw new SnidgetException('Неподдерживаемый FOREIGN KEY: ' . implode(' ', $words));
                 }
 
                 $columns[$columnName]->ref = "$refTable.$refColumnName";
@@ -73,7 +74,7 @@ class Meta
             $isNull = !(count($words) === 2 && $words[0] === 'NOT' && $words[1] === 'NULL');
             $columns[$name] = new Column(
                 name: $name,
-                type: Type::from($type),
+                type: Type::tryFrom($type) ?? Type::TEXT,
                 isNull: $isNull,
             );
         }

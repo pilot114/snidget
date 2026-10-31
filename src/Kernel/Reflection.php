@@ -11,11 +11,11 @@ use ReflectionProperty;
 
 class Reflection
 {
-    const ATTR_PROPERTY = Attribute::TARGET_PROPERTY;
+    public const ATTR_PROPERTY = Attribute::TARGET_PROPERTY;
 
-    const ATTR_METHOD = Attribute::TARGET_METHOD;
+    public const ATTR_METHOD = Attribute::TARGET_METHOD;
 
-    const ATTR_CLASS = Attribute::TARGET_CLASS;
+    public const ATTR_CLASS = Attribute::TARGET_CLASS;
 
     protected ReflectionClass $class;
 

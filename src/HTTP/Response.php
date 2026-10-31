@@ -4,8 +4,11 @@ namespace Snidget\HTTP;
 
 class Response
 {
-    public function __construct(protected string $body = '', protected int $statusCode = 200, protected array $headers = [])
-    {
+    public function __construct(
+        protected string $body = '',
+        protected int $statusCode = 200,
+        protected array $headers = [],
+    ) {
     }
 
     public function withStatus(int $code): self

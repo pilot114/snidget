@@ -25,6 +25,13 @@ class Assert
             $errors[] = 'Значение не может быть пустым';
         }
 
+        // иначе число вместо строки обходит проверки длины и шаблона
+        $isStringRule = $this->minLength !== null || $this->maxLength !== null || $this->pattern !== null;
+        if ($isStringRule && $value !== null && !is_string($value)) {
+            $errors[] = 'Ожидается строка';
+            return $errors;
+        }
+
         if (is_int($this->min) && $value < $this->min) {
             $errors[] = 'Значение меньше ' . $this->min;
         }

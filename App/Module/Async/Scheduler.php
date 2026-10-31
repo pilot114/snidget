@@ -9,23 +9,24 @@ class Scheduler
 {
     public SplQueue $fibers;
 
-    protected ?Debug $debug;
+    protected ?Debug $debug = null;
 
     protected array $waitingRead = [];
 
     protected array $waitingWrite = [];
 
-    protected array $waitingDelay = [];
+    // служебные файберы (ioPoll, Debug) крутятся в очереди всегда
+    protected int $serviceFibers = 1;
 
     public function __construct(array $cbs, ?Debug $debug = null)
     {
         if ($debug instanceof Debug) {
             $this->debug = $debug;
             $cbs[] = $debug->print(...);
+            $this->serviceFibers++;
         }
 
         $cbs[] = $this->ioPoll(...);
-        $cbs[] = $this->delayPoll(...);
 
         $this->fibers = new SplQueue();
         foreach ($cbs as $cb) {
@@ -43,7 +44,6 @@ class Scheduler
         });
 
         while (!$this->fibers->isEmpty() && !$isTerminate) {
-            usleep(0);
             $fiber = $this->fibers->dequeue();
 
             if ($fiber->isTerminated()) {
@@ -63,12 +63,8 @@ class Scheduler
 
             match ($result[0]) {
                 Wait::ASAP  => $this->fibers->enqueue($fiber),
-                Wait::READ  => $this->wait($fiber, $this->waitingRead, $result[1], (int)$result[1]),
-                Wait::WRITE => $this->wait($fiber, $this->waitingWrite, $result[1], (int)$result[1]),
-                Wait::DELAY => $this->wait($fiber, $this->waitingDelay, [
-                    $result[1] * 1000, // delay
-                    floor(microtime(true) * 1000) // start
-                ]),
+                Wait::READ  => $this->wait($fiber, $this->waitingRead, $result[1]),
+                Wait::WRITE => $this->wait($fiber, $this->waitingWrite, $result[1]),
                 default => null,
             };
         }
@@ -106,11 +102,13 @@ class Scheduler
         return Fiber::suspend($cb);
     }
 
-    protected function wait(Fiber $fiber, array &$wait, mixed $payload, ?int $id = null): void
+    /**
+     * @param resource $socket
+     */
+    protected function wait(Fiber $fiber, array &$wait, mixed $socket): void
     {
-        $id ??= count($wait);
-        $wait[$id] ??= [$payload, []];
-        $wait[$id][1][] = $fiber;
+        $wait[(int)$socket] ??= [$socket, []];
+        $wait[(int)$socket][1][] = $fiber;
     }
 
     /**
@@ -128,8 +126,9 @@ class Scheduler
             $wSocks = array_map(fn(array $x) => $x[0], $this->waitingWrite);
             $eSocks = [];
 
-            $timeout = $this->fibers->isEmpty() ? null : 0;
-            if (!stream_select($rSocks, $wSocks, $eSocks, $timeout)) {
+            // в очереди только служебные файберы: ждём I/O, а не крутим цикл вхолостую
+            $isIdle = count($this->fibers) < $this->serviceFibers;
+            if (!stream_select($rSocks, $wSocks, $eSocks, $isIdle ? 1 : 0)) {
                 continue;
             }
 
@@ -141,25 +140,6 @@ class Scheduler
             foreach ($wSocks as $socket) {
                 array_map($this->fibers->enqueue(...), $this->waitingWrite[(int) $socket][1]);
                 unset($this->waitingWrite[(int) $socket]);
-            }
-        }
-    }
-
-    protected function delayPoll(): void
-    {
-        while (true) {
-            Scheduler::suspend(Wait::ASAP);
-            if (!$this->waitingDelay) {
-                continue;
-            }
-
-            $now = (int)floor(microtime(true) * 1000);
-            foreach ($this->waitingDelay as $i => $delay) {
-                [$timeout, $ts] = $delay[0];
-                if ($now > ((int)$ts + (int)$timeout)) {
-                    $this->fibers->enqueue($delay[1][0]);
-                    unset($this->waitingDelay[$i]);
-                }
             }
         }
     }

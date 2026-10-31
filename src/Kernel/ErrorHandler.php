@@ -25,6 +25,12 @@ class ErrorHandler
         }
 
         foreach (self::$errors as $exception) {
+            // в HTTP-ответ трейс не попадает: там он раскрывает устройство сервера
+            if (!isCli()) {
+                error_log((string)$exception);
+                continue;
+            }
+
             dump($exception::class . ': ' . $exception->getMessage());
             dump($exception->getFile() . ':' . $exception->getLine());
             dump($exception->getTraceAsString());

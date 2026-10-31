@@ -38,9 +38,7 @@ class Kernel
     {
         [$router, $middlewareManager] = $this->prepare();
         $request ??= $this->container->get(Request::class)->fromGlobal();
-        $data = $this->handle($router, $middlewareManager, $request);
-        $response = $data instanceof Response ? $data : new Response($data);
-        $response->send();
+        $this->handle($router, $middlewareManager, $request)->send();
         exit;
     }
 
@@ -56,15 +54,32 @@ class Kernel
         return [$router, $middlewareManager];
     }
 
-    protected function handle(Router $router, MiddlewareManager $middlewareManager, Request $request): string|Response
+    protected function handle(Router $router, MiddlewareManager $middlewareManager, Request $request): Response
     {
-        $this->eventManager->emit(KernelEvent::REQUEST, $request);
-        [$controller, $action, $params] = $router->match($request);
-        $data = $middlewareManager
-            ->match($controller, $action)
-            ->handle($request, fn(): mixed => $this->container->call($this->container->get($controller), $action, $params));
-        $this->eventManager->emit(KernelEvent::RESPONSE, $data);
-        return $data;
+        try {
+            $this->eventManager->emit(KernelEvent::REQUEST, $request);
+            [$controller, $action, $params] = $router->match($request);
+            $data = $middlewareManager
+                ->match($controller, $action)
+                ->handle(
+                    $request,
+                    fn(): mixed => $this->container->call($this->container->get($controller), $action, $params)
+                );
+            $response = $data instanceof Response ? $data : new Response($data);
+        } catch (Throwable $throwable) {
+            // клиенту — только статус, подробности — в обработчик ошибок
+            $response = match ($throwable instanceof SnidgetException ? $throwable->getCode() : 0) {
+                404 => new Response('Not Found', 404),
+                405 => new Response('Method Not Allowed', 405),
+                default => new Response('Internal Server Error', 500),
+            };
+            if ($response->getStatusCode() === 500) {
+                $this->eventManager->emit(KernelEvent::ERROR, $throwable);
+            }
+        }
+
+        $this->eventManager->emit(KernelEvent::RESPONSE, $response);
+        return $response;
     }
 
     protected function setErrorReportingSettings(): void
@@ -74,9 +89,20 @@ class Kernel
         error_reporting(E_ALL);
 
         set_error_handler(function (int $severity, string $message, string $file, int $line): bool {
+            // ошибка подавлена через @ или исключена из error_reporting
+            if ((error_reporting() & $severity) === 0) {
+                return false;
+            }
+
             $this->eventManager->emit(KernelEvent::ERROR, new \ErrorException($message, 0, $severity, $file, $line));
             return true;
         });
-        set_exception_handler(fn (Throwable $exception) => $this->eventManager->emit(KernelEvent::ERROR, $exception));
+        set_exception_handler(function (Throwable $exception): void {
+            if (!headers_sent()) {
+                http_response_code(500);
+            }
+
+            $this->eventManager->emit(KernelEvent::ERROR, $exception);
+        });
     }
 }

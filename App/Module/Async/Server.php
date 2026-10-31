@@ -3,25 +3,23 @@
 namespace App\Module\Async;
 
 use Snidget\HTTP\Request;
+use Snidget\HTTP\Response;
 use Snidget\Kernel\SnidgetException;
+use Throwable;
 
 class Server
 {
-    const HOST = '0.0.0.0';
+    private const string HOST = '0.0.0.0';
 
-    const PORT = 80;
+    private const int PORT = 80;
 
     public static \Closure $kernelHandler;
-
-    public static Request $request;
 
     protected static array $serveFiles = [];
 
     /**
      * http server
-     * current stable performance: ab -n 100000 -c 40 127.0.0.1:8000/
-     * RPS ~ 1650, median - 20 ms
-     * TODO: without usleep in scheduler: RPS ~ 12600, median - 3 ms
+     * benchmark: ab -n 100000 -c 40 127.0.0.1:8000/
      */
     public static function http(): void
     {
@@ -43,17 +41,25 @@ class Server
             Scheduler::suspend(Wait::READ, $socket);
             $clientSocket = stream_socket_accept($socket, 0);
             if (!$clientSocket) {
-                throw new SnidgetException("Не удалось создать клиентский сокет");
+                // клиент мог отвалиться между select и accept — это не повод останавливать сервер
+                continue;
             }
 
             Scheduler::fork(function () use ($clientSocket): void {
                 Scheduler::suspend(Wait::READ, $clientSocket);
                 $request = fread($clientSocket, 8192);
                 if (!$request) {
-                    throw new SnidgetException("Не удалось прочитать данные из клиентского сокета");
+                    fclose($clientSocket);
+                    return;
                 }
 
-                $response = self::httpHandle($request);
+                // ошибка одного запроса не должна ронять весь сервер
+                try {
+                    $response = self::httpHandle($request);
+                } catch (Throwable $throwable) {
+                    error_log((string)$throwable);
+                    $response = self::format(new Response('Internal Server Error', 500), 0);
+                }
 
                 Scheduler::suspend(Wait::WRITE, $clientSocket);
                 fwrite($clientSocket, $response);
@@ -77,37 +83,46 @@ class Server
     protected static function httpHandle(string $request): string
     {
         $start = hrtime(true);
-        $request = self::$request->fromString($request, $start);
+        // новый объект на каждый запрос: иначе заголовки и тело переходят к следующему клиенту
+        $request = new Request()->fromString($request, $start);
 
         // static and separate php scripts
         if (in_array($request->uri, self::$serveFiles)) {
             if (str_ends_with($request->uri, '.php')) {
                 // TODO: handle output and terminate in current process
-                $responseString = shell_exec('php ' . $request->uri);
+                $response = new Response((string)shell_exec('php ' . $request->uri));
             } else {
-                $responseString = file_get_contents($request->uri);
+                $response = new Response((string)file_get_contents($request->uri));
             }
         } else {
-            $responseString = (self::$kernelHandler)($request);
+            $response = (self::$kernelHandler)($request);
         }
 
-        $msgLength = strlen($responseString);
-
         // https://web.dev/custom-metrics/?utm_source=devtools#server-timing-api
-        $duration = round((hrtime(true) - $start) / 1_000_000, 2);
+        return self::format($response, round((hrtime(true) - $start) / 1_000_000, 2));
+    }
 
-        json_decode($responseString);
-        $isJson = json_last_error() === JSON_ERROR_NONE;
-        $contentType = $isJson ? 'json' : 'html';
+    protected static function format(Response $response, float $duration): string
+    {
+        $body = $response->getBody();
+        $headers = $response->getHeaders();
+        if (!isset($headers['Content-Type'])) {
+            json_decode($body);
+            $isJson = $body !== '' && json_last_error() === JSON_ERROR_NONE;
+            $headers['Content-Type'] = ($isJson ? 'application/json' : 'text/html') . '; charset=utf-8';
+        }
 
-        return <<<RES
-HTTP/1.1 200 OK\r
-Content-Type: text/$contentType; charset=utf-8\r
-Content-Length: $msgLength\r
-Connection: close\r
-Server-Timing: miss, app;dur=$duration\r
-\r
-$responseString
-RES;
+        $headers += [
+            'Content-Length' => strlen($body),
+            'Connection' => 'close',
+            'Server-Timing' => "miss, app;dur=$duration",
+        ];
+
+        $head = "HTTP/1.1 {$response->getStatusCode()} \r\n";
+        foreach ($headers as $name => $value) {
+            $head .= "$name: $value\r\n";
+        }
+
+        return "$head\r\n$body";
     }
 }

@@ -10,8 +10,6 @@ class MemoryCache implements CacheInterface
 
     protected array $timers = [];
 
-    protected bool $useSharedMemory = false;
-
     public function get(string $key, mixed $default = null): mixed
     {
         $this->checkCacheKey($key);
@@ -22,16 +20,13 @@ class MemoryCache implements CacheInterface
     public function set(string $key, mixed $value, null|int|\DateInterval $ttl = null): bool
     {
         $this->checkCacheKey($key);
-        if (array_key_exists($key, $this->values)) {
-            return false;
-        }
-
         if ($ttl instanceof \DateInterval) {
             $now = new \DateTimeImmutable();
             $ttl = $now->add($ttl)->getTimestamp() - time();
         }
 
         $this->values[$key] = $value;
+        unset($this->timers[$key]);
         if ($ttl) {
             $this->timers[$key] = time() . ':' . $ttl;
         }

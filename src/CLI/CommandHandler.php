@@ -44,7 +44,7 @@ class CommandHandler
         foreach (AttributeLoader::getCommands($paths) as $fqn => $attr) {
             [$class, $method] = explode('::', $fqn);
             $parts = explode('\\', $class);
-            $tmp[end($parts)] = [$method => $attr->getDescription()];
+            $tmp[end($parts)][$method] = $attr->getDescription();
         }
 
         foreach ($tmp as $groupName => $group) {
@@ -71,67 +71,75 @@ class CommandHandler
         return AttributeLoader::getDtoInfoByCommandName($paths, $command, $subCommand);
     }
 
+    /**
+     * @param list<string> $argv
+     */
     protected function parse(string $dtoName, array $argv): array
     {
-        $data = [];
-        $shortOpts = '';
-        $longOpts = [];
-        $propMap = [];
-
+        /** @var array<string, string> $types */
+        $types = [];
+        $shorts = [];
         foreach (AttributeLoader::getArgs($dtoName) as $prop => $attribute) {
             $name = $prop->getName();
             $type = $prop->getType()->getName();
-            $isArray = $type === 'array';
-            $isBool = $type === 'bool';
-            $short = $attribute->short;
-
-            if (!$prop->getType()->allowsNull() && !$isArray && !$isBool) {
+            if (!$prop->getType()->allowsNull() && $type !== 'array' && $type !== 'bool') {
                 throw new SnidgetException("опция $name должна быть указана как необязательная");
             }
 
-            if ($short) {
-                $shortOpts .= $short . ($isBool ? '' : ':');
-                $propMap[$short] = $name;
+            $types[$name] = $type;
+            if ($attribute->short) {
+                $shorts[$attribute->short] = $name;
             }
-
-            $longOpts[] = $name . ($isBool ? '' : ':');
-            $propMap[$name] = $name;
         }
 
-        $optind = null;
-        $options = getopt($shortOpts, $longOpts, $optind);
-
-        foreach (AttributeLoader::getArgs($dtoName) as $prop => $attribute) {
-            $name = $prop->getName();
-            $type = $prop->getType()->getName();
-            $isArray = $type === 'array';
-            $isBool = $type === 'bool';
-            $short = $attribute->short;
-
-            $value = null;
-            if (isset($options[$name])) {
-                $value = $options[$name];
-            } elseif ($short && isset($options[$short])) {
-                $value = $options[$short];
+        // getopt() не подходит: читает глобальный argv и останавливается на имени команды
+        $data = [];
+        $positionalArgs = [];
+        while (($arg = array_shift($argv)) !== null) {
+            if ($arg === '--') {
+                array_push($positionalArgs, ...$argv);
+                break;
             }
 
-            if ($value !== null) {
-                if ($isArray) {
-                    $data[$name] = is_array($value) ? $value : [$value];
-                } elseif ($isBool) {
-                    $data[$name] = true;
-                } else {
-                    $data[$name] = is_array($value) ? end($value) : $value;
+            if (str_starts_with($arg, '--')) {
+                [$name, $value] = array_pad(explode('=', substr($arg, 2), 2), 2, null);
+            } elseif (strlen($arg) > 1 && $arg[0] === '-') {
+                $name = $shorts[$arg[1]] ?? throw new SnidgetException("Неизвестная опция $arg");
+                $rest = substr($arg, 2);
+                $value = null;
+                if ($types[$name] === 'bool') {
+                    // -de — несколько флагов сразу
+                    if ($rest !== '') {
+                        array_unshift($argv, '-' . $rest);
+                    }
+                } elseif ($rest !== '') {
+                    $value = ltrim($rest, '=');
                 }
+            } else {
+                $positionalArgs[] = $arg;
+                continue;
+            }
+
+            $type = $types[$name] ?? throw new SnidgetException("Неизвестная опция $arg");
+            if ($type === 'bool') {
+                $data[$name] = true;
+                continue;
+            }
+
+            $value ??= array_shift($argv) ?? throw new SnidgetException("Не указано значение опции $arg");
+            if ($type === 'array') {
+                $data[$name][] = $value;
+            } else {
+                $data[$name] = $this->cast($value, $type);
             }
         }
 
-        $positionalArgs = array_slice($argv, $optind);
         foreach (AttributeLoader::getArgs($dtoName, false) as $prop => $attribute) {
             $name = $prop->getName();
             $type = $prop->getType()->getName();
             if ($type !== 'array') {
-                $data[$name] = array_shift($positionalArgs);
+                $value = array_shift($positionalArgs);
+                $data[$name] = $value === null ? null : $this->cast($value, $type);
             } else {
                 $data[$name] = $positionalArgs;
                 $positionalArgs = [];
@@ -139,5 +147,14 @@ class CommandHandler
         }
 
         return $data;
+    }
+
+    protected function cast(string $value, string $type): mixed
+    {
+        return match ($type) {
+            'int'   => (int)$value,
+            'float' => (float)$value,
+            default => $value,
+        };
     }
 }

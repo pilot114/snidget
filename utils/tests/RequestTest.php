@@ -26,6 +26,43 @@ class RequestTest extends TestCase
         $this->assertEquals(['key' => 'value'], $request->payload);
     }
 
+    public function testFromStringRealHttp(): void
+    {
+        $request = new Request();
+        $request->fromString(
+            "POST /api/v1/post?page=2 HTTP/1.1\r\nHost: a\r\nUser-Agent: curl\r\n\r\n{\"login\":\"abcd\"}",
+            0
+        );
+
+        $this->assertEquals('api/v1/post', $request->uri);
+        $this->assertEquals(['page' => '2'], $request->query);
+        $this->assertEquals(['login' => 'abcd'], $request->payload);
+        $this->assertEquals('curl', $request->getHeader('User-Agent'));
+    }
+
+    public function testFromStringWithoutBody(): void
+    {
+        $request = new Request();
+        $request->fromString("GET / HTTP/1.1\r\nHost: a\r\n\r\n", 0);
+
+        $this->assertNull($request->payload);
+    }
+
+    public function testFromGlobalHeaderNames(): void
+    {
+        $_SERVER['REQUEST_URI'] = '/x';
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_SERVER['HTTP_USER_AGENT'] = 'curl';
+        $_SERVER['CONTENT_TYPE'] = 'application/json';
+
+        $request = new Request()->fromGlobal();
+        unset($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);
+        unset($_SERVER['HTTP_USER_AGENT'], $_SERVER['CONTENT_TYPE']);
+
+        $this->assertEquals('curl', $request->getHeader('User-Agent'));
+        $this->assertEquals('application/json', $request->getHeader('Content-Type'));
+    }
+
     public function testGetHeader(): void
     {
         $request = new Request();

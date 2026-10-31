@@ -20,14 +20,17 @@ class Admin
     #[Route(regex: '')]
     public function index(): string
     {
-        return $this->template($this->links(), '<b>Common counts by other admin pages + quality code info + project and repo info</b>');
+        return $this->template(
+            $this->links(),
+            '<b>Common counts by other admin pages + quality code info + project and repo info</b>'
+        );
     }
 
     #[Route(regex: 'routes')]
     public function routes(Router $router, MiddlewareManager $mw): string
     {
         $actions = [];
-        foreach ($router->routes() as $regex => $route) {
+        foreach ($router->routes() as ['regex' => $regex, 'fqn' => $route]) {
             $routeMw = $mw->match(...explode('::', $route))->getMiddlewares();
             $routeMw = array_map(fn($x) => implode('::', $x), $routeMw);
 

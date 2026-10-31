@@ -1,17 +1,5 @@
 <?php
 
-use Snidget\HTTP\Request;
-use Snidget\Kernel\Kernel;
-
-function request(string $url, string $method, array $data): never
-{
-    $request = new Request();
-    $request->uri = $url;
-    $request->method = $method;
-    $request->payload = $data;
-    (new Kernel())->run($request);
-}
-
 function isCli(): bool
 {
     return php_sapi_name() === 'cli';
@@ -26,20 +14,6 @@ function dump(mixed ...$vars): void
     }
 }
 
-function autoload(string $prefix, string $baseDir): void
-{
-    spl_autoload_register(function ($class) use ($prefix, $baseDir) {
-        $len = strlen($prefix);
-        if (strncmp($prefix, $class, $len) !== 0) {
-            return;
-        }
-        $file = $baseDir . str_replace('\\', '/', substr($class, $len)) . '.php';
-        if (file_exists($file)) {
-            require $file;
-        }
-    });
-}
-
 /**
  * Получаем все классы в директории, если они соотвествуют PSR
  *
@@ -48,6 +22,12 @@ function autoload(string $prefix, string $baseDir): void
 function psrIterator(array $classPaths, bool $recursive = false, ?string $alias = null): \Generator
 {
     foreach ($classPaths as $classPath) {
+        // путь вида bin/../App иначе превращается в неймспейс \Bin\..\App
+        $classPath = realpath($classPath);
+        if ($classPath === false) {
+            continue;
+        }
+
         $relPath = substr($classPath, strlen(dirname(__DIR__)) + 1);
         $parts = array_filter(explode('/', $relPath));
         if ($alias) {

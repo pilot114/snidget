@@ -70,7 +70,9 @@ class InMemoryCacheTest extends TestCase
         $this->assertFalse($this->cache->has($key), 'Не должно быть значения в кеше');
         $this->assertTrue($this->cache->set($key, $value), 'Запись в кэш должна быть успешна');
         $this->assertTrue($this->cache->has($key), 'Должно быть значение в кеше');
-        $this->assertFalse($this->cache->set($key, $value), 'Запись в кэш должна быть неуспешна');
+        $this->assertTrue($this->cache->set($key, 'new'), 'Повторная запись должна перезаписать значение');
+        $this->assertEquals('new', $this->cache->get($key));
+        $this->cache->set($key, $value);
         $this->assertEquals($value, $this->cache->get($key), 'Полученое значение должно быть равно записанному');
         $this->assertTrue($this->cache->delete($key), 'Должно быть упешное удаление');
         $this->assertFalse($this->cache->delete($key), 'Должно быть неупешное удаление');
@@ -87,7 +89,7 @@ class InMemoryCacheTest extends TestCase
         array_map(fn(int|string $k) => $this->assertFalse($this->cache->has($k)), $keys);
         $this->assertTrue($this->cache->setMultiple($values), 'Запись в кэш должна быть успешна');
         array_map(fn(int|string $k) => $this->assertTrue($this->cache->has($k)), $keys);
-        $this->assertFalse($this->cache->setMultiple($values), 'Запись в кэш должна быть неуспешна');
+        $this->assertTrue($this->cache->setMultiple($values), 'Повторная запись должна перезаписать значения');
         $this->assertEquals(
             $values,
             $this->cache->getMultiple($keys),

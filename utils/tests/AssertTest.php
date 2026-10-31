@@ -29,6 +29,13 @@ class AssertTest extends TestCase
         $this->assertEmpty($assert->check('hello'));
     }
 
+    public function testStringRulesRejectNonString(): void
+    {
+        $this->assertNotEmpty(new Assert(minLength: 4, maxLength: 24)->check(12345678));
+        $this->assertNotEmpty(new Assert(pattern: '/^\d{3}$/')->check(123));
+        $this->assertEmpty(new Assert(minLength: 4)->check(null));
+    }
+
     public function testPatternValidation(): void
     {
         $assert = new Assert(pattern: '/^\d{3}$/');

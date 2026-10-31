@@ -2,6 +2,7 @@
 
 namespace App\Module\Core\HTTP\Controller;
 
+use Snidget\HTTP\Response;
 use Snidget\HTTP\Route;
 
 class Main
@@ -13,9 +14,8 @@ class Main
     }
 
     #[Route(regex: '.*')]
-    public function notFound(): string
+    public function notFound(): Response
     {
-        http_response_code(404);
-        return '404 Not Found';
+        return new Response('404 Not Found', 404);
     }
 }

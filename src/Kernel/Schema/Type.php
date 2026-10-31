@@ -26,7 +26,12 @@ abstract class Type implements JsonSerializable
             try {
                 $this->$key = $value;
             } catch (TypeError $e) {
-                $message = sprintf("Не удалось установить в поле %s::%s значение %s", static::class, $key, $value ?? 'null');
+                $message = sprintf(
+                    "Не удалось установить в поле %s::%s значение %s",
+                    static::class,
+                    $key,
+                    $value ?? 'null'
+                );
                 throw new TypeError($message, $e->getCode(), $e);
             }
         }

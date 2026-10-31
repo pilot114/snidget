@@ -46,8 +46,8 @@ class AutoComplete
         $dtoName = $info[2];
         foreach (AttributeLoader::getArgs($dtoName) as $prop => $attribute) {
             $name = $prop->getName();
-            $desc = $attribute->getDescription();
-            $short = $attribute->getShort();
+            $desc = $attribute->description;
+            $short = $attribute->short;
             echo "--$name\t$desc\n";
             if ($short) {
                 echo "-$short\t$desc\n";

@@ -53,7 +53,7 @@ Snidget follows a modular architecture:
 
 ```
 App/                    # Application code
-  Module/               # Modules (Core, Async, Blockchain, etc.)
+  Module/               # Modules (Core, Async, etc.)
   Schema/               # Data schema definitions
   HTTP/                 # HTTP-related controllers
 bin/                    # Executable scripts

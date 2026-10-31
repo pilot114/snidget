@@ -51,8 +51,7 @@ class AttributeLoader
         $columns = [];
         $values = [];
         $ref = new Reflection($typeName);
-        foreach ($ref->getAttributes(Reflection::ATTR_PROPERTY, Column::class) as $fqn => $attribute) {
-            $propName = explode('::', $fqn)[1];
+        foreach ($ref->getAttributes(Reflection::ATTR_PROPERTY, Column::class) as $attribute) {
             $value = $data->{$attribute->name};
             if ($value === null) {
                 continue;
@@ -106,7 +105,7 @@ class AttributeLoader
         $result = [];
         foreach (AttributeLoader::getCommands($commandPaths) as $fqn => $attr) {
             [$class, $method] = explode('::', $fqn);
-            if (str_ends_with($class, $command) && $method === $subCommand) {
+            if (substr((string)strrchr($class, '\\'), 1) === $command && $method === $subCommand) {
                 $result = [$class, $method, null];
                 foreach (new Reflection($class)->getParams($method) as $param) {
                     $paramTypeName = $param->getType()->getName();
