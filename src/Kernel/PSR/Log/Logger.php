@@ -2,10 +2,12 @@
 
 namespace Snidget\Kernel\PSR\Log;
 
+use Psr\Log\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 
 class Logger implements LoggerInterface, \Stringable
 {
+    /** @var list<array{float, string, string, string}> время, уровень, сообщение, контекст в JSON */
     protected array $log = [];
 
     public function __toString(): string
@@ -59,16 +61,24 @@ class Logger implements LoggerInterface, \Stringable
             $level = LogLevel::from(strtoupper($level));
         }
 
+        if (!$level instanceof LogLevel) {
+            throw new InvalidArgumentException('Уровень лога — строка или ' . LogLevel::class);
+        }
+
         $this->push($level, (string)$message, $context);
     }
 
+    /** @return list<array{float, string, string, string}> */
     public function getLog(): array
     {
         return $this->log;
     }
 
+    /**
+     * @param array<mixed> $context
+     */
     protected function push(LogLevel $level, string $message, array $context = []): void
     {
-        $this->log[] = [microtime(true), $level->name, $message, json_encode($context)];
+        $this->log[] = [microtime(true), $level->name, $message, (string)json_encode($context)];
     }
 }

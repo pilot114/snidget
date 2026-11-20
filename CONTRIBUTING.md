@@ -79,7 +79,7 @@ composer tests
 
 Snidget uses the following tools to ensure code quality:
 
-* `composer check` — PHPStan (level max, existing errors in `phpstan-baseline.neon`), Rector dry-run, PHPCS (PSR-12)
+* `composer check` — PHPStan (level max, без baseline; конфиги — в `dev/`), Rector dry-run, PHPCS (PSR-12)
 * `composer fix` — Rector and PHPCBF apply their fixes
 * `composer test` — PHPUnit
 
@@ -95,7 +95,7 @@ Snidget makes extensive use of PHP 8 attributes. Notable attributes include:
 
 ## Documentation
 
-When adding new features, please update the relevant documentation in the `utils/docs/md` directory. Documentation can be built using the `bin/docs.php` script.
+When adding new features, please update the relevant documentation in the `dev/docs/md` directory. Documentation can be built using the `bin/docs.php` script.
 
 ## Submitting Changes
 

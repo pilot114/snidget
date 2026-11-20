@@ -13,15 +13,13 @@ class EventManager implements EventDispatcherInterface
 {
     public function __construct(
         protected Container $container,
+        /** @var array<string, list<string>> имя события => [Класс::метод] */
         protected array $listeners = [],
     ) {
     }
 
     public function register(string $appPath, ?string $alias = null): void
     {
-        /**
-         * @var Listen $listener
-         */
         foreach (AttributeLoader::getListeners([$appPath], $alias) as $fqn => $listener) {
             $this->listeners[$listener->getEvent()->name][] = $fqn;
         }

@@ -8,6 +8,7 @@ use Throwable;
 
 class ErrorHandler
 {
+    /** @var list<Throwable> */
     protected static array $errors = [];
 
     #[Listen(KernelEvent::ERROR)]
@@ -20,7 +21,7 @@ class ErrorHandler
     public function onShutdown(): void
     {
         $error = error_get_last();
-        if ($error) {
+        if ($error !== null) {
             self::$errors[] = new \ErrorException($error['message'], 0, $error['type'], $error['file'], $error['line']);
         }
 

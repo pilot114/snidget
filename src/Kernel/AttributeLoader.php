@@ -2,6 +2,7 @@
 
 namespace Snidget\Kernel;
 
+use ReflectionNamedType;
 use Snidget\CLI\Arg;
 use Snidget\CLI\Command;
 use Snidget\Database\SQLite\Column;
@@ -12,11 +13,13 @@ use Snidget\Kernel\PSR\Event\Listen;
 
 class AttributeLoader
 {
+    /** @return \Generator<string, Assert> */
     public static function getAssertions(string $typeName): \Generator
     {
         yield from new Reflection($typeName)->getAttributes(Reflection::ATTR_PROPERTY, Assert::class);
     }
 
+    /** @return \Generator<string, Bind> */
     public static function getBindsByAction(string $controllerName, string $actionName): \Generator
     {
         $ref = new Reflection($controllerName);
@@ -44,7 +47,7 @@ class AttributeLoader
     }
 
     /**
-     * @return array{columns: string[], values: mixed[]}
+     * @return array{columns: list<string>, values: list<mixed>}
      */
     public static function getDbTypeInsertDefinition(string $typeName, SchemaType $data): array
     {
@@ -52,7 +55,7 @@ class AttributeLoader
         $values = [];
         $ref = new Reflection($typeName);
         foreach ($ref->getAttributes(Reflection::ATTR_PROPERTY, Column::class) as $attribute) {
-            $value = $data->{$attribute->name};
+            $value = $ref->getProperty($attribute->name)->getValue($data);
             if ($value === null) {
                 continue;
             }
@@ -64,6 +67,10 @@ class AttributeLoader
         return ['columns' => $columns, 'values' => $values];
     }
 
+    /**
+     * @param list<string> $listenerPaths
+     * @return \Generator<string, Listen>
+     */
     public static function getListeners(array $listenerPaths, ?string $alias = null): \Generator
     {
         foreach (psrIterator($listenerPaths, true, $alias) as $className) {
@@ -76,21 +83,32 @@ class AttributeLoader
         }
     }
 
+    /**
+     * @param list<string> $controllerPaths
+     * @return \Generator<string, array{fqn: string, method: string}>
+     */
     public static function getRoutes(array $controllerPaths): \Generator
     {
         foreach (psrIterator($controllerPaths) as $className) {
             $ref = new Reflection($className);
-            /** @var ?Route $route */
-            $route = $ref->getAttributes(Reflection::ATTR_CLASS, Route::class)->current();
-            $prefix = $route?->getPrefix();
+            $classRoutes = iterator_to_array($ref->getAttributes(Reflection::ATTR_CLASS, Route::class));
+            $prefix = array_first($classRoutes)?->getPrefix() ?? '';
             foreach ($ref->getAttributes(Reflection::ATTR_METHOD, Route::class) as $fqn => $attribute) {
                 $regex = $attribute->getRegex();
-                $regex = ($prefix && $regex) ? "$prefix/$regex" : ($prefix ?? $regex);
+                $regex = match (true) {
+                    $prefix === '' => $regex,
+                    $regex === ''  => $prefix,
+                    default        => "$prefix/$regex",
+                };
                 yield $regex => ['fqn' => $fqn, 'method' => $attribute->getMethod()];
             }
         }
     }
 
+    /**
+     * @param list<string> $classPaths
+     * @return \Generator<string, Bind>
+     */
     public static function getBinds(array $classPaths): \Generator
     {
         foreach (psrIterator($classPaths) as $className) {
@@ -100,6 +118,12 @@ class AttributeLoader
         }
     }
 
+    /**
+     * Класс, метод и DTO команды (null — команда без DTO)
+     *
+     * @param list<string> $commandPaths
+     * @return array{}|array{string, string, class-string<SchemaType>|null}
+     */
     public static function getDtoInfoByCommandName(array $commandPaths, string $command, string $subCommand): array
     {
         $result = [];
@@ -108,7 +132,8 @@ class AttributeLoader
             if (substr((string)strrchr($class, '\\'), 1) === $command && $method === $subCommand) {
                 $result = [$class, $method, null];
                 foreach (new Reflection($class)->getParams($method) as $param) {
-                    $paramTypeName = $param->getType()->getName();
+                    $paramType = $param->getType();
+                    $paramTypeName = $paramType instanceof ReflectionNamedType ? $paramType->getName() : '';
                     if (is_subclass_of($paramTypeName, SchemaType::class)) {
                         return [$class, $method, $paramTypeName];
                     }
@@ -119,6 +144,7 @@ class AttributeLoader
         return $result;
     }
 
+    /** @return \Generator<\ReflectionProperty, Arg> */
     public static function getArgs(string $dtoName, bool $isOption = true): \Generator
     {
         $refDto = new Reflection($dtoName);
@@ -129,23 +155,18 @@ class AttributeLoader
             }
 
             $firstAttr = $attrs[0]->newInstance();
-            if ($isOption && $firstAttr->isOption) {
+            if ($firstAttr->isOption === $isOption) {
                 yield $prop => $firstAttr;
             }
-
-            if ($isOption) {
-                continue;
-            }
-
-            if ($firstAttr->isOption) {
-                continue;
-            }
-
-            yield $prop => $firstAttr;
         }
     }
 
-    /** TODO: for info in CLI */
+    /**
+     * TODO: for info in CLI
+     *
+     * @param list<string> $commandPaths
+     * @return \Generator<string, Command>
+     */
     public static function getCommands(array $commandPaths): \Generator
     {
         foreach (psrIterator($commandPaths) as $className) {

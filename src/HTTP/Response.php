@@ -4,6 +4,9 @@ namespace Snidget\HTTP;
 
 class Response
 {
+    /**
+     * @param array<string, string> $headers
+     */
     public function __construct(
         protected string $body = '',
         protected int $statusCode = 200,
@@ -11,18 +14,16 @@ class Response
     ) {
     }
 
+    #[\NoDiscard('Response неизменяемый, изменения — в возвращённой копии')]
     public function withStatus(int $code): self
     {
-        $new = clone $this;
-        $new->statusCode = $code;
-        return $new;
+        return clone($this, ['statusCode' => $code]);
     }
 
+    #[\NoDiscard('Response неизменяемый, изменения — в возвращённой копии')]
     public function withHeader(string $name, string $value): self
     {
-        $new = clone $this;
-        $new->headers[$name] = $value;
-        return $new;
+        return clone($this, ['headers' => [...$this->headers, $name => $value]]);
     }
 
     public function getStatusCode(): int
@@ -30,6 +31,7 @@ class Response
         return $this->statusCode;
     }
 
+    /** @return array<string, string> */
     public function getHeaders(): array
     {
         return $this->headers;

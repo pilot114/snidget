@@ -25,6 +25,7 @@ abstract class AbstractDriver
     }
 
     /**
+     * @param array<mixed> $params
      * @throws SnidgetException
      */
     public function execute(string $sql, array $params = []): bool
@@ -33,15 +34,24 @@ abstract class AbstractDriver
     }
 
     /**
+     * @param array<mixed> $params
+     * @return list<array<string, mixed>>
      * @throws SnidgetException
      */
     public function query(string $sql, array $params = []): array
     {
         $stmt = $this->prepare($sql);
-        return $stmt->execute($params) ? $stmt->fetchAll() : [];
+        if (!$stmt->execute($params)) {
+            return [];
+        }
+
+        /** @var list<array<string, mixed>> $rows строки в FETCH_ASSOC */
+        $rows = $stmt->fetchAll();
+        return $rows;
     }
 
     /**
+     * @param array<mixed> $params
      * @throws SnidgetException
      */
     public function count(string $sql, array $params = []): int
@@ -66,6 +76,7 @@ abstract class AbstractDriver
     }
 
     /**
+     * @param callable(static): mixed $callback
      * @throws SnidgetException
      */
     public function transaction(callable $callback): mixed
@@ -87,7 +98,7 @@ abstract class AbstractDriver
     protected function prepare(string $sql): PDOStatement
     {
         $stmt = $this->connection->prepare($sql);
-        if (!$stmt) {
+        if ($stmt === false) {
             throw new SnidgetException("Не удалось подготовить sql запрос: $sql");
         }
 

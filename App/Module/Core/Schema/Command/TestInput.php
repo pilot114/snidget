@@ -7,6 +7,7 @@ use Snidget\Kernel\Schema\Type;
 
 class TestInput extends Type
 {
+    /** @var list<string> */
     #[Arg('alpha option', short: 'a')]
     public array $alpha = [];
 
@@ -23,11 +24,12 @@ class TestInput extends Type
     public bool $epsilon = false;
 
     #[Arg('first arg', isOption: false)]
-    public string $first;
+    public string $first = '';
 
     #[Arg('second arg', isOption: false)]
     public ?string $second = null;
 
+    /** @var list<string> */
     // TODO: array может, быть и в начале и в конце
     #[Arg('third arg', isOption: false)]
     public array $third = [];

@@ -42,6 +42,7 @@ class Kernel
         exit;
     }
 
+    /** @return array{Router, MiddlewareManager} */
     public function prepare(): array
     {
         $router = $this->container->get(Router::class);
@@ -63,9 +64,13 @@ class Kernel
                 ->match($controller, $action)
                 ->handle(
                     $request,
-                    fn(): mixed => $this->container->call($this->container->get($controller), $action, $params)
+                    fn(): mixed => $this->container->call($controller, $action, $params)
                 );
-            $response = $data instanceof Response ? $data : new Response($data);
+            $response = match (true) {
+                $data instanceof Response => $data,
+                is_string($data) => new Response($data),
+                default => Response::json($data),
+            };
         } catch (Throwable $throwable) {
             // клиенту — только статус, подробности — в обработчик ошибок
             $response = match ($throwable instanceof SnidgetException ? $throwable->getCode() : 0) {

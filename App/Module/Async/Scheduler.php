@@ -3,21 +3,36 @@
 namespace App\Module\Async;
 
 use Fiber;
+use Io\Poll\Context;
+use Io\Poll\Event;
+use Io\Poll\Watcher;
 use SplQueue;
+use StreamPollHandle;
+use Time\Duration;
 
 class Scheduler
 {
+    /** @var SplQueue<Fiber<mixed, mixed, mixed, mixed>> */
     public SplQueue $fibers;
 
     protected ?Debug $debug = null;
 
-    protected array $waitingRead = [];
+    protected Context $poll;
 
-    protected array $waitingWrite = [];
+    /**
+     * Один наблюдатель на сокет (Context не даёт добавить сокет дважды),
+     * в его data — ждущие файберы по событиям: ['Read' => [Fiber, ...], 'Write' => [...]]
+     *
+     * @var array<int, Watcher>
+     */
+    protected array $watchers = [];
 
     // служебные файберы (ioPoll, Debug) крутятся в очереди всегда
     protected int $serviceFibers = 1;
 
+    /**
+     * @param list<callable(): mixed> $cbs
+     */
     public function __construct(array $cbs, ?Debug $debug = null)
     {
         if ($debug instanceof Debug) {
@@ -27,6 +42,7 @@ class Scheduler
         }
 
         $cbs[] = $this->ioPoll(...);
+        $this->poll = new Context();
 
         $this->fibers = new SplQueue();
         foreach ($cbs as $cb) {
@@ -63,8 +79,8 @@ class Scheduler
 
             match ($result[0]) {
                 Wait::ASAP  => $this->fibers->enqueue($fiber),
-                Wait::READ  => $this->wait($fiber, $this->waitingRead, $result[1]),
-                Wait::WRITE => $this->wait($fiber, $this->waitingWrite, $result[1]),
+                Wait::READ  => $this->wait($fiber, Event::Read, $result[1]),
+                Wait::WRITE => $this->wait($fiber, Event::Write, $result[1]),
                 default => null,
             };
         }
@@ -72,10 +88,13 @@ class Scheduler
         exit("fibers queue empty. exit...\n");
     }
 
+    /**
+     * @param Fiber<mixed, mixed, mixed, mixed> $fiber
+     */
     protected function execute(Fiber $fiber): mixed
     {
         if ($this->debug instanceof Debug) {
-            $this->debug->beforeFiber(hrtime(true), $fiber);
+            $this->debug->beforeFiber((int)hrtime(true), $fiber);
         }
 
         if ($fiber->isStarted()) {
@@ -85,7 +104,7 @@ class Scheduler
         }
 
         if ($this->debug instanceof Debug) {
-            $this->debug->afterFiber(hrtime(true), $fiber);
+            $this->debug->afterFiber((int)hrtime(true), $fiber);
         }
 
         return $result;
@@ -93,54 +112,89 @@ class Scheduler
 
     public static function suspend(Wait $type, mixed $payload = null): mixed
     {
-        $args = $payload ? [$type, $payload] : [$type];
+        $args = $payload === null ? [$type] : [$type, $payload];
         return Fiber::suspend($args);
     }
 
+    /**
+     * @param callable(): mixed $cb
+     */
     public static function fork(callable $cb): mixed
     {
         return Fiber::suspend($cb);
     }
 
     /**
-     * @param resource $socket
+     * @param Fiber<mixed, mixed, mixed, mixed> $fiber
      */
-    protected function wait(Fiber $fiber, array &$wait, mixed $socket): void
+    protected function wait(Fiber $fiber, Event $event, mixed $socket): void
     {
-        $wait[(int)$socket] ??= [$socket, []];
-        $wait[(int)$socket][1][] = $fiber;
+        if (!is_resource($socket)) {
+            throw new \InvalidArgumentException('Файбер ждёт I/O, но не передал сокет');
+        }
+
+        $watcher = $this->watchers[(int)$socket] ?? null;
+        if ($watcher === null) {
+            $handle = new StreamPollHandle($socket);
+            $this->watchers[(int)$socket] = $this->poll->add($handle, [$event], [$event->name => [$fiber]]);
+            return;
+        }
+
+        /** @var array<string, list<Fiber<mixed, mixed, mixed, mixed>>> $waiting */
+        $waiting = $watcher->getData();
+        $waiting[$event->name][] = $fiber;
+        $watcher->modify(self::events($waiting), $waiting);
     }
 
     /**
      * Добавляет в очередь файберы, которые ожидают операций I/O
      */
-    protected function ioPoll(): void
+    protected function ioPoll(): never
     {
         while (true) {
             Scheduler::suspend(Wait::ASAP);
-            if (!$this->waitingRead && !$this->waitingWrite) {
+            if ($this->watchers === []) {
                 continue;
             }
-
-            $rSocks = array_map(fn(array $x) => $x[0], $this->waitingRead);
-            $wSocks = array_map(fn(array $x) => $x[0], $this->waitingWrite);
-            $eSocks = [];
 
             // в очереди только служебные файберы: ждём I/O, а не крутим цикл вхолостую
             $isIdle = count($this->fibers) < $this->serviceFibers;
-            if (!stream_select($rSocks, $wSocks, $eSocks, $isIdle ? 1 : 0)) {
-                continue;
-            }
-
-            foreach ($rSocks as $socket) {
-                array_map($this->fibers->enqueue(...), $this->waitingRead[(int) $socket][1]);
-                unset($this->waitingRead[(int) $socket]);
-            }
-
-            foreach ($wSocks as $socket) {
-                array_map($this->fibers->enqueue(...), $this->waitingWrite[(int) $socket][1]);
-                unset($this->waitingWrite[(int) $socket]);
+            foreach ($this->poll->wait(Duration::fromSeconds($isIdle ? 1 : 0)) as $watcher) {
+                $this->wake($watcher);
             }
         }
+    }
+
+    protected function wake(Watcher $watcher): void
+    {
+        // ошибка или разрыв будит всех: чтение получит EOF, запись — ошибку
+        $isBroken = $watcher->hasTriggered(Event::Error) || $watcher->hasTriggered(Event::HangUp);
+        /** @var array<string, list<Fiber<mixed, mixed, mixed, mixed>>> $waiting */
+        $waiting = $watcher->getData();
+        foreach ([Event::Read, Event::Write] as $event) {
+            if ($isBroken || $watcher->hasTriggered($event)) {
+                array_map($this->fibers->enqueue(...), $waiting[$event->name] ?? []);
+                unset($waiting[$event->name]);
+            }
+        }
+
+        if ($waiting === []) {
+            /** @var StreamPollHandle $handle */
+            $handle = $watcher->getHandle();
+            unset($this->watchers[(int)$handle->getStream()]);
+            $watcher->remove();
+            return;
+        }
+
+        $watcher->modify(self::events($waiting), $waiting);
+    }
+
+    /**
+     * @param array<string, mixed> $waiting
+     * @return list<Event>
+     */
+    protected static function events(array $waiting): array
+    {
+        return array_values(array_filter([Event::Read, Event::Write], fn(Event $e): bool => isset($waiting[$e->name])));
     }
 }

@@ -44,12 +44,16 @@ class AutoComplete
 
         // options
         $dtoName = $info[2];
+        if ($dtoName === null) {
+            return;
+        }
+
         foreach (AttributeLoader::getArgs($dtoName) as $prop => $attribute) {
             $name = $prop->getName();
             $desc = $attribute->description;
             $short = $attribute->short;
             echo "--$name\t$desc\n";
-            if ($short) {
+            if ($short !== null) {
                 echo "-$short\t$desc\n";
             }
         }

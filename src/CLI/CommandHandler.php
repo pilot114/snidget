@@ -2,19 +2,27 @@
 
 namespace Snidget\CLI;
 
+use ReflectionNamedType;
+use ReflectionProperty;
 use Snidget\Kernel\AttributeLoader;
+use Snidget\Kernel\Schema\Type;
 use Snidget\Kernel\SnidgetException;
 
 class CommandHandler
 {
-    protected array $paths = [];
-
+    /**
+     * @param list<string> $args
+     */
     public function __construct(
         protected array $args,
     ) {
     }
 
     /**
+     * DTO, данные для него, класс и метод команды
+     *
+     * @param list<string> $paths
+     * @return array{}|array{class-string<Type>|null, array<string, mixed>|null, string, string}
      * @throws SnidgetException
      */
     public function extractCommand(array $paths): array
@@ -37,7 +45,11 @@ class CommandHandler
         return [$dtoName, $data, $commandClassName, $commandMethodName];
     }
 
-    /** banner and help by commands TODO: to separate command */
+    /**
+     * banner and help by commands TODO: to separate command
+     *
+     * @param list<string> $paths
+     */
     public function default(array $paths): void
     {
         $tmp = [];
@@ -55,15 +67,15 @@ class CommandHandler
         }
     }
 
+    /**
+     * @param list<string> $paths
+     * @return array{}|array{string, string, class-string<Type>|null}
+     */
     public function getCommandInfo(array $paths): array
     {
         array_shift($this->args);
         $command = array_shift($this->args);
-        if (!$command) {
-            return [];
-        }
-
-        if (!str_contains($command, ':')) {
+        if ($command === null || !str_contains($command, ':')) {
             return [];
         }
 
@@ -73,6 +85,7 @@ class CommandHandler
 
     /**
      * @param list<string> $argv
+     * @return array<string, mixed>
      */
     protected function parse(string $dtoName, array $argv): array
     {
@@ -81,19 +94,21 @@ class CommandHandler
         $shorts = [];
         foreach (AttributeLoader::getArgs($dtoName) as $prop => $attribute) {
             $name = $prop->getName();
-            $type = $prop->getType()->getName();
-            if (!$prop->getType()->allowsNull() && $type !== 'array' && $type !== 'bool') {
+            $type = self::typeName($prop);
+            if ($prop->getType()?->allowsNull() === false && $type !== 'array' && $type !== 'bool') {
                 throw new SnidgetException("опция $name должна быть указана как необязательная");
             }
 
             $types[$name] = $type;
-            if ($attribute->short) {
+            if ($attribute->short !== null) {
                 $shorts[$attribute->short] = $name;
             }
         }
 
         // getopt() не подходит: читает глобальный argv и останавливается на имени команды
         $data = [];
+        /** @var array<string, list<string>> $lists значения опций-массивов */
+        $lists = [];
         $positionalArgs = [];
         while (($arg = array_shift($argv)) !== null) {
             if ($arg === '--') {
@@ -102,7 +117,9 @@ class CommandHandler
             }
 
             if (str_starts_with($arg, '--')) {
-                [$name, $value] = array_pad(explode('=', substr($arg, 2), 2), 2, null);
+                $parts = explode('=', substr($arg, 2), 2);
+                $name = $parts[0];
+                $value = $parts[1] ?? null;
             } elseif (strlen($arg) > 1 && $arg[0] === '-') {
                 $name = $shorts[$arg[1]] ?? throw new SnidgetException("Неизвестная опция $arg");
                 $rest = substr($arg, 2);
@@ -128,15 +145,16 @@ class CommandHandler
 
             $value ??= array_shift($argv) ?? throw new SnidgetException("Не указано значение опции $arg");
             if ($type === 'array') {
-                $data[$name][] = $value;
+                $lists[$name][] = $value;
             } else {
                 $data[$name] = $this->cast($value, $type);
             }
         }
 
+        $data = [...$data, ...$lists];
         foreach (AttributeLoader::getArgs($dtoName, false) as $prop => $attribute) {
             $name = $prop->getName();
-            $type = $prop->getType()->getName();
+            $type = self::typeName($prop);
             if ($type !== 'array') {
                 $value = array_shift($positionalArgs);
                 $data[$name] = $value === null ? null : $this->cast($value, $type);
@@ -156,5 +174,11 @@ class CommandHandler
             'float' => (float)$value,
             default => $value,
         };
+    }
+
+    protected static function typeName(ReflectionProperty $prop): string
+    {
+        $type = $prop->getType();
+        return $type instanceof ReflectionNamedType ? $type->getName() : 'mixed';
     }
 }

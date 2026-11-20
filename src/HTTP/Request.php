@@ -4,32 +4,43 @@ namespace Snidget\HTTP;
 
 class Request
 {
-    public string $uri;
+    public string $uri = '';
 
     public string $method = 'GET';
 
+    /** @var array<string, string> */
     public array $headers = [];
 
     public mixed $payload = null;
 
-    public float $requestTimeMs;
+    public float $requestTimeMs = 0.0;
 
+    /** @var array<mixed> */
     public array $query = [];
 
+    /** @var array<mixed> */
     public array $cookies = [];
 
     public function fromGlobal(): self
     {
-        $this->uri = trim(parse_url($_SERVER['REQUEST_URI'])['path'] ?? '', '/');
-        $this->payload = json_decode(file_get_contents('php://input') ?: '', true);
-        $this->method = $_SERVER['REQUEST_METHOD'];
-        $this->requestTimeMs = $_SERVER['REQUEST_TIME_FLOAT'];
+        $requestUri = $_SERVER['REQUEST_URI'] ?? '';
+        $this->uri = trim((string)parse_url(is_string($requestUri) ? $requestUri : '', PHP_URL_PATH), '/');
+        $input = file_get_contents('php://input');
+        $this->payload = json_decode($input === false ? '' : $input, true);
+        $method = $_SERVER['REQUEST_METHOD'] ?? null;
+        $this->method = is_string($method) ? $method : 'GET';
+        $time = $_SERVER['REQUEST_TIME_FLOAT'] ?? null;
+        $this->requestTimeMs = is_float($time) ? $time : microtime(true);
         $this->query = $_GET;
         $this->cookies = $_COOKIE;
 
         // имена как в fromString: USER-AGENT; CONTENT_* приходят без префикса HTTP_
         foreach ($_SERVER as $key => $value) {
             $key = (string)$key;
+            if (!is_string($value)) {
+                continue;
+            }
+
             if (str_starts_with($key, 'HTTP_')) {
                 $key = substr($key, 5);
             } elseif ($key !== 'CONTENT_TYPE' && $key !== 'CONTENT_LENGTH') {

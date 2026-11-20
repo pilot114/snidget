@@ -15,13 +15,13 @@ class Meta
     {
         $tablesInfo = $this->driver->query("select tbl_name, sql from sqlite_schema where type = 'table'");
 
-        foreach ($tablesInfo as $tableInfo) {
-            $tableName = $tableInfo['tbl_name'];
-            $fields = $this->parseCreateTableSql($tableInfo['sql']);
+        foreach ($tablesInfo as ['tbl_name' => $tableName, 'sql' => $sql]) {
+            if (!is_string($tableName) || !is_string($sql)) {
+                continue;
+            }
 
             dump($tableName);
-            /** @var Column $field */
-            foreach ($fields as $field) {
+            foreach ($this->parseCreateTableSql($sql) as $field) {
                 if ($field->ref === null) {
                     dump("\t$field->name");
                 } else {
@@ -31,38 +31,47 @@ class Meta
         }
     }
 
-    // https://sqlite.org/lang_createtable.html
+    /**
+     * https://sqlite.org/lang_createtable.html
+     *
+     * @return array<string, Column>
+     */
     private function parseCreateTableSql(string $sql): array
     {
         $pattern = '#CREATE TABLE (\[?\w+\]?)\s+\((.+)\)#s';
-        preg_match($pattern, $sql, $matches);
+        $parts = preg_match($pattern, $sql, $matches) === 1 ? preg_split("#,\n#", trim($matches[2])) : false;
+        if ($parts === false) {
+            throw new SnidgetException("Не удалось разобрать CREATE TABLE: $sql");
+        }
 
-        /** @var Column[] $columns */
         $columns = [];
-        foreach (preg_split("#,\n#", trim($matches[2])) as $part) {
-            $part = preg_replace("#\s+#", ' ', $part);
-            $words = array_filter(explode(' ', trim($part)));
-            if ($words[0] === 'CONSTRAINT') {
+        foreach ($parts as $part) {
+            $part = preg_replace("#\s+#", ' ', $part) ?? $part;
+            $words = array_values(array_filter(explode(' ', trim($part)), fn(string $w): bool => $w !== ''));
+            $first = $words[0] ?? '';
+            if ($first === 'CONSTRAINT') {
                 continue;
             }
 
-            if ($words[0] === 'FOREIGN') {
+            if ($first === 'FOREIGN') {
                 array_shift($words);
                 array_shift($words);
-                $columnName = trim(array_shift($words), '()[]');
+                $columnName = $this->shiftName($words);
                 array_shift($words); // REFERENCES
-                $refTable = trim(array_shift($words), '()[]');
-                $refColumnName = trim(array_shift($words), '()[]');
+                $refTable = $this->shiftName($words);
+                $refColumnName = $this->shiftName($words);
                 if (implode(' ', $words) !== 'ON DELETE NO ACTION ON UPDATE NO ACTION') {
                     throw new SnidgetException('Неподдерживаемый FOREIGN KEY: ' . implode(' ', $words));
                 }
 
-                $columns[$columnName]->ref = "$refTable.$refColumnName";
+                $column = $columns[$columnName]
+                    ?? throw new SnidgetException("FOREIGN KEY на неизвестную колонку $columnName");
+                $column->ref = "$refTable.$refColumnName";
                 continue;
             }
 
-            $name = trim(array_shift($words), "[]");
-            $type = mb_strtoupper(array_shift($words));
+            $name = $this->shiftName($words);
+            $type = mb_strtoupper(array_shift($words) ?? '');
             $type = match (true) {
                 str_starts_with($type, 'NVARCHAR') => 'TEXT',
                 str_starts_with($type, 'NUMERIC')  => 'REAL',
@@ -71,7 +80,7 @@ class Meta
                 str_starts_with($type, 'VARCHAR')  => 'TEXT',
                 default => $type,
             };
-            $isNull = !(count($words) === 2 && $words[0] === 'NOT' && $words[1] === 'NULL');
+            $isNull = $words !== ['NOT', 'NULL'];
             $columns[$name] = new Column(
                 name: $name,
                 type: Type::tryFrom($type) ?? Type::TEXT,
@@ -80,5 +89,13 @@ class Meta
         }
 
         return $columns;
+    }
+
+    /**
+     * @param list<string> $words
+     */
+    private function shiftName(array &$words): string
+    {
+        return trim(array_shift($words) ?? '', '()[]');
     }
 }

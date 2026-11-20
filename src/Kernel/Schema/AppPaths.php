@@ -13,31 +13,34 @@ class AppPaths
     ) {
     }
 
+    /** @return list<string> */
     public function getCommandPaths(): array
     {
         return $this->getPathsByType($this->commandPath);
     }
 
+    /** @return list<string> */
     public function getControllerPaths(): array
     {
         return $this->getPathsByType($this->controllerPath);
     }
 
+    /** @return list<string> */
     public function getMiddlewarePaths(): array
     {
         return $this->getPathsByType($this->middlewarePath);
     }
 
+    /** @return list<string> */
     public function getSchemaPaths(): array
     {
         return $this->getPathsByType($this->schemaPath);
     }
 
+    /** @return list<string> */
     protected function getPathsByType(string $dir): array
     {
-        return [
-            $this->appPath . '/' . $dir,
-            ...(glob($this->appPath . '/Module/*/' . $dir) ?: []),
-        ];
+        $modulePaths = glob($this->appPath . '/Module/*/' . $dir);
+        return [$this->appPath . '/' . $dir, ...($modulePaths === false ? [] : $modulePaths)];
     }
 }

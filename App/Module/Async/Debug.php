@@ -8,21 +8,23 @@ class Debug
 {
     protected int $start = 0;
 
+    /** @var array<int, int> id файбера => число запусков */
     protected array $fiberTicks = [];
 
+    /** @var array<int, int> id файбера => время работы, нс */
     protected array $impactTime = [];
 
-    protected int $startFiberNs;
+    protected int $startFiberNs = 0;
 
-    protected int $currentFiberId;
+    protected int $currentFiberId = 0;
 
     public function __construct(
         protected int $perSecond = 1
     ) {
-        $this->start = hrtime(true);
+        $this->start = (int)hrtime(true);
     }
 
-    public function print(): void
+    public function print(): never
     {
         $skipCount = 0;
         $prevIteration = hrtime(true);
@@ -31,7 +33,7 @@ class Debug
         while (true) {
             Scheduler::suspend(Wait::ASAP);
             $currentMs = floor(microtime(true) * 1000);
-            if (!$skipCount || ($currentMs - $ms) < (1000 / $this->perSecond)) {
+            if ($skipCount === 0 || ($currentMs - $ms) < (1000 / $this->perSecond)) {
                 $skipCount++;
                 continue;
             }
@@ -57,6 +59,9 @@ class Debug
         }
     }
 
+    /**
+     * @param Fiber<mixed, mixed, mixed, mixed> $fiber
+     */
     public function beforeFiber(int $tsNs, Fiber $fiber): void
     {
         $fiberId = spl_object_id($fiber);
@@ -72,6 +77,9 @@ class Debug
         $this->impactTime[$fiberId] ??= 0;
     }
 
+    /**
+     * @param Fiber<mixed, mixed, mixed, mixed> $fiber
+     */
     public function afterFiber(int $finishFiberNs, Fiber $fiber): void
     {
         $fiberId = spl_object_id($fiber);

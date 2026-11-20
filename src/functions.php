@@ -17,6 +17,7 @@ function dump(mixed ...$vars): void
 /**
  * Получаем все классы в директории, если они соотвествуют PSR
  *
+ * @param list<string> $classPaths
  * @return Generator<string>
  */
 function psrIterator(array $classPaths, bool $recursive = false, ?string $alias = null): \Generator
@@ -29,19 +30,19 @@ function psrIterator(array $classPaths, bool $recursive = false, ?string $alias 
         }
 
         $relPath = substr($classPath, strlen(dirname(__DIR__)) + 1);
-        $parts = array_filter(explode('/', $relPath));
-        if ($alias) {
+        $parts = array_filter(explode('/', $relPath), fn(string $part): bool => $part !== '');
+        if ($alias !== null) {
             $parts[0] = $alias;
         }
         $classNamespace = '\\' . implode('\\', array_map(ucfirst(...), $parts)) . '\\';
 
-        foreach (glob($classPath . '/*') ?: [] as $file) {
+        $files = glob($classPath . '/*');
+        foreach ($files === false ? [] : $files as $file) {
             if ($recursive && is_dir($file)) {
                 yield from psrIterator([$file], true, $alias);
                 continue;
             }
-            preg_match("#/(?<className>\w+)\.php#i", $file, $matches);
-            if (!empty($matches['className'])) {
+            if (preg_match("#/(?<className>\w+)\.php#i", $file, $matches) === 1) {
                 yield $classNamespace . $matches['className'];
             }
         }
@@ -53,19 +54,21 @@ function psrIterator(array $classPaths, bool $recursive = false, ?string $alias 
  */
 function millisecondPrint(int $sec): string
 {
-    $ms = $sec % 1_000;
-    $s = floor(($sec % 60_000) / 1_000);
-    $m = floor(($sec % 3_600_000) / 60_000);
-    $h = floor(($sec % 86_400_000) / 3_600_000);
-    $d = floor(($sec % 2_592_000_000) / 86_400_000);
-    $M = floor($sec / 2_592_000_000);
+    $units = [
+        'months'  => intdiv($sec, 2_592_000_000),
+        'days'    => intdiv($sec % 2_592_000_000, 86_400_000),
+        'hours'   => intdiv($sec % 86_400_000, 3_600_000),
+        'minutes' => intdiv($sec % 3_600_000, 60_000),
+        'sec'     => intdiv($sec % 60_000, 1_000),
+        'msec'    => $sec % 1_000,
+    ];
+
     $result = [];
-    $M && $result[] = "$M months";
-    $d && $result[] = "$d days";
-    $h && $result[] = "$h hours";
-    $m && $result[] = "$m minutes";
-    $s && $result[] = "$s sec";
-    $ms && $result[] = "$ms msec";
+    foreach ($units as $unit => $value) {
+        if ($value !== 0) {
+            $result[] = "$value $unit";
+        }
+    }
 
     return implode(' ', $result);
 }

@@ -12,7 +12,7 @@ $converter = new CommonMarkConverterAlias([
 
 function load(string $filename): string {
     global $converter;
-    $md = file_get_contents('/app/utils/docs/md/' . $filename);
+    $md = file_get_contents('/app/dev/docs/md/' . $filename);
     return $converter->convert($md);
 }
 
@@ -60,6 +60,6 @@ $pages = [
     ],
 ];
 
-$template = file_get_contents('/app/utils/docs/index.template.html');
+$template = file_get_contents('/app/dev/docs/index.template.html');
 $content = str_replace('%pages%', json_encode($pages), $template);
-file_put_contents('/app/utils/docs/index.html', $content);
+file_put_contents('/app/dev/docs/index.html', $content);

@@ -9,6 +9,7 @@ use Snidget\Kernel\MiddlewareManager;
 #[Route(prefix: 'admin')]
 class Admin
 {
+    /** @var array<string, string> url => название */
     protected array $links = [
         '/admin'          => 'Dashboard',
         '/admin/routes'   => 'Endpoints',
@@ -29,25 +30,21 @@ class Admin
     #[Route(regex: 'routes')]
     public function routes(Router $router, MiddlewareManager $mw): string
     {
+        // короткие имена: без App\, Module\ и слоя HTTP, вместо \ — :
+        $short = str_replace(
+            ['App\\', 'Module\\', 'HTTP\Controller\\', 'HTTP\Middleware\\', '\\'],
+            ['', '', '', '', ':'],
+            ?
+        );
+
         $actions = [];
         foreach ($router->routes() as ['regex' => $regex, 'fqn' => $route]) {
-            $routeMw = $mw->match(...explode('::', $route))->getMiddlewares();
-            $routeMw = array_map(fn($x) => implode('::', $x), $routeMw);
-
-            // hide prefixes
-            $routeMw = str_replace('App\\', '', $routeMw);
-            $routeMw = str_replace('Module\\', '', $routeMw);
-            $routeMw = str_replace('HTTP\Middleware\\', '', $routeMw);
-            $routeMw = str_replace('\\', ':', $routeMw);
-            $route = str_replace('App\\', '', $route);
-            $route = str_replace('Module\\', '', $route);
-            $route = str_replace('HTTP\Controller\\', '', $route);
-            $route = str_replace('\\', ':', $route);
-
             $actions[] = [
                 'URI' => sprintf('<a href="/%s">/%s</a>', $regex, htmlentities($regex)),
-                'Controllers' => $route,
-                'Middlewares' => implode('<br>', $routeMw),
+                'Controllers' => $short($route),
+                'Middlewares' => $mw->match(...explode('::', $route))->getMiddlewares()
+                    |> $short
+                    |> implode('<br>', ?),
             ];
         }
 
@@ -112,6 +109,9 @@ class Admin
         return $out;
     }
 
+    /**
+     * @param list<array<string, string>> $data
+     */
     protected function table(string $name, array $data): string
     {
         $out = "<h3>$name</h3>";

@@ -7,11 +7,12 @@ use Snidget\Kernel\Kernel;
 
 class AsyncKernel extends Kernel
 {
+    #[\Override]
     public function run(?Request $request = null): never
     {
         [$router, $middlewareManager] = $this->prepare();
 
-        Server::$kernelHandler = fn($request) => $this->handle($router, $middlewareManager, $request);
+        Server::$kernelHandler = $this->handle($router, $middlewareManager, ?);
         $scheduler = new Scheduler([
             Server::http(...),
         ], $this->container->get(Debug::class));

@@ -3,15 +3,21 @@
 namespace Snidget\Kernel;
 
 use Closure;
+use Snidget\HTTP\Bind;
 use Snidget\HTTP\Request;
 use Snidget\Kernel\PSR\Container;
 
 class MiddlewareManager
 {
+    /** @var array<string, Bind> */
     protected array $allMiddlewares = [];
 
+    /** @var list<string> Класс::метод в порядке вызова */
     protected array $middlewares = [];
 
+    /**
+     * @param list<string> $middlewarePaths
+     */
     public function __construct(
         protected array $middlewarePaths,
         protected Container $container
@@ -19,6 +25,7 @@ class MiddlewareManager
         $this->allMiddlewares = iterator_to_array(AttributeLoader::getBinds($middlewarePaths));
     }
 
+    /** @return list<string> */
     public function getMiddlewares(): array
     {
         return $this->middlewares;
@@ -30,32 +37,38 @@ class MiddlewareManager
         foreach (AttributeLoader::getBindsByAction($controller, $action) as $attribute) {
             $c = $attribute->getClass();
             $m = $attribute->getMethod();
-            $priority = $attribute->getPriority();
-            $mwFqn = $m ? ($c . '::' . $m) : $c;
-            $binds[$mwFqn] = $priority;
+            if ($c === null) {
+                continue;
+            }
+
+            $binds[$m === null ? $c : "$c::$m"] = $attribute->getPriority();
         }
 
         arsort($binds);
-        $this->middlewares = array_map(fn($x) => explode('::', $x), array_keys($binds));
+        $this->middlewares = array_keys($binds);
         return $this;
     }
 
+    /**
+     * @param Closure(Request): mixed $core
+     */
     public function handle(Request $request, Closure $core): mixed
     {
         return array_reduce(
             array_reverse($this->middlewares),
             $this->createLayer(...),
-            fn($object) => $core($object)
+            $core
         )($request);
     }
 
+    /** @return \Generator<string, int> */
     protected function getMiddlewareBinds(string $controller, string $action): \Generator
     {
         foreach ($this->allMiddlewares as $mwFqn => $attribute) {
             $c = $attribute->getClass();
             $m = $attribute->getMethod();
             $priority = $attribute->getPriority();
-            if (!$c || (!$m && $c === $controller) || ($m === $action && $c === $controller)) {
+            if ($c === null || ($m === null && $c === $controller) || ($m === $action && $c === $controller)) {
                 if (str_contains($mwFqn, '::')) {
                     yield $mwFqn => $priority;
                 } else {
@@ -67,10 +80,14 @@ class MiddlewareManager
         }
     }
 
-    protected function createLayer(Closure $nextLayer, array $layer): Closure
+    /**
+     * @param Closure(Request): mixed $nextLayer
+     * @return Closure(Request): mixed
+     */
+    protected function createLayer(Closure $nextLayer, string $layer): Closure
     {
-        [$class, $method] = $layer;
-        $class = $this->container->get($class);
-        return fn($x): mixed => $this->container->call($class, $method, ['request' => $x, 'next' => $nextLayer]);
+        [$class, $method] = explode('::', $layer);
+        return fn(Request $x): mixed => $this->container
+            ->call($class, $method, ['request' => $x, 'next' => $nextLayer]);
     }
 }

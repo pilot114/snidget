@@ -8,6 +8,9 @@ use Snidget\Kernel\SnidgetException;
 
 class Duck
 {
+    /**
+     * @param list<string> $schemaPaths
+     */
     public function __construct(
         protected array $schemaPaths
     ) {
@@ -15,6 +18,9 @@ class Duck
 
     // TODO: handle nested schema
     // TODO: duck use for correct build DTO and save to container
+    /**
+     * @param array<mixed> $data
+     */
     protected function quack(array $data): ?string
     {
         $hash = $this->hash(array_keys($data));
@@ -32,7 +38,10 @@ class Duck
         return $schemas[$hash] ?? null;
     }
 
-    /** @return iterable<string, string[]> только поля с ошибками */
+    /**
+     * @param array<mixed> $data
+     * @return iterable<string, list<string>> только поля с ошибками
+     */
     public function layAnEgg(array $data): iterable
     {
         $type = $this->quack($data);
@@ -50,7 +59,11 @@ class Duck
         }
     }
 
-    // порядок ключей в JSON не важен
+    /**
+     * Порядок ключей в JSON не важен
+     *
+     * @param list<array-key> $keys
+     */
     protected function hash(array $keys): string
     {
         sort($keys);

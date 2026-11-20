@@ -1,0 +1,58 @@
+<?php
+
+declare(strict_types=1);
+
+use PHPUnit\Framework\Attributes\Depends;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+
+final class DependencyAndDataProviderComboTest extends TestCase
+{
+    /** @return list<array{string}> */
+    public static function provider1(): array
+    {
+        return [
+            ['provider11'],
+            ['provider12'],
+        ];
+    }
+
+    /** @return list<array{string}> */
+    public static function provider2(): array
+    {
+        return [
+            ['provider21'],
+            ['provider22'],
+        ];
+    }
+
+    public function testProducerFirst(): string
+    {
+        $this->expectNotToPerformAssertions();
+
+        return 'first';
+    }
+
+    public function testProducerSecond(): string
+    {
+        $this->expectNotToPerformAssertions();
+
+        return 'second';
+    }
+
+    #[Depends('testProducerFirst')]
+    #[Depends('testProducerSecond')]
+    #[DataProvider('provider1')]
+    #[DataProvider('provider2')]
+    public function testConsumer(string $fromProvider, string $first, string $second): void
+    {
+        self::assertContains($fromProvider, [
+            'provider11',
+            'provider12',
+            'provider21',
+            'provider22',
+        ]);
+        self::assertSame('first', $first);
+        self::assertSame('second', $second);
+    }
+}

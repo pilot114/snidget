@@ -2,6 +2,8 @@
 
 namespace Snidget\Kernel\PSR;
 
+use Closure;
+use Generator;
 use Psr\Container\ContainerInterface;
 use ReflectionException;
 use ReflectionNamedType;
@@ -11,15 +13,16 @@ use Snidget\Kernel\SnidgetException;
 
 /**
  * TODO: https://php.watch/articles/practical-weakmap
- *
- * @template T
  */
 class Container implements ContainerInterface
 {
+    /** @var array<string, object> */
     protected array $pool = [];
 
+    /** @var array<string, string|Closure(self): string> */
     protected array $map = [];
 
+    /** @var list<string> */
     protected array $resolving = [];
 
     public function __construct()
@@ -29,7 +32,7 @@ class Container implements ContainerInterface
     }
 
     /**
-     * @param object | class-string<T> $instance
+     * @param array<string, mixed> $params
      * @throws SnidgetException | ReflectionException
      */
     public function call(object|string $instance, string $methodName, array $params = []): mixed
@@ -37,27 +40,71 @@ class Container implements ContainerInterface
         $instance = is_string($instance) ? $this->getRealId($instance) : $instance;
         $realParams = $this->getParams($instance, $methodName, $params);
 
-        if (new Reflection($instance)->getMethod($methodName)->isStatic()) {
-            return $instance::{$methodName}(...$realParams);
-        }
-
-        if (is_string($instance)) {
+        if (is_string($instance) && !new Reflection($instance)->getMethod($methodName)->isStatic()) {
             $instance = $this->get($instance);
         }
 
-        return $instance->{$methodName}(...$realParams);
+        $method = [$instance, $methodName];
+        if (!is_callable($method)) {
+            throw new SnidgetException("Метод $methodName нельзя вызвать");
+        }
+
+        return $method(...$realParams);
     }
 
     /**
-     * @param class-string<T> $origId
+     * @template T of object
+     * @param class-string<T> $id
+     * @param array<string, mixed> $params
      * @return T
      * @throws SnidgetException | ReflectionException
      */
-    public function make(string $origId, array $params = [])
+    public function make(string $id, array $params = []): object
+    {
+        /** @var T $instance */
+        $instance = $this->build($id, $params);
+        return $instance;
+    }
+
+    /**
+     * @template T of object
+     * @param string|class-string<T> $id
+     * @param array<string, mixed> $params
+     * @return ($id is class-string<T> ? T : mixed)
+     * @throws SnidgetException | ReflectionException
+     */
+    public function get(string $id, array $params = []): mixed
+    {
+        $id = $this->getRealId($id);
+        return $this->pool[$id] ?? $this->build($id, $params);
+    }
+
+    public function has(string $id): bool
+    {
+        return isset($this->pool[$this->getRealId($id)]);
+    }
+
+    /**
+     * @param string|Closure(self): string|null $target класс или замыкание, которое вернёт имя класса
+     */
+    public function link(string $id, string|Closure|null $target = null): void
+    {
+        if ($target === null) {
+            unset($this->map[$id]);
+        } else {
+            $this->map[$id] = $target;
+        }
+    }
+
+    /**
+     * @param array<string, mixed> $params
+     * @throws SnidgetException | ReflectionException
+     */
+    protected function build(string $origId, array $params): object
     {
         $id = $this->getRealId($origId);
-        if (new Reflection($id)->isAbstract()) {
-            throw new SnidgetException("Невозможно инcтанцировать абстрактный класс $id");
+        if (!class_exists($id) || new Reflection($id)->isAbstract()) {
+            throw new SnidgetException("Невозможно инcтанцировать $id: это не класс или абстрактный класс");
         }
 
         if (in_array($id, $this->resolving, true)) {
@@ -67,7 +114,6 @@ class Container implements ContainerInterface
 
         $this->resolving[] = $id;
         try {
-            /** @var class-string<T> $id */
             $instance = new $id(...$this->getParams($id, '__construct', $params));
             $this->pool[$origId] = $this->pool[$id] = $instance;
             return $instance;
@@ -76,41 +122,18 @@ class Container implements ContainerInterface
         }
     }
 
-    /**
-     * @param class-string<T> $id
-     * @return T
-     * @throws SnidgetException | ReflectionException
-     */
-    public function get(string $id, array $params = [])
-    {
-        $id = $this->getRealId($id);
-        return $this->pool[$id] ?? $this->make($id, $params);
-    }
-
-    public function has(string $id): bool
-    {
-        return isset($this->pool[$this->getRealId($id)]);
-    }
-
-    public function link(string $id, callable|string|null $target = null): void
-    {
-        if ($target) {
-            $this->map[$id] = $target;
-        } else {
-            unset($this->map[$id]);
-        }
-    }
-
     protected function getRealId(string $id): string
     {
         $id = $this->map[$id] ?? $id;
-        return is_callable($id) ? $id($this) : $id;
+        return $id instanceof Closure ? $id($this) : $id;
     }
 
     /**
+     * @param array<string, mixed> $params
+     * @return Generator<string, mixed>
      * @throws ReflectionException | SnidgetException
      */
-    protected function getParams(object|string $instance, string $methodName, array $params): \Generator
+    protected function getParams(object|string $instance, string $methodName, array $params): Generator
     {
         foreach (new Reflection($instance)->getParams($methodName) as $param) {
             $paramName = $param->getName();
@@ -133,11 +156,8 @@ class Container implements ContainerInterface
      */
     protected function getValue(ReflectionParameter $param): mixed
     {
-        /**
-         * @var ?ReflectionNamedType $type
-         */
         $type = $param->getType();
-        $typeName = is_null($type) ? 'mixed' : $type->getName();
+        $typeName = $type instanceof ReflectionNamedType ? $type->getName() : 'mixed';
         if (class_exists($typeName)) {
             return $this->get($typeName);
         }

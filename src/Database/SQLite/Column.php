@@ -15,7 +15,7 @@ class Column
         public bool $isNull = false,
         public bool $autoincrement = false,
         public bool $isUnsigned = false,
-        public mixed $default = null,
+        public string|int|float|null $default = null,
         public ?int $length = null
     ) {
     }
@@ -29,7 +29,7 @@ class Column
             $this->type->name,
             $this->autoincrement ? ' PRIMARY KEY AUTOINCREMENT' : '',
             $this->isNull ? '' : ' NOT NULL',
-            $this->default ? ' DEFAULT ' . $this->default : ''
+            $this->default === null ? '' : ' DEFAULT ' . $this->default
         );
     }
 }

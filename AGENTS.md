@@ -1,36 +1,38 @@
 # snidget — для агентов
 
+
+
 ## Project
 
-Snidget is a PHP 8.4 educational microframework demonstrating DDD + CQRS patterns, PSR compatibility, and modern PHP features (attributes, enums, fibers). Comments and error messages are in Russian; class/method names follow English conventions.
+Snidget is a PHP 8.6 educational microframework demonstrating DDD + CQRS patterns, PSR compatibility, and modern PHP features (attributes, enums, fibers). Comments and error messages are in Russian; class/method names follow English conventions.
 
 ## Development Environment
 
 The project runs inside Docker. All composer commands assume `/app` working directory inside the container.
 
 ```bash
-# Docker (from utils/docker/)
+# Docker (from dev/docker/)
 make build    # Build containers
 make start    # Start containers (nginx + PHP-FPM on port 99)
 make stop     # Stop containers
 make enter    # Shell into PHP container
 
 # Inside container
-composer test       # PHPUnit with coverage (HTML → utils/tests/coverage/)
-composer check      # PHPStan (max + baseline) + Rector dry-run + PHPCS
+composer test       # PHPUnit with coverage (HTML → dev/tests/coverage/)
+composer check      # PHPStan (max, без baseline) + Rector dry-run + PHPCS
 composer fix        # Rector + PHPCBF
 ```
 
 ### Running individual tests
 
 ```bash
-phpunit /app/utils/tests/ContainerTest.php --bootstrap /app/utils/tests/bootstrap.php
-phpunit --filter testHas /app/utils/tests/ContainerTest.php --bootstrap /app/utils/tests/bootstrap.php
+phpunit /app/dev/tests/ContainerTest.php --bootstrap /app/dev/tests/bootstrap.php
+phpunit --filter testHas /app/dev/tests/ContainerTest.php --bootstrap /app/dev/tests/bootstrap.php
 ```
 
 ### Pre-commit hooks
 
-`composer hook-install` sets git hooks path to `utils/git-hooks/`. The pre-commit hook runs phpstan, tests, phploc, and lint.
+`composer hook-install` sets git hooks path to `dev/git-hooks/`. The pre-commit hook runs phpstan, tests, phploc, and lint.
 
 ## Architecture
 
@@ -75,7 +77,7 @@ START → REQUEST → RESPONSE → FINISH (or ERROR). Listeners registered via `
 ## Code Standards
 
 - PSR-12 coding standard
-- PHPStan level 6
+- PHPStan level max (config in `dev/phpstan.neon`)
 - Rector for automated refactoring (dead code, code quality, type declarations, early returns)
 - Heavy use of typed properties, return types, enums, constructor property promotion
 
@@ -83,7 +85,7 @@ START → REQUEST → RESPONSE → FINISH (or ERROR). Listeners registered via `
 
 Обслуживание — как в pretty-php: `composer test`, `composer check`, `composer fix`.
 
-- `check` — phpstan (baseline), rector --dry-run, phpcs; ничего не меняет
+- `check` — phpstan, rector --dry-run, phpcs; ничего не меняет
 - `fix` — rector, phpcbf
 - `test` — phpunit с покрытием
 

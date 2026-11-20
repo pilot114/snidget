@@ -13,25 +13,29 @@ class Server
 
     private const int PORT = 80;
 
+    /** @var \Closure(Request): Response */
     public static \Closure $kernelHandler;
 
+    /** @var array<string> пути статики относительно корня */
     protected static array $serveFiles = [];
 
     /**
      * http server
      * benchmark: ab -n 100000 -c 40 127.0.0.1:8000/
      */
-    public static function http(): void
+    public static function http(): never
     {
-        self::$serveFiles = array_map(
-            fn($x) => str_replace($_SERVER['PWD'] . '/', '', $x),
-            self::getPublicFiles($_SERVER['PWD'])
-        );
+        $pwd = $_SERVER['PWD'] ?? getcwd();
+        if (!is_string($pwd)) {
+            throw new SnidgetException('Не удалось определить рабочую директорию');
+        }
 
-        echo sprintf("Starting server at http://%s:%s, serve %s\n", self::HOST, self::PORT, $_SERVER['PWD']);
+        self::$serveFiles = str_replace($pwd . '/', '', self::getPublicFiles($pwd));
+
+        echo sprintf("Starting server at http://%s:%s, serve %s\n", self::HOST, self::PORT, $pwd);
         $address = sprintf('tcp://%s:%s', self::HOST, self::PORT);
         $socket = stream_socket_server($address);
-        if (!$socket) {
+        if ($socket === false) {
             throw new SnidgetException("Не удалось создать сокет с адресом $address");
         }
 
@@ -40,7 +44,7 @@ class Server
         while (true) {
             Scheduler::suspend(Wait::READ, $socket);
             $clientSocket = stream_socket_accept($socket, 0);
-            if (!$clientSocket) {
+            if ($clientSocket === false) {
                 // клиент мог отвалиться между select и accept — это не повод останавливать сервер
                 continue;
             }
@@ -48,7 +52,7 @@ class Server
             Scheduler::fork(function () use ($clientSocket): void {
                 Scheduler::suspend(Wait::READ, $clientSocket);
                 $request = fread($clientSocket, 8192);
-                if (!$request) {
+                if ($request === false || $request === '') {
                     fclose($clientSocket);
                     return;
                 }
@@ -68,11 +72,14 @@ class Server
         }
     }
 
+    /** @return array<string> */
     protected static function getPublicFiles(string $base): array
     {
-        $files = glob($base . '*') ?: [];
-        $dirs = glob($base . '*', GLOB_ONLYDIR | GLOB_NOSORT | GLOB_MARK) ?: [];
-        foreach ($dirs as $dir) {
+        $files = glob($base . '*');
+        $files = $files === false ? [] : $files;
+
+        $dirs = glob($base . '*', GLOB_ONLYDIR | GLOB_NOSORT | GLOB_MARK);
+        foreach ($dirs === false ? [] : $dirs as $dir) {
             $dirFiles = self::getPublicFiles($dir);
             $files = array_merge($files, $dirFiles);
         }
@@ -87,7 +94,7 @@ class Server
         $request = new Request()->fromString($request, $start);
 
         // static and separate php scripts
-        if (in_array($request->uri, self::$serveFiles)) {
+        if (in_array($request->uri, self::$serveFiles, true)) {
             if (str_ends_with($request->uri, '.php')) {
                 // TODO: handle output and terminate in current process
                 $response = new Response((string)shell_exec('php ' . $request->uri));

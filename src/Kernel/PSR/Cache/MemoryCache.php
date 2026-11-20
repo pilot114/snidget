@@ -6,8 +6,10 @@ use Psr\SimpleCache\CacheInterface;
 
 class MemoryCache implements CacheInterface
 {
+    /** @var array<string, mixed> */
     protected array $values = [];
 
+    /** @var array<string, int> ключ => время истечения (unix ts) */
     protected array $timers = [];
 
     public function get(string $key, mixed $default = null): mixed
@@ -27,8 +29,8 @@ class MemoryCache implements CacheInterface
 
         $this->values[$key] = $value;
         unset($this->timers[$key]);
-        if ($ttl) {
-            $this->timers[$key] = time() . ':' . $ttl;
+        if ($ttl !== null && $ttl !== 0) {
+            $this->timers[$key] = time() + $ttl;
         }
 
         return true;
@@ -53,40 +55,38 @@ class MemoryCache implements CacheInterface
         return true;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getMultiple(iterable $keys, mixed $default = null): iterable
     {
-        array_map($this->checkCacheKey(...), (array)$keys);
-        $keys = array_flip((array)$keys);
-        foreach (array_keys($keys) as $key) {
-            $keys[$key] = $this->get($key, $default);
+        $result = [];
+        foreach ($this->validKeys($keys) as $key) {
+            $result[$key] = $this->get($key, $default);
         }
 
-        return $keys;
+        return $result;
     }
 
     /**
-     * @param iterable<string, mixed> $values
+     * @param iterable<mixed, mixed> $values
      * @throws InvalidCacheKeyException
      */
     public function setMultiple(iterable $values, null|int|\DateInterval $ttl = null): bool
     {
-        array_map($this->checkCacheKey(...), array_keys((array)$values));
-        $results = [];
+        // сначала проверяем все ключи: невалидный не должен оставить запись наполовину
+        $pairs = [];
         foreach ($values as $key => $value) {
-            $results[] = $this->set($key, $value, $ttl);
+            $pairs[] = [$this->validKey($key), $value];
         }
 
+        $results = array_map(fn(array $pair): bool => $this->set($pair[0], $pair[1], $ttl), $pairs);
         return in_array(true, $results, true);
     }
 
     public function deleteMultiple(iterable $keys): bool
     {
-        array_map($this->checkCacheKey(...), (array)$keys);
-        $results = [];
-        foreach ($keys as $key) {
-            $results[] = $this->delete($key);
-        }
-
+        $results = array_map($this->delete(...), $this->validKeys($keys));
         return in_array(true, $results, true);
     }
 
@@ -99,16 +99,43 @@ class MemoryCache implements CacheInterface
     protected function deleteIfExpired(string $key): void
     {
         $this->checkCacheKey($key);
-        if (!isset($this->timers[$key])) {
-            return;
-        }
-
-        [$startTs, $duration] = explode(':', $this->timers[$key]);
-        $duration = (int)$duration;
-        $isExpired = $duration && (time() - (int)$startTs) >= $duration;
-        if ($isExpired) {
+        if (isset($this->timers[$key]) && time() >= $this->timers[$key]) {
             $this->delete($key);
         }
+    }
+
+    /**
+     * @param iterable<mixed> $keys
+     * @return list<string>
+     * @throws InvalidCacheKeyException
+     */
+    protected function validKeys(iterable $keys): array
+    {
+        $result = [];
+        foreach ($keys as $key) {
+            $result[] = $this->validKey($key);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Ключи-числа PHP приводит к int даже в массиве строк — возвращаем им строковый вид
+     *
+     * @throws InvalidCacheKeyException
+     */
+    protected function validKey(mixed $key): string
+    {
+        if (is_int($key)) {
+            $key = (string)$key;
+        }
+
+        if (!is_string($key)) {
+            throw new InvalidCacheKeyException('Ключ кэша должен быть строкой, получен ' . get_debug_type($key));
+        }
+
+        $this->checkCacheKey($key);
+        return $key;
     }
 
     protected function checkCacheKey(string $key): void

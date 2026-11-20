@@ -17,6 +17,7 @@ class Reflection
 
     public const ATTR_CLASS = Attribute::TARGET_CLASS;
 
+    /** @var ReflectionClass<object> */
     protected ReflectionClass $class;
 
     /**
@@ -24,7 +25,11 @@ class Reflection
      */
     public function __construct(string|object $class)
     {
-        $this->class = new ReflectionClass(is_object($class) ? $class::class : $class);
+        if (is_string($class) && !class_exists($class) && !interface_exists($class) && !trait_exists($class)) {
+            throw new ReflectionException("Class \"$class\" does not exist");
+        }
+
+        $this->class = new ReflectionClass($class);
     }
 
     public function isAbstract(): bool
@@ -37,11 +42,13 @@ class Reflection
         return $this->class->getMethod($name);
     }
 
+    /** @return list<ReflectionMethod> */
     public function getMethods(): array
     {
         return $this->class->getMethods();
     }
 
+    /** @return list<ReflectionProperty> */
     public function getPublicProperties(): array
     {
         return $this->class->getProperties(ReflectionProperty::IS_PUBLIC);
@@ -56,33 +63,40 @@ class Reflection
     }
 
     /**
-     * @template T
+     * Атрибуты по ключу Класс::член (для ATTR_CLASS — имя класса)
+     *
+     * @template T of object
      * @param class-string<T> $attrName
      * @return Generator<string, T>
      */
     public function getAttributes(int $type, string $attrName): Generator
     {
-        $tmp = match ($type) {
+        $items = match ($type) {
             self::ATTR_PROPERTY => $this->getPublicProperties(),
             self::ATTR_METHOD   => $this->getMethods(),
             self::ATTR_CLASS    => [$this->class],
             default             => throw new \UnhandledMatchError()
         };
-        foreach ($tmp as $item) {
+        foreach ($items as $item) {
+            $fqn = $item instanceof ReflectionClass ? $item->getName() : $item->class . '::' . $item->getName();
             foreach ($item->getAttributes($attrName) as $attribute) {
-                /** @var ReflectionClass | ReflectionMethod | ReflectionProperty $item */
-                $fqn = isset($item->class) ? ($item->class . '::' . $item->getName()) : $item->getName();
                 yield $fqn => $attribute->newInstance();
             }
         }
     }
 
+    /**
+     * @template T of object
+     * @param class-string<T> $attrName
+     * @return list<\ReflectionAttribute<T>>
+     */
     public function getPropAttributes(string $propName, string $attrName): array
     {
         return $this->class->getProperty($propName)->getAttributes($attrName);
     }
 
-    public function getParams(string $methodName): \Generator
+    /** @return Generator<int, \ReflectionParameter> */
+    public function getParams(string $methodName): Generator
     {
         $params = match ($methodName) {
             '__construct' => $this->class->getConstructor()?->getParameters() ?? [],

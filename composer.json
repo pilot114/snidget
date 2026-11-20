@@ -5,7 +5,7 @@
     "license": "MIT",
     "minimum-stability": "stable",
     "require": {
-        "php": "^8.4",
+        "php": "^8.6",
         "ext-pdo": "*",
         "ext-mbstring": "*",
         "ext-pcntl": "*",
@@ -16,26 +16,26 @@
     },
     "require-dev": {
         "ext-xdebug": "*",
-        "phpstan/phpstan": "^2.3",
-        "rector/rector": "^2.7",
-        "phpunit/phpunit": "^13.4",
-        "league/commonmark": "^2.10",
-        "phpstan/extension-installer": "^1.4",
-        "phpstan/phpstan-strict-rules": "^2.1",
-        "phpstan/phpstan-deprecation-rules": "^2.0",
-        "squizlabs/php_codesniffer": "^4.0"
+        "phpstan/phpstan": "^2.3.7",
+        "rector/rector": "^2.8.5",
+        "phpunit/phpunit": "^13.4.8",
+        "league/commonmark": "^2.10.7",
+        "phpstan/extension-installer": "^1.4.3",
+        "phpstan/phpstan-strict-rules": "^2.1.1",
+        "phpstan/phpstan-deprecation-rules": "^2.0.5",
+        "squizlabs/php_codesniffer": "^4.0.4"
     },
     "scripts": {
-        "hook-install": "git config core.hooksPath utils/git-hooks",
-        "test": "XDEBUG_MODE=coverage phpunit utils/tests --coverage-html utils/tests/coverage --coverage-filter src --order-by random --bootstrap utils/tests/bootstrap.php",
+        "hook-install": "git config core.hooksPath dev/git-hooks",
+        "test": "XDEBUG_MODE=coverage phpunit dev/tests --coverage-html dev/tests/coverage --coverage-filter src --order-by random --bootstrap dev/tests/bootstrap.php",
         "fix": [
-            "rector process",
-            "phpcbf"
+            "rector process --config dev/rector.php",
+            "phpcbf --standard=dev/phpcs.xml"
         ],
         "check": [
-            "phpstan analyse --memory-limit=1G --no-progress",
-            "rector process --dry-run",
-            "phpcs"
+            "phpstan analyse -c dev/phpstan.neon --memory-limit=1G --no-progress",
+            "rector process --config dev/rector.php --dry-run",
+            "phpcs --standard=dev/phpcs.xml"
         ]
     },
     "autoload": {

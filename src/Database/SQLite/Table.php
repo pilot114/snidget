@@ -45,11 +45,13 @@ class Table
         return $this->db->execute($sql, $params);
     }
 
+    /** @return list<array<string, mixed>> */
     public function find(): array
     {
         return $this->db->query("SELECT * FROM {$this->name}");
     }
 
+    /** @return list<array<string, mixed>> */
     public function like(string $q, string $field): array
     {
         self::validateIdentifier($field);
@@ -64,6 +66,7 @@ class Table
         return $this->db->count("SELECT count(1) count FROM {$this->name}");
     }
 
+    /** @return array<string, mixed> */
     public function read(int $id, string $field = 'id'): array
     {
         self::validateIdentifier($field);
@@ -83,7 +86,7 @@ class Table
      */
     public static function validateIdentifier(string $identifier): void
     {
-        if (!preg_match('/^[a-zA-Z_]\w*$/', $identifier)) {
+        if (preg_match('/^[a-zA-Z_]\w*$/', $identifier) !== 1) {
             throw new SnidgetException("Недопустимый идентификатор: $identifier");
         }
     }

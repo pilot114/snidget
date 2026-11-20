@@ -29,7 +29,7 @@ class Api
         return json_encode([
             'total' => $table->count(),
             'items' => $table->like('TEST', 'name'),
-        ]);
+        ], JSON_THROW_ON_ERROR);
     }
 
     #[Route(regex: 'post/(?<id>\d+)')]
@@ -42,6 +42,6 @@ class Api
 
         $data = $table->read($id);
 
-        return json_encode($data);
+        return json_encode($data, JSON_THROW_ON_ERROR);
     }
 }

@@ -18,6 +18,7 @@ class Assert
     ) {
     }
 
+    /** @return list<string> */
     public function check(mixed $value): array
     {
         $errors = [];
@@ -48,7 +49,7 @@ class Assert
             $errors[] = "Значение длиннее {$this->maxLength} символов";
         }
 
-        if ($this->pattern !== null && is_string($value) && !preg_match($this->pattern, $value)) {
+        if ($this->pattern !== null && is_string($value) && preg_match($this->pattern, $value) !== 1) {
             $errors[] = "Значение не соответствует шаблону {$this->pattern}";
         }
 
@@ -56,17 +57,17 @@ class Assert
     }
 
     /**
-     * @return array<string, string[]>
+     * @return array<string, list<string>>
      */
     public static function validateType(Type $type): array
     {
         $errors = [];
+        $reflection = new Reflection($type);
         foreach (AttributeLoader::getAssertions($type::class) as $fqn => $assert) {
             $propName = explode('::', $fqn)[1];
-            $value = $type->{$propName};
-            $fieldErrors = $assert->check($value);
+            $fieldErrors = $assert->check($reflection->getProperty($propName)->getValue($type));
             if ($fieldErrors !== []) {
-                $errors[$propName] = array_merge($errors[$propName] ?? [], $fieldErrors);
+                $errors[$propName] = [...$errors[$propName] ?? [], ...$fieldErrors];
             }
         }
 

@@ -10,14 +10,20 @@ use Snidget\HTTP\Bind;
 #[Bind(priority: PHP_INT_MAX)]
 class BuiltIn
 {
+    /**
+     * @param Closure(Request): mixed $next
+     */
     public function auth(Request $request, Closure $next): mixed
     {
         return $next($request);
     }
 
+    /**
+     * @param Closure(Request): mixed $next
+     */
     public function duckValidate(Request $request, Closure $next, AppPaths $config): mixed
     {
-        if ($request->payload) {
+        if ($request->payload !== null && $request->payload !== []) {
             if (!is_array($request->payload)) {
                 return Response::json(['errors' => ['Ожидается JSON-объект']], 422);
             }
