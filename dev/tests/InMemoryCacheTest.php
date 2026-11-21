@@ -152,4 +152,10 @@ class InMemoryCacheTest extends TestCase
         $this->expectException(InvalidCacheKeyException::class);
         $this->cache->setMultiple((static fn() => yield new stdClass() => 'value')());
     }
+
+    public function testZeroTtlDeletesValue(): void
+    {
+        $this->cache->set('key', 'value', 0);
+        self::assertFalse($this->cache->has('key'));
+    }
 }

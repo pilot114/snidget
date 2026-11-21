@@ -28,19 +28,11 @@
 
 ### Поехали?
 
-Для оптимального изучения рекомендуется развернуть пустой проект. Для этого достаточно выполнить команду (linux / iOS):
+Для оптимального изучения рекомендуется развернуть проект локально. Нужны только git, docker и make:
 
-    wget domain.com/setup?name=example ...
+    git clone https://github.com/pilot114/snidget.git example
+    cd example
+    make build install dev
 
-или, используя composer:
-
-    composer create-project pilot114/snidget example
-    cd example/docker && make serve
-
-ПРИМЕР  
-Install Context Generator  
-Download and install the tool using our installation script:
-  
-    curl -sSL https://raw.githubusercontent.com/context-hub/generator/main/download-latest.sh | sh
-
-This installs the ctx command to your system (typically in /usr/local/bin).
+После этого приложение открывается на http://localhost:8099, а документация собирается командой `make docs`.
+Остальные команды - в разделе "Расширение функционала" и в `make help`.

@@ -9,7 +9,7 @@ use Snidget\Kernel\PSR\Container;
 
 class MiddlewareManager
 {
-    /** @var array<string, Bind> */
+    /** @var list<array{string, Bind}> Class or Class::method with its Bind, a class can have several */
     protected array $allMiddlewares = [];
 
     /** @var list<string> Class::method in call order */
@@ -22,7 +22,9 @@ class MiddlewareManager
         protected array $middlewarePaths,
         protected Container $container
     ) {
-        $this->allMiddlewares = iterator_to_array(AttributeLoader::getBinds($middlewarePaths));
+        foreach (AttributeLoader::getBinds($middlewarePaths) as $fqn => $bind) {
+            $this->allMiddlewares[] = [$fqn, $bind];
+        }
     }
 
     /** @return list<string> */
@@ -34,7 +36,7 @@ class MiddlewareManager
     public function match(string $controller, string $action): self
     {
         $binds = [];
-        foreach ($this->allMiddlewares as $fqn => $attribute) {
+        foreach ($this->allMiddlewares as [$fqn, $attribute]) {
             $c = $attribute->getClass();
             $m = $attribute->getMethod();
             if ($c === null || ($c === $controller && ($m === null || $m === $action))) {
@@ -68,14 +70,22 @@ class MiddlewareManager
         )($request);
     }
 
-    /** @return array<string, int> Class::method => priority, a class gives all its methods */
+    /** @return array<string, int> Class::method => priority, a class gives its public methods */
     protected function layers(string $fqn, int $priority): array
     {
-        $layers = str_contains($fqn, '::') ? [$fqn] : array_map(
-            fn(\ReflectionMethod $method): string => "$fqn::$method->name",
-            new Reflection($fqn)->getMethods()
-        );
-        return array_fill_keys($layers, $priority);
+        if (str_contains($fqn, '::')) {
+            return [$fqn => $priority];
+        }
+
+        $layers = [];
+        foreach (new Reflection($fqn)->getMethods() as $method) {
+            // magic methods, the constructor too, are not layers
+            if ($method->isPublic() && !str_starts_with($method->name, '__')) {
+                $layers["$fqn::$method->name"] = $priority;
+            }
+        }
+
+        return $layers;
     }
 
     /**

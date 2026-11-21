@@ -9,6 +9,7 @@ use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use Snidget\HTTP\Router;
 use Snidget\Kernel\MiddlewareManager;
 use Snidget\Tests\Fixtures\FixtureController;
+use Snidget\Tests\Fixtures\UriController;
 
 class KernelTest extends TestCase
 {
@@ -53,11 +54,21 @@ class KernelTest extends TestCase
 
         self::assertSame(404, $kernel->request('GET', 'nope')->getStatusCode());
 
-        $response = $kernel->request('POST', 'nope');
+        self::assertSame(404, $kernel->request('POST', 'nope')->getStatusCode());
+        self::assertSame(200, $kernel->request('GET', 'api/v1/post/2')->getStatusCode());
+        self::assertSame(404, $kernel->request('GET', 'api/v1/post/99')->getStatusCode());
+
+        $response = $kernel->request('POST', '');
         self::assertSame(405, $response->getStatusCode());
         self::assertSame('Method Not Allowed', $response->getBody());
 
+        // the admin is open only in development
+        $env = getenv('APP_ENV');
+        putenv('APP_ENV');
+        self::assertSame(404, $kernel->request('GET', 'admin/routes')->getStatusCode());
+        putenv('APP_ENV=dev');
         self::assertSame(200, $kernel->request('GET', 'admin/routes')->getStatusCode());
+        putenv($env === false ? 'APP_ENV' : "APP_ENV=$env");
     }
 
     public function testHandleTurnsResultsAndErrorsIntoResponses(): void
@@ -87,6 +98,7 @@ class KernelTest extends TestCase
     public function testErrorAndExceptionHandlers(): void
     {
         new Kernel();
+        self::assertSame('1', ini_get('log_errors'));
         $onError = set_error_handler(null) ?? self::fail('no error handler');
         $onException = set_exception_handler(null) ?? self::fail('no exception handler');
         // drop the null handlers we just set and the Kernel ones, PHPUnit wants its own back
@@ -116,5 +128,27 @@ class KernelTest extends TestCase
 
         $this->expectOutputString('main');
         $kernel->run($request);
+    }
+
+    public function testControllerGetsTheRequestBeingHandled(): void
+    {
+        include_once __DIR__ . '/fixtures/Handlers.php';
+        $kernel = new class extends Kernel {
+            public function request(Router $router, string $uri): Response
+            {
+                $request = new Request();
+                $request->uri = $uri;
+                return $this->handle($router, new MiddlewareManager([], $this->container), $request);
+            }
+        };
+        restore_error_handler();
+        restore_exception_handler();
+
+        $router = new Router();
+        $router->register('uri', UriController::class . '::uri');
+        $router->register('replace', UriController::class . '::replaced');
+
+        self::assertSame('uri', $kernel->request($router, 'uri')->getBody());
+        self::assertSame('replaced', $kernel->request($router, 'replace')->getBody());
     }
 }

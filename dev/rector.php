@@ -12,6 +12,7 @@ return RectorConfig::configure()
         dirname(__DIR__) . '/App',
         dirname(__DIR__) . '/public',
         __DIR__ . '/tests',
+        __DIR__ . '/bench.php',
     ])
     ->withSets([
         SetList::CODE_QUALITY,
@@ -38,7 +39,6 @@ return RectorConfig::configure()
         __DIR__ . '/tests/coverage',
         // shortcut: rector 2.8 падает на частичном применении функций (PHP 8.6, f(?, $x));
         // убрать, когда rector поддержит PFA. То же в phpcs.xml.
-        dirname(__DIR__) . '/App/Module/Async/AsyncKernel.php',
         dirname(__DIR__) . '/App/Module/Core/HTTP/Controller/Admin.php',
         // правила rector 2.7, меняющие поведение (strict_types, типы параметров замыканий там,
         // где ключи бывают int, а элементы — массивы)

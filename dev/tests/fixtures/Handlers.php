@@ -69,3 +69,50 @@ class FixtureListener
         $event->calls++;
     }
 }
+
+class ReplaceMiddleware
+{
+    /** @param Closure(Request): mixed $next */
+    public function replace(Request $request, Closure $next): mixed
+    {
+        $replaced = new Request();
+        $replaced->uri = 'replaced';
+        return $next($replaced);
+    }
+}
+
+class UriController
+{
+    public function uri(Request $request): string
+    {
+        return $request->uri;
+    }
+
+    #[Bind(class: ReplaceMiddleware::class, method: 'replace')]
+    public function replaced(Request $request): string
+    {
+        return $request->uri;
+    }
+}
+
+interface Clock
+{
+}
+
+class SystemClock implements Clock
+{
+}
+
+class NeedsClock
+{
+    public function __construct(public Clock $clock)
+    {
+    }
+}
+
+class MaybeClock
+{
+    public function __construct(public ?Clock $clock = null)
+    {
+    }
+}

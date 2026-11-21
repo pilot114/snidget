@@ -4,6 +4,10 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Snidget\Kernel\PSR\Container;
 use Snidget\Kernel\SnidgetException;
+use Snidget\Tests\Fixtures\Clock;
+use Snidget\Tests\Fixtures\MaybeClock;
+use Snidget\Tests\Fixtures\NeedsClock;
+use Snidget\Tests\Fixtures\SystemClock;
 
 class ContainerTest extends TestCase
 {
@@ -191,5 +195,14 @@ class ContainerTest extends TestCase
             {
             }
         }, 'hidden');
+    }
+
+    public function testLinkedInterfaceIsAutowired(): void
+    {
+        include_once __DIR__ . '/fixtures/Handlers.php';
+        self::assertNull($this->container->get(MaybeClock::class)->clock);
+
+        $this->container->link(Clock::class, SystemClock::class);
+        self::assertInstanceOf(SystemClock::class, $this->container->get(NeedsClock::class)->clock);
     }
 }

@@ -29,7 +29,7 @@ class MemoryCache implements CacheInterface
 
         $this->values[$key] = $value;
         unset($this->timers[$key]);
-        if ($ttl !== null && $ttl !== 0) {
+        if ($ttl !== null) {
             $this->timers[$key] = time() + $ttl;
         }
 

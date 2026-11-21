@@ -24,10 +24,18 @@ install: ## поставить зависимости
 dev: ## запустить для разработки: nginx + php-fpm (порт — PORT в dev/docker/.env), Ctrl+C — стоп
 	$(COMPOSE) up
 
+.PHONY: async
+async: ## асинхронный сервер (модуль Async) на http://localhost:8100, Ctrl+C — стоп
+	$(COMPOSE) run --rm -p 8100:80 -e ASYNC=1 -w /app/public php php index.php
+
 .PHONY: docs
 docs: ## собрать документацию (dev/docs/md → dev/docs/index.html)
 	$(RUN) php bin/docs
 	@echo "документация: http://localhost:$(PORT)/docs/ (если не открывается — make dev)"
+
+.PHONY: bench
+bench: ## скорость и память фреймворка, без nginx и php-fpm
+	$(COMPOSE) run --rm -e XDEBUG_MODE=off php php -d opcache.enable_cli=1 dev/bench.php
 
 .PHONY: enter
 enter: ## shell в php-контейнере (composer test | check | fix)

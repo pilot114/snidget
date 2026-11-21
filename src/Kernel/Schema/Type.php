@@ -98,7 +98,9 @@ abstract class Type implements JsonSerializable
         }
 
         if (!in_array($value, [null, '', []], true) && !is_object($value)) {
-            return new $className($value);
+            return is_subclass_of($className, \BackedEnum::class) && (is_int($value) || is_string($value))
+                ? $className::from($value)
+                : new $className($value);
         }
 
         return $value;

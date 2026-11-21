@@ -58,7 +58,7 @@ class Logger implements LoggerInterface, \Stringable
     public function log($level, string|\Stringable $message, array $context = []): void
     {
         if (is_string($level)) {
-            $level = LogLevel::from(strtoupper($level));
+            $level = LogLevel::tryFrom(strtoupper($level));
         }
 
         if (!$level instanceof LogLevel) {

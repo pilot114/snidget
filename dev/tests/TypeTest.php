@@ -5,6 +5,8 @@ use Snidget\Tests\Fixtures\SimpleType;
 use Snidget\Tests\Fixtures\NestedType;
 use Snidget\Tests\Fixtures\CollectionType;
 use Snidget\Tests\Fixtures\ListType;
+use Snidget\Tests\Fixtures\EnumType;
+use Snidget\Tests\Fixtures\Status;
 
 class TypeTest extends TestCase
 {
@@ -86,5 +88,10 @@ class TypeTest extends TestCase
         ], $type->toArray());
         self::assertStringContainsString('Omsk', serialize($type));
         self::assertNull(new ListType()->date);
+    }
+
+    public function testBackedEnumProperty(): void
+    {
+        self::assertSame(Status::Active, new EnumType(['status' => 'active'])->status);
     }
 }

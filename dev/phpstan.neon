@@ -5,6 +5,7 @@ parameters:
         - ../App
         - ../public
         - tests
+        - bench.php
 
     # свойства тестов заполняет setUp
     additionalConstructors:

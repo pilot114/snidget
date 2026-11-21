@@ -48,7 +48,7 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
     -t robbyrussell \
     -p git
 
-COPY --from=composer/composer:2.8-bin /composer /usr/bin/composer
+COPY --from=composer/composer:2.11-bin /composer /usr/bin/composer
 
 ADD xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 ADD .zshrc /home/workspace

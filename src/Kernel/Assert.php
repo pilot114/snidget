@@ -26,10 +26,15 @@ class Assert
             $errors[] = 'Значение не может быть пустым';
         }
 
-        // else a number skips the length and pattern checks
+        // a value of a wrong type would slip past the checks below
         $isStringRule = $this->minLength !== null || $this->maxLength !== null || $this->pattern !== null;
         if ($isStringRule && $value !== null && !is_string($value)) {
             $errors[] = 'Ожидается строка';
+            return $errors;
+        }
+
+        if (($this->min !== null || $this->max !== null) && $value !== null && !is_int($value) && !is_float($value)) {
+            $errors[] = 'Ожидается число';
             return $errors;
         }
 

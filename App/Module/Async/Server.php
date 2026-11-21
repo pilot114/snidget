@@ -50,9 +50,15 @@ class Server
             }
 
             Scheduler::fork(function () use ($clientSocket): void {
-                Scheduler::suspend(Wait::READ, $clientSocket);
-                $request = fread($clientSocket, 8192);
-                if ($request === false || $request === '') {
+                // a request can come in several packets
+                $request = '';
+                do {
+                    Scheduler::suspend(Wait::READ, $clientSocket);
+                    $chunk = (string)fread($clientSocket, 8192);
+                    $request .= $chunk;
+                } while ($chunk !== '' && !self::isComplete($request));
+
+                if ($request === '') {
                     fclose($clientSocket);
                     return;
                 }
@@ -70,6 +76,20 @@ class Server
                 fclose($clientSocket);
             });
         }
+    }
+
+    /**
+     * Headers are over and the body has Content-Length bytes
+     */
+    public static function isComplete(string $request): bool
+    {
+        $headersEnd = strpos($request, "\r\n\r\n");
+        if ($headersEnd === false) {
+            return false;
+        }
+
+        preg_match('/^Content-Length:\s*(\d+)/mi', substr($request, 0, $headersEnd), $match);
+        return strlen($request) - $headersEnd - 4 >= (int)($match[1] ?? 0);
     }
 
     /** @return array<string> */

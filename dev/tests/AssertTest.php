@@ -83,4 +83,10 @@ class AssertTest extends TestCase
         $errors = Assert::validateType($type);
         self::assertEmpty($errors);
     }
+
+    public function testNumberRuleRejectsNotNumber(): void
+    {
+        self::assertSame(['Ожидается число'], new Assert(min: 18)->check('abc'));
+        self::assertSame([], new Assert(min: 18, max: 30)->check(18.5));
+    }
 }

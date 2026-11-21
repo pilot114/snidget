@@ -75,6 +75,11 @@ class Container implements ContainerInterface
         return $this->pool[$id] ?? $this->build($id, $params);
     }
 
+    public function set(string $id, object $instance): void
+    {
+        $this->pool[$id] = $instance;
+    }
+
     public function has(string $id): bool
     {
         return isset($this->pool[$this->getRealId($id)]);
@@ -154,7 +159,7 @@ class Container implements ContainerInterface
     {
         $type = $param->getType();
         $typeName = $type instanceof ReflectionNamedType ? $type->getName() : 'mixed';
-        if (class_exists($typeName)) {
+        if (class_exists($typeName) || isset($this->map[$typeName])) {
             return $this->get($typeName);
         }
 

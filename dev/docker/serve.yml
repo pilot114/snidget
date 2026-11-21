@@ -17,6 +17,7 @@ services:
     working_dir: /app
     environment:
       PHP_IDE_CONFIG: "serverName=Docker"
+      APP_ENV: dev
     volumes:
       - "../../:/app"
 #      - "../../data:/app/data"

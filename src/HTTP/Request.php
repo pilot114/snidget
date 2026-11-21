@@ -30,7 +30,7 @@ class Request
         $method = $_SERVER['REQUEST_METHOD'] ?? null;
         $this->method = is_string($method) ? $method : 'GET';
         $time = $_SERVER['REQUEST_TIME_FLOAT'] ?? null;
-        $this->requestTimeMs = is_float($time) ? $time : microtime(true);
+        $this->requestTimeMs = (is_float($time) ? $time : microtime(true)) * 1000;
         $this->query = $_GET;
         $this->cookies = $_COOKIE;
 

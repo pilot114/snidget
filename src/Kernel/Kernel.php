@@ -61,10 +61,11 @@ class Kernel
             [$controller, $action, $params] = $router->match($request);
             $data = $middlewareManager
                 ->match($controller, $action)
-                ->handle(
-                    $request,
-                    fn(): mixed => $this->container->call($controller, $action, $params)
-                );
+                ->handle($request, function (Request $request) use ($controller, $action, $params): mixed {
+                    // the action must get this request, not an old one from the pool
+                    $this->container->set(Request::class, $request);
+                    return $this->container->call($controller, $action, $params);
+                });
             $response = match (true) {
                 $data instanceof Response => $data,
                 is_string($data) => new Response($data),
@@ -88,8 +89,10 @@ class Kernel
 
     protected function setErrorReportingSettings(): void
     {
+        // errors go to the log, never to the page; fatal ones too, as no handler gets them
         ini_set('display_errors', 0);
         ini_set('display_startup_errors', 0);
+        ini_set('log_errors', 1);
         error_reporting(E_ALL);
 
         set_error_handler(function (int $severity, string $message, string $file, int $line): bool {

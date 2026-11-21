@@ -23,7 +23,8 @@ $pages = [
     'attributes' => ['Список атрибутов', '', 'addition'],
     'events'     => ['Список событий', '', 'addition'],
     'admin'      => ['Admin', '', 'module'],
-    'async'      => ['Async', '', 'module'],
+    // async.md is an article in progress, not shown yet
+    'async-module' => ['Async', '', 'module'],
 ];
 
 $html = ['%part%' => '', '%addition%' => '', '%module%' => '', '%pages%' => ''];

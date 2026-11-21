@@ -6,6 +6,7 @@
     <file>../App</file>
     <file>../public</file>
     <file>tests</file>
+    <file>bench.php</file>
 
     <arg value="p"/>
     <arg name="colors"/>
@@ -32,7 +33,6 @@
     <!-- shortcut: phpcs 4.0 не знает частичное применение функций (PHP 8.6, f(?, $x)) и считает ?
          тернарным оператором; убрать исключение, когда phpcs поддержит PFA. То же в rector.php. -->
     <rule ref="PSR12.Operators.OperatorSpacing.NoSpaceAfter">
-        <exclude-pattern>App/Module/Async/AsyncKernel.php</exclude-pattern>
         <exclude-pattern>App/Module/Core/HTTP/Controller/Admin.php</exclude-pattern>
     </rule>
     <!-- Черновик разбора ICMP: набросок, а не часть фреймворка. -->

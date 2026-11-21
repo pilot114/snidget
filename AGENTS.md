@@ -16,6 +16,8 @@ make build    # Build images (php 8.6 + xdebug, nginx)
 make install  # composer install in container
 make dev      # nginx + PHP-FPM on port 8099, Ctrl+C to stop
 make docs     # Build dev/docs/index.html, served at http://localhost:8099/docs/
+make async    # Async (fiber) server on port 8100, Ctrl+C to stop
+make bench    # Framework speed and memory, without nginx and php-fpm
 make enter    # Shell into PHP container
 
 # Inside container
@@ -61,7 +63,7 @@ Application modules live under `App/Module/`. Each module can contain `Command/`
 
 - **HTTP**: `public/index.php` → `Kernel::run()` (routes, middleware onion, controller dispatch, events)
 - **CLI**: `bin/app` → `CommandHandler` resolves `Class:method` pattern (e.g., `Test:run`)
-- **Async HTTP**: Same entry point with `ASYNC=1` env → Fiber-based server via `AsyncKernel`
+- **Async HTTP**: Same entry point with `ASYNC=1` env → Fiber-based server via `AsyncKernel` (`make async`)
 
 ### DI Container
 

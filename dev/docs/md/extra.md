@@ -30,8 +30,8 @@
     $container->link(Storage::class, fn(Container $c) => isCli() ? FileStorage::class : MemoryStorage::class);
     $container->link(Storage::class);  // убрать связь
 
-Ограничение: автовайринг смотрит только на классы, в том числе абстрактные. Параметр с типом-интерфейсом
-сам не заполнится даже при наличии `link()` - такой объект нужно запросить явно, `get(CacheInterface::class)`.
+Параметр с типом-интерфейсом заполняется, только если для интерфейса есть `link()`, иначе - как обычно:
+значение по умолчанию или `null`.
 
 Циклические зависимости (A → B → A) обнаруживаются сразу, с цепочкой классов в сообщении об ошибке.
 
@@ -89,6 +89,8 @@
     make install   - поставить зависимости (composer install)
     make dev       - запустить nginx + php-fpm, порт задан в dev/docker/.env
     make docs      - собрать эту документацию
+    make async     - асинхронный сервер (модуль Async) на порту 8100
+    make bench     - скорость и память фреймворка, без nginx и php-fpm
     make enter     - shell внутри php-контейнера
     make audit     - уязвимости в зависимостях
     make outdated  - устаревшие зависимости

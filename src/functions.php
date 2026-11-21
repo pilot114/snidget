@@ -9,7 +9,7 @@ function dump(mixed ...$vars): void
 {
     foreach ($vars as $var) {
         $dump = print_r($var, true);
-        echo isCli() ? "$dump\n" : "<pre>$dump</pre>";
+        echo isCli() ? "$dump\n" : '<pre>' . htmlspecialchars($dump) . '</pre>';
     }
 }
 
@@ -41,7 +41,7 @@ function psrIterator(array $classPaths, bool $recursive = false, ?string $alias 
                 yield from psrIterator([$file], true, $alias);
                 continue;
             }
-            if (preg_match("#/(?<className>\w+)\.php#i", $file, $matches) === 1) {
+            if (preg_match("#/(?<className>\w+)\.php$#", $file, $matches) === 1) {
                 yield $classNamespace . $matches['className'];
             }
         }

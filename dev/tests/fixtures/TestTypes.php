@@ -42,3 +42,13 @@ class ListType extends Type
     /** @var list<string>|null */
     public ?array $tags = null;
 }
+
+enum Status: string
+{
+    case Active = 'active';
+}
+
+class EnumType extends Type
+{
+    public ?Status $status = null;
+}

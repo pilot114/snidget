@@ -80,4 +80,13 @@ class RequestTest extends TestCase
             self::assertEquals($method, $request->method);
         }
     }
+
+    public function testRequestTimeInMilliseconds(): void
+    {
+        $_SERVER['REQUEST_TIME_FLOAT'] = 1.5;
+        $request = new Request()->fromGlobal();
+        unset($_SERVER['REQUEST_TIME_FLOAT']);
+
+        self::assertSame(1500.0, $request->requestTimeMs);
+    }
 }

@@ -21,17 +21,23 @@ class EventManager implements EventDispatcherInterface
     public function register(string $appPath, ?string $alias = null): void
     {
         foreach (AttributeLoader::getListeners([$appPath], $alias) as $fqn => $listener) {
-            $this->listeners[$listener->getEvent()->name][] = $fqn;
+            $this->listeners[self::key($listener->getEvent())][] = $fqn;
         }
     }
 
     public function emit(UnitEnum $event, mixed $data = null): void
     {
-        foreach ($this->listeners[$event->name] ?? [] as $listener) {
+        foreach ($this->listeners[self::key($event)] ?? [] as $listener) {
             $this->container->get(Logger::class)->notice("event [$event->name] dispatch listener: $listener");
             [$class, $method] = explode('::', $listener);
             $this->container->call($class, $method, ['data' => $data]);
         }
+    }
+
+    // with the enum class, so MyEvent::START is not KernelEvent::START
+    protected static function key(UnitEnum $event): string
+    {
+        return $event::class . '::' . $event->name;
     }
 
     public function dispatch(object $event): object

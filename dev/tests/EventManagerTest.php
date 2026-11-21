@@ -6,6 +6,8 @@ use Snidget\Kernel\PSR\Event\EventManager;
 use Snidget\Kernel\PSR\Event\KernelEvent;
 use Snidget\Tests\Fixtures\FixtureListener;
 use Snidget\Tests\Fixtures\StopEvent;
+use Dev\Tests\Fixtures\Listener\EventListener;
+use Dev\Tests\Fixtures\Listener\FixtureEvent;
 
 class EventManagerTest extends TestCase
 {
@@ -53,7 +55,8 @@ class EventManagerTest extends TestCase
     public function testEmitCallsListenerWithData(): void
     {
         include_once __DIR__ . '/fixtures/Handlers.php';
-        $manager = new EventManager($this->container, ['START' => [FixtureListener::class . '::onData']]);
+        $listeners = [KernelEvent::class . '::START' => [FixtureListener::class . '::onData']];
+        $manager = new EventManager($this->container, $listeners);
 
         $manager->emit(KernelEvent::START, 'payload');
         self::assertSame('payload', array_last(FixtureListener::$received));
@@ -67,5 +70,17 @@ class EventManagerTest extends TestCase
 
         $event = $manager->dispatch(new StopEvent());
         self::assertSame(1, $event instanceof StopEvent ? $event->calls : 0);
+    }
+
+    public function testEnumsWithSameCaseNameAreDifferentEvents(): void
+    {
+        include_once __DIR__ . '/fixtures/Listener/EventListener.php';
+        $this->eventManager->register(__DIR__ . '/fixtures/Listener');
+
+        $this->eventManager->emit(FixtureEvent::START);
+        self::assertSame([], EventListener::$calls);
+
+        $this->eventManager->emit(KernelEvent::START);
+        self::assertSame(['kernel start'], EventListener::$calls);
     }
 }

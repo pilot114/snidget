@@ -80,4 +80,10 @@ class LoggerTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         new Logger()->log(1, 'message');
     }
+
+    public function testUnknownLevelThrowsPsrException(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        new Logger()->log('unknown', 'message');
+    }
 }
