@@ -68,8 +68,7 @@ class Request
 
     public function getHeader(string $name): ?string
     {
-        $name = strtoupper($name);
-        return $this->headers[$name] ?? null;
+        return $this->headers[strtoupper($name)] ?? null;
     }
 
     protected function parseHeaders(string $headers): void
