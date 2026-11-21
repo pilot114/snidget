@@ -4,6 +4,8 @@ use PHPUnit\Framework\TestCase;
 use Snidget\Kernel\PSR\Container;
 use Snidget\Kernel\PSR\Event\EventManager;
 use Snidget\Kernel\PSR\Event\KernelEvent;
+use Snidget\Tests\Fixtures\FixtureListener;
+use Snidget\Tests\Fixtures\StopEvent;
 
 class EventManagerTest extends TestCase
 {
@@ -46,5 +48,24 @@ class EventManagerTest extends TestCase
         $this->eventManager->emit(KernelEvent::REQUEST);
         $this->eventManager->emit(KernelEvent::RESPONSE);
         $this->eventManager->emit(KernelEvent::FINISH);
+    }
+
+    public function testEmitCallsListenerWithData(): void
+    {
+        include_once __DIR__ . '/fixtures/Handlers.php';
+        $manager = new EventManager($this->container, ['START' => [FixtureListener::class . '::onData']]);
+
+        $manager->emit(KernelEvent::START, 'payload');
+        self::assertSame('payload', array_last(FixtureListener::$received));
+    }
+
+    public function testDispatchStopsPropagation(): void
+    {
+        include_once __DIR__ . '/fixtures/Handlers.php';
+        $listener = FixtureListener::class . '::onEvent';
+        $manager = new EventManager($this->container, [StopEvent::class => [$listener, $listener]]);
+
+        $event = $manager->dispatch(new StopEvent());
+        self::assertSame(1, $event instanceof StopEvent ? $event->calls : 0);
     }
 }

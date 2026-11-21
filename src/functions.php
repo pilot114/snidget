@@ -9,13 +9,12 @@ function dump(mixed ...$vars): void
 {
     foreach ($vars as $var) {
         $dump = print_r($var, true);
-        #TODO: В асинхронном режиме вывод не работает
         echo isCli() ? "$dump\n" : "<pre>$dump</pre>";
     }
 }
 
 /**
- * Получаем все классы в директории, если они соотвествуют PSR
+ * Class names of PSR-4 files in the given dirs
  *
  * @param list<string> $classPaths
  * @return Generator<string>
@@ -23,7 +22,7 @@ function dump(mixed ...$vars): void
 function psrIterator(array $classPaths, bool $recursive = false, ?string $alias = null): \Generator
 {
     foreach ($classPaths as $classPath) {
-        // путь вида bin/../App иначе превращается в неймспейс \Bin\..\App
+        // else bin/../App becomes namespace \Bin\..\App
         $classPath = realpath($classPath);
         if ($classPath === false) {
             continue;
@@ -49,26 +48,16 @@ function psrIterator(array $classPaths, bool $recursive = false, ?string $alias 
     }
 }
 
-/**
- * Вывод миллисекунд в удобочитаемом формате
- */
-function millisecondPrint(int $sec): string
+function millisecondPrint(int $ms): string
 {
-    $units = [
-        'months'  => intdiv($sec, 2_592_000_000),
-        'days'    => intdiv($sec % 2_592_000_000, 86_400_000),
-        'hours'   => intdiv($sec % 86_400_000, 3_600_000),
-        'minutes' => intdiv($sec % 3_600_000, 60_000),
-        'sec'     => intdiv($sec % 60_000, 1_000),
-        'msec'    => $sec % 1_000,
-    ];
+    $units = array_filter([
+        'months'  => intdiv($ms, 2_592_000_000),
+        'days'    => intdiv($ms % 2_592_000_000, 86_400_000),
+        'hours'   => intdiv($ms % 86_400_000, 3_600_000),
+        'minutes' => intdiv($ms % 3_600_000, 60_000),
+        'sec'     => intdiv($ms % 60_000, 1_000),
+        'msec'    => $ms % 1_000,
+    ], fn(int $value): bool => $value !== 0);
 
-    $result = [];
-    foreach ($units as $unit => $value) {
-        if ($value !== 0) {
-            $result[] = "$value $unit";
-        }
-    }
-
-    return implode(' ', $result);
+    return implode(' ', array_map(fn(int $value, string $unit): string => "$value $unit", $units, array_keys($units)));
 }

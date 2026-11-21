@@ -41,11 +41,8 @@ abstract class AbstractDriver
     public function query(string $sql, array $params = []): array
     {
         $stmt = $this->prepare($sql);
-        if (!$stmt->execute($params)) {
-            return [];
-        }
-
-        /** @var list<array<string, mixed>> $rows строки в FETCH_ASSOC */
+        $stmt->execute($params);
+        /** @var list<array<string, mixed>> $rows FETCH_ASSOC rows */
         $rows = $stmt->fetchAll();
         return $rows;
     }
@@ -98,10 +95,6 @@ abstract class AbstractDriver
     protected function prepare(string $sql): PDOStatement
     {
         $stmt = $this->connection->prepare($sql);
-        if ($stmt === false) {
-            throw new SnidgetException("Не удалось подготовить sql запрос: $sql");
-        }
-
-        return $stmt;
+        return $stmt !== false ? $stmt : throw new SnidgetException("Не удалось подготовить sql запрос: $sql");
     }
 }

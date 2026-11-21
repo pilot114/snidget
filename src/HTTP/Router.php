@@ -25,7 +25,7 @@ class Router
     }
 
     /**
-     * @return array{string, string, array<string, string>} контроллер, действие и именованные группы из URI
+     * @return array{string, string, array<string, string>} controller, action, named URI groups
      * @throws SnidgetException
      */
     public function match(Request $request): array

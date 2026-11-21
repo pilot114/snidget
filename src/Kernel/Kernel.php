@@ -34,12 +34,11 @@ class Kernel
         register_shutdown_function(fn() => $this->eventManager->emit(KernelEvent::FINISH));
     }
 
-    public function run(?Request $request = null): never
+    public function run(?Request $request = null): void
     {
         [$router, $middlewareManager] = $this->prepare();
         $request ??= $this->container->get(Request::class)->fromGlobal();
         $this->handle($router, $middlewareManager, $request)->send();
-        exit;
     }
 
     /** @return array{Router, MiddlewareManager} */
@@ -72,7 +71,7 @@ class Kernel
                 default => Response::json($data),
             };
         } catch (Throwable $throwable) {
-            // клиенту — только статус, подробности — в обработчик ошибок
+            // client gets the status only, details go to ERROR listeners
             $response = match ($throwable instanceof SnidgetException ? $throwable->getCode() : 0) {
                 404 => new Response('Not Found', 404),
                 405 => new Response('Method Not Allowed', 405),
@@ -94,7 +93,7 @@ class Kernel
         error_reporting(E_ALL);
 
         set_error_handler(function (int $severity, string $message, string $file, int $line): bool {
-            // ошибка подавлена через @ или исключена из error_reporting
+            // suppressed by @ or excluded by error_reporting
             if ((error_reporting() & $severity) === 0) {
                 return false;
             }

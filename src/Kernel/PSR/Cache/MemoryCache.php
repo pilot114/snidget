@@ -9,7 +9,7 @@ class MemoryCache implements CacheInterface
     /** @var array<string, mixed> */
     protected array $values = [];
 
-    /** @var array<string, int> ключ => время истечения (unix ts) */
+    /** @var array<string, int> key => expiry unix time */
     protected array $timers = [];
 
     public function get(string $key, mixed $default = null): mixed
@@ -74,7 +74,7 @@ class MemoryCache implements CacheInterface
      */
     public function setMultiple(iterable $values, null|int|\DateInterval $ttl = null): bool
     {
-        // сначала проверяем все ключи: невалидный не должен оставить запись наполовину
+        // check all keys first, so a bad key writes nothing
         $pairs = [];
         foreach ($values as $key => $value) {
             $pairs[] = [$this->validKey($key), $value];
@@ -120,7 +120,7 @@ class MemoryCache implements CacheInterface
     }
 
     /**
-     * Ключи-числа PHP приводит к int даже в массиве строк — возвращаем им строковый вид
+     * PHP casts numeric string keys to int, cast them back
      *
      * @throws InvalidCacheKeyException
      */

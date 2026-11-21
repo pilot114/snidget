@@ -23,13 +23,10 @@ class AttributeLoader
     public static function getBindsByAction(string $controllerName, string $actionName): \Generator
     {
         $ref = new Reflection($controllerName);
-        foreach ($ref->getAttributes(Reflection::ATTR_CLASS, Bind::class) as $fqn => $attribute) {
-            yield $fqn => $attribute;
-        }
+        yield from $ref->getAttributes(Reflection::ATTR_CLASS, Bind::class);
 
         foreach ($ref->getAttributes(Reflection::ATTR_METHOD, Bind::class) as $fqn => $attribute) {
-            $method = explode('::', $fqn)[1];
-            if ($method === $actionName) {
+            if (str_ends_with($fqn, "::$actionName")) {
                 yield $fqn => $attribute;
             }
         }
@@ -119,7 +116,7 @@ class AttributeLoader
     }
 
     /**
-     * Класс, метод и DTO команды (null — команда без DTO)
+     * Command class, method and DTO (null if none)
      *
      * @param list<string> $commandPaths
      * @return array{}|array{string, string, class-string<SchemaType>|null}
@@ -162,18 +159,13 @@ class AttributeLoader
     }
 
     /**
-     * TODO: for info in CLI
-     *
      * @param list<string> $commandPaths
      * @return \Generator<string, Command>
      */
     public static function getCommands(array $commandPaths): \Generator
     {
         foreach (psrIterator($commandPaths) as $className) {
-            $ref = new Reflection($className);
-            foreach ($ref->getAttributes(Reflection::ATTR_METHOD, Command::class) as $fqn => $attribute) {
-                yield $fqn => $attribute;
-            }
+            yield from new Reflection($className)->getAttributes(Reflection::ATTR_METHOD, Command::class);
         }
     }
 }

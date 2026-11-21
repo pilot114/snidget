@@ -31,3 +31,14 @@ class CollectionType extends Type
     /** @var Collection<mixed>|null */
     public ?Collection $items = null;
 }
+
+class ListType extends Type
+{
+    /** @var Collection<AddressType>|null $addresses \Snidget\Tests\Fixtures\AddressType[] */
+    public ?Collection $addresses = null;
+
+    public ?\DateTimeImmutable $date = null;
+
+    /** @var list<string>|null */
+    public ?array $tags = null;
+}

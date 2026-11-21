@@ -11,9 +11,6 @@ use ReflectionParameter;
 use Snidget\Kernel\Reflection;
 use Snidget\Kernel\SnidgetException;
 
-/**
- * TODO: https://php.watch/articles/practical-weakmap
- */
 class Container implements ContainerInterface
 {
     /** @var array<string, object> */
@@ -27,7 +24,6 @@ class Container implements ContainerInterface
 
     public function __construct()
     {
-        // self linking for container
         $this->pool[self::class] = $this;
     }
 
@@ -85,7 +81,7 @@ class Container implements ContainerInterface
     }
 
     /**
-     * @param string|Closure(self): string|null $target класс или замыкание, которое вернёт имя класса
+     * @param string|Closure(self): string|null $target class or closure returning it, null unlinks
      */
     public function link(string $id, string|Closure|null $target = null): void
     {

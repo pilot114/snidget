@@ -4,6 +4,8 @@ use PHPUnit\Framework\TestCase;
 use Snidget\HTTP\Request;
 use Snidget\Kernel\MiddlewareManager;
 use Snidget\Kernel\PSR\Container;
+use Snidget\Tests\Fixtures\FixtureController;
+use Snidget\Tests\Fixtures\FixtureMiddleware;
 
 class MiddlewareTest extends TestCase
 {
@@ -37,5 +39,17 @@ class MiddlewareTest extends TestCase
 
         self::assertInstanceOf(Request::class, $receivedRequest);
         self::assertEquals('test', $receivedRequest->uri);
+    }
+
+    public function testControllerBindsMiddlewareMethodOrWholeClass(): void
+    {
+        include_once __DIR__ . '/fixtures/Handlers.php';
+        $manager = new MiddlewareManager([], new Container());
+
+        foreach (['one', 'two'] as $action) {
+            $layers = $manager->match(FixtureController::class, $action)->getMiddlewares();
+            self::assertSame([FixtureMiddleware::class . '::wrap'], $layers);
+            self::assertSame('wrapped core', $manager->handle(new Request(), fn(): string => 'core'));
+        }
     }
 }

@@ -2,6 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use Snidget\HTTP\Response;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 
 class ResponseTest extends TestCase
 {
@@ -55,5 +56,16 @@ class ResponseTest extends TestCase
 
         self::assertEquals(201, $response->getStatusCode());
         self::assertEquals('Hello, world!', $response->getBody());
+    }
+
+    #[RunInSeparateProcess]
+    public function testSendPrintsBody(): void
+    {
+        // CLI has no such function, this stub lets send() call it
+        eval('function fastcgi_finish_request(): bool { return true; }');
+
+        $this->expectOutputString('ok{"a":1}');
+        new Response('ok', 201, ['X-Test' => 'yes'])->send();
+        new Response('{"a":1}')->send();
     }
 }

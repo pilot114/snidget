@@ -63,7 +63,7 @@ class Reflection
     }
 
     /**
-     * Атрибуты по ключу Класс::член (для ATTR_CLASS — имя класса)
+     * Attributes keyed by Class::member (class name for ATTR_CLASS)
      *
      * @template T of object
      * @param class-string<T> $attrName

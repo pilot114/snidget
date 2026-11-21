@@ -5,6 +5,9 @@ use App\Module\Core\Schema\Command\TestInput;
 use PHPUnit\Framework\TestCase;
 use Snidget\CLI\CommandHandler;
 use Snidget\Kernel\Schema\AppPaths;
+use App\Module\Core\Command\Database;
+use Dev\Tests\Fixtures\Command\Fixture;
+use Snidget\Kernel\SnidgetException;
 
 class CommandHandlerTest extends TestCase
 {
@@ -70,5 +73,36 @@ class CommandHandlerTest extends TestCase
         $data = $handler->extractCommand([dirname(__DIR__, 2) . '/App/Module/Core/Command'])[1] ?? null;
 
         self::assertSame(['current' => 2, 'input' => ['app', '-a']], $data);
+    }
+
+    public function testCommandWithoutDto(): void
+    {
+        $handler = new CommandHandler(['app', 'Database:run']);
+        $result = $handler->extractCommand([dirname(__DIR__, 2) . '/App/Module/Core/Command']);
+
+        self::assertSame([null, null, Database::class, 'run'], $result);
+    }
+
+    public function testDefaultListsCommands(): void
+    {
+        $this->expectOutputRegex('/^AutoComplete\n    run\tauto-complete for commands and options\n/');
+        new CommandHandler(['app'])->default([dirname(__DIR__, 2) . '/App/Module/Core/Command']);
+    }
+
+    public function testFloatOptionAndArgsAfterDoubleDash(): void
+    {
+        include_once __DIR__ . '/fixtures/Command/Fixture.php';
+        $handler = new CommandHandler(['app', 'Fixture:floats', '--ratio', '1.5', '--', '-x', 'y']);
+        $result = $handler->extractCommand([__DIR__ . '/fixtures/Command']);
+
+        self::assertSame(Fixture::class, $result[2] ?? null);
+        self::assertSame(['ratio' => 1.5, 'rest' => ['-x', 'y']], $result[1] ?? null);
+    }
+
+    public function testOptionMustBeNullable(): void
+    {
+        include_once __DIR__ . '/fixtures/Command/Fixture.php';
+        $this->expectException(SnidgetException::class);
+        new CommandHandler(['app', 'Fixture:strict'])->extractCommand([__DIR__ . '/fixtures/Command']);
     }
 }

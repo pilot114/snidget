@@ -1,102 +1,69 @@
 <!doctype html>
-<html>
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="./assets/tailwindcss.com_3.2.6.js"></script>
-  <link rel="stylesheet" href="./assets/github-markdown-light.css">
+  <title>Snidget — документация</title>
   <style>
-    [v-cloak] {
-      display: none;
-    }
-    menu, ol, ul {
-      list-style: inside !important;
+    * { box-sizing: border-box; }
+    body { margin: 0; font: 16px/1.6 system-ui, sans-serif; color: #1e293b; background: #fff; }
+    ::selection { background: #2563eb; color: #fff; }
+
+    #menu { position: fixed; inset: 0 auto 0 0; width: 18rem; overflow-y: auto; background: #111827; color: #cbd5e1; }
+    #menu header { padding: 1rem 1.5rem; }
+    #menu h1 { margin: 0; font-size: 1.5rem; color: #fff; }
+    #menu h1 span { color: #3b82f6; }
+    #menu header p { margin: 0; font-size: .8rem; color: #64748b; }
+    #menu h2 { margin: 0; padding: 1rem 1rem .5rem; font-size: .95rem; font-weight: normal; }
+    #menu a { display: block; padding: .5rem 1.5rem; border-bottom: 1px solid #334155; color: #fff; text-decoration: none; }
+    #menu a:hover { background: #1f2937; }
+    #menu a.active { background: #1e40af; }
+    #menu b { display: block; font-size: .9rem; }
+    #menu small { display: block; font-size: .75rem; color: rgb(255 255 255 / .5); }
+
+    main { margin-left: 18rem; padding: 3rem 2rem; max-width: 60rem; }
+    .page { display: none; scroll-margin-top: 3rem; }
+    .page.active { display: block; }
+    h1, h2, h3 { margin: 1.5em 0 .75em; line-height: 1.25; }
+    h3 { font-size: 1.25rem; padding-bottom: .3em; border-bottom: 1px solid #e2e8f0; }
+    .page > :first-child { margin-top: 0; }
+    a { color: #2563eb; }
+    img { max-width: 100%; }
+    code { padding: .15em .35em; font: .875em/1.5 ui-monospace, monospace; background: #f1f5f9; border-radius: 4px; }
+    pre { padding: 1rem; overflow-x: auto; background: #f1f5f9; border-radius: 6px; }
+    pre code { padding: 0; background: none; }
+    blockquote { margin: 0 0 1rem; padding: 0 1rem; color: #64748b; border-left: 4px solid #e2e8f0; }
+
+    @media (max-width: 50rem) {
+      #menu { position: static; width: auto; }
+      main { margin: 0; padding: 1.5rem 1rem; }
     }
   </style>
-  <script type="module">
-    import { createApp } from './assets/vue.esm-browser_3.2.47.js'
-
-    createApp({
-      data() {
-        return {
-          pages: %pages%
-        }
-      },
-      methods: {
-        changeActive(page) {
-          this.pages.forEach(page => page.active = false);
-          page.active = true;
-        },
-        filterByType(type) {
-          return this.pages.filter(page => page.type === type);
-        },
-      },
-      computed: {
-        getActive() {
-          return this.pages.find(page => page.active === true);
-        },
-      },
-    }).mount('#app')
-  </script>
 </head>
 <body>
-<div id="app" v-cloak class="w-screen h-screen antialiased text-slate-800 selection:bg-blue-600 selection:text-white">
-  <div class="flex flex-col relative w-screen">
-    <div id="menu" class="bg-gray-900 min-h-screen z-10 text-slate-300 w-76 fixed left-0 h-screen">
-
-      <div id="logo" class="my-4 px-6">
-        <h1 class="text-lg md:text-2xl font-bold text-white">Snidget <span class="text-blue-500">(alpha)</span></h1>
-        <p class="text-slate-500 text-sm">Документация [RU]</p>
-      </div>
-
-      <div class="p-4 text-xl">🪄 Основные разделы</div>
-      <div class="w-full" v-for="page in filterByType('part')">
-        <a
-                href="#"
-                class="w-full px-2 inline-flex space-x-2 items-center border-b border-slate-700 py-3 transition ease-linear duration-50"
-                :class="{[`bg-blue-800`]: page.active}"
-                @click="changeActive(page)"
-        >
-          <div class="flex flex-col px-4">
-            <span class="text-lg font-bold leading-5 text-white">{{ page.title }}</span>
-            <span class="text-sm text-white/50 hidden md:block">{{ page.overview }}</span>
-          </div>
-        </a>
-      </div>
-
-      <div class="p-4 text-xl">🧐 Справочная информация</div>
-      <div class="w-full" v-for="page in filterByType('addition')">
-        <a
-                href="#"
-                class="w-full px-2 inline-flex space-x-2 items-center border-b border-slate-700 py-3 transition ease-linear duration-50"
-                :class="{[`bg-blue-800`]: page.active}"
-                @click="changeActive(page)"
-        >
-          <div class="flex flex-col px-4">
-            <span class="text-lg font-bold leading-5 text-white">{{ page.title }}</span>
-            <span class="text-sm text-white/50 hidden md:block">{{ page.overview }}</span>
-          </div>
-        </a>
-      </div>
-
-      <div class="p-4 text-xl">🎁 Модули</div>
-      <div class="w-full" v-for="page in filterByType('module')">
-        <a
-                href="#"
-                class="w-full px-2 inline-flex space-x-2 items-center border-b border-slate-700 py-3 transition  ease-linear duration-50"
-                :class="{[`bg-blue-800`]: page.active}"
-                @click="changeActive(page)"
-        >
-          <div class="flex flex-col px-4">
-            <span class="text-lg font-bold leading-5 text-white">{{ page.title }}</span>
-            <span class="text-sm text-white/50 hidden md:block">{{ page.overview }}</span>
-          </div>
-        </a>
-      </div>
-    </div>
-
-    <div class="markdown-body col-span-12 py-12 ml-96 max-w-4xl" v-html="getActive.content"></div>
-  </div>
-</div>
+<nav id="menu">
+  <header>
+    <h1>Snidget <span>(alpha)</span></h1>
+    <p>Документация [RU]</p>
+  </header>
+  <h2>🪄 Основные разделы</h2>
+  %part%
+  <h2>🧐 Справочная информация</h2>
+  %addition%
+  <h2>🎁 Модули</h2>
+  %module%
+</nav>
+<main>
+  %pages%
+</main>
+<script>
+  // show the page from #hash, the first one by default
+  function show() {
+    const id = document.getElementById(location.hash.slice(1))?.id ?? document.querySelector('.page').id
+    document.querySelectorAll('.page, #menu a').forEach(el => el.classList.toggle('active', el.id === id || el.hash === '#' + id))
+  }
+  addEventListener('hashchange', () => { show(); document.querySelector('main').scrollIntoView() })
+  show()
+</script>
 </body>
 </html>

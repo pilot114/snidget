@@ -143,4 +143,13 @@ class InMemoryCacheTest extends TestCase
         $this->expectException(InvalidCacheKeyException::class);
         $call($this->cache);
     }
+
+    public function testNumericKeysAndInvalidKeyType(): void
+    {
+        $this->cache->setMultiple(['1' => 'one']);
+        self::assertSame('one', $this->cache->get('1'));
+
+        $this->expectException(InvalidCacheKeyException::class);
+        $this->cache->setMultiple((static fn() => yield new stdClass() => 'value')());
+    }
 }

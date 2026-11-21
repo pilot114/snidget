@@ -13,15 +13,9 @@ class Route
         protected string $prefix = '',
         protected string $method = 'GET',
     ) {
-        if ($this->prefix === '' || $this->prefix === '0') {
-            return;
+        if ($this->prefix !== '' && $this->regex !== '') {
+            throw new SnidgetException('Для аттрибута Route нельзя задать вместе prefix и regex');
         }
-
-        if ($this->regex === '' || $this->regex === '0') {
-            return;
-        }
-
-        throw new SnidgetException('Для аттрибута Route нельзя задать вместе prefix и regex');
     }
 
     public function getRegex(): string

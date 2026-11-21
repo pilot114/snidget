@@ -6,6 +6,7 @@ use Snidget\Database\SQLite\Driver;
 use Snidget\Database\SQLite\Table;
 use Snidget\Kernel\SnidgetException;
 use Snidget\Tests\Fixtures\TestSchema;
+use Snidget\Database\SQLite\Meta;
 
 class DatabaseTest extends TestCase
 {
@@ -139,5 +140,30 @@ class DatabaseTest extends TestCase
         }
 
         self::assertEquals(0, $table->count());
+    }
+
+    public function testCreateFromOtherTable(): void
+    {
+        $this->createTable()->insert(new TestSchema(['name' => 'Alice', 'age' => 25]));
+        $copy = new Table($this->db, 'copy', new TestSchema());
+
+        self::assertTrue($copy->create('test'));
+        self::assertSame(1, $copy->count());
+    }
+
+    public function testGetType(): void
+    {
+        $type = new TestSchema();
+        self::assertSame($type, new Table($this->db, 'test', $type)->getType());
+    }
+
+    public function testMetaPrintsColumnsAndForeignKeys(): void
+    {
+        $this->db->execute('CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)');
+        $this->db->execute('CREATE TABLE posts (user_id INTEGER REFERENCES users(id) ON DELETE CASCADE)');
+        $this->db->execute("INSERT INTO users (name) VALUES ('a')");
+
+        $this->expectOutputString("users\n\tid\n\tname\nposts\n\tuser_id => users.id\n");
+        new Meta($this->db)->getInfo();
     }
 }

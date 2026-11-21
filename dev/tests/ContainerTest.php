@@ -182,4 +182,14 @@ class ContainerTest extends TestCase
             'make' => $container->make($className, $params),
         };
     }
+
+    public function testCallNotPublicMethodThrows(): void
+    {
+        $this->expectException(SnidgetException::class);
+        $this->container->call(new class {
+            protected function hidden(): void
+            {
+            }
+        }, 'hidden');
+    }
 }

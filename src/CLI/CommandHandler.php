@@ -19,7 +19,7 @@ class CommandHandler
     }
 
     /**
-     * DTO, данные для него, класс и метод команды
+     * DTO, its data, command class and method
      *
      * @param list<string> $paths
      * @return array{}|array{class-string<Type>|null, array<string, mixed>|null, string, string}
@@ -27,26 +27,17 @@ class CommandHandler
      */
     public function extractCommand(array $paths): array
     {
-        if (count($this->args) === 1) {
-            return [];
-        }
-
         $data = $this->getCommandInfo($paths);
         if ($data === []) {
             return [];
         }
 
-        [$commandClassName, $commandMethodName, $dtoName] = $data;
-        if ($dtoName === null) {
-            return [null, null, $commandClassName, $commandMethodName];
-        }
-
-        $data = $this->parse($dtoName, $this->args);
-        return [$dtoName, $data, $commandClassName, $commandMethodName];
+        [$class, $method, $dtoName] = $data;
+        return [$dtoName, $dtoName === null ? null : $this->parse($dtoName, $this->args), $class, $method];
     }
 
     /**
-     * banner and help by commands TODO: to separate command
+     * Prints all commands with descriptions
      *
      * @param list<string> $paths
      */
@@ -105,9 +96,9 @@ class CommandHandler
             }
         }
 
-        // getopt() не подходит: читает глобальный argv и останавливается на имени команды
+        // not getopt(): it reads global argv and stops at the command name
         $data = [];
-        /** @var array<string, list<string>> $lists значения опций-массивов */
+        /** @var array<string, list<string>> $lists values of array options */
         $lists = [];
         $positionalArgs = [];
         while (($arg = array_shift($argv)) !== null) {
@@ -125,7 +116,7 @@ class CommandHandler
                 $rest = substr($arg, 2);
                 $value = null;
                 if ($types[$name] === 'bool') {
-                    // -de — несколько флагов сразу
+                    // -de is -d -e
                     if ($rest !== '') {
                         array_unshift($argv, '-' . $rest);
                     }

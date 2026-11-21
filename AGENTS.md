@@ -4,17 +4,18 @@
 
 ## Project
 
-Snidget is a PHP 8.6 educational microframework demonstrating DDD + CQRS patterns, PSR compatibility, and modern PHP features (attributes, enums, fibers). Comments and error messages are in Russian; class/method names follow English conventions.
+Snidget is a PHP 8.6 educational microframework demonstrating DDD + CQRS patterns, PSR compatibility, and modern PHP features (attributes, enums, fibers). Comments are short, in simple English; error messages are in Russian; class/method names follow English conventions.
 
 ## Development Environment
 
 The project runs inside Docker. All composer commands assume `/app` working directory inside the container.
 
 ```bash
-# Docker (from dev/docker/)
-make build    # Build containers
-make start    # Start containers (nginx + PHP-FPM on port 99)
-make stop     # Stop containers
+# Docker (from repo root; compose file — dev/docker/serve.yml)
+make build    # Build images (php 8.6 + xdebug, nginx)
+make install  # composer install in container
+make dev      # nginx + PHP-FPM on port 8099, Ctrl+C to stop
+make docs     # Build dev/docs/index.html, served at http://localhost:8099/docs/
 make enter    # Shell into PHP container
 
 # Inside container

@@ -12,7 +12,7 @@ class MiddlewareManager
     /** @var array<string, Bind> */
     protected array $allMiddlewares = [];
 
-    /** @var list<string> Класс::метод в порядке вызова */
+    /** @var list<string> Class::method in call order */
     protected array $middlewares = [];
 
     /**
@@ -33,15 +33,22 @@ class MiddlewareManager
 
     public function match(string $controller, string $action): self
     {
-        $binds = iterator_to_array($this->getMiddlewareBinds($controller, $action));
+        $binds = [];
+        foreach ($this->allMiddlewares as $fqn => $attribute) {
+            $c = $attribute->getClass();
+            $m = $attribute->getMethod();
+            if ($c === null || ($c === $controller && ($m === null || $m === $action))) {
+                $binds = [...$binds, ...$this->layers($fqn, $attribute->getPriority())];
+            }
+        }
+
+        // on a controller, Bind points to the middleware
         foreach (AttributeLoader::getBindsByAction($controller, $action) as $attribute) {
             $c = $attribute->getClass();
             $m = $attribute->getMethod();
-            if ($c === null) {
-                continue;
+            if ($c !== null) {
+                $binds = [...$binds, ...$this->layers($m === null ? $c : "$c::$m", $attribute->getPriority())];
             }
-
-            $binds[$m === null ? $c : "$c::$m"] = $attribute->getPriority();
         }
 
         arsort($binds);
@@ -61,23 +68,14 @@ class MiddlewareManager
         )($request);
     }
 
-    /** @return \Generator<string, int> */
-    protected function getMiddlewareBinds(string $controller, string $action): \Generator
+    /** @return array<string, int> Class::method => priority, a class gives all its methods */
+    protected function layers(string $fqn, int $priority): array
     {
-        foreach ($this->allMiddlewares as $mwFqn => $attribute) {
-            $c = $attribute->getClass();
-            $m = $attribute->getMethod();
-            $priority = $attribute->getPriority();
-            if ($c === null || ($m === null && $c === $controller) || ($m === $action && $c === $controller)) {
-                if (str_contains($mwFqn, '::')) {
-                    yield $mwFqn => $priority;
-                } else {
-                    foreach (new Reflection($mwFqn)->getMethods() as $method) {
-                        yield $mwFqn . '::' . $method->getName() => $priority;
-                    }
-                }
-            }
-        }
+        $layers = str_contains($fqn, '::') ? [$fqn] : array_map(
+            fn(\ReflectionMethod $method): string => "$fqn::$method->name",
+            new Reflection($fqn)->getMethods()
+        );
+        return array_fill_keys($layers, $priority);
     }
 
     /**

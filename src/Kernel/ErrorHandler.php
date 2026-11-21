@@ -25,16 +25,9 @@ class ErrorHandler
             self::$errors[] = new \ErrorException($error['message'], 0, $error['type'], $error['file'], $error['line']);
         }
 
+        // PHP log or stderr, never the response: a trace shows server internals
         foreach (self::$errors as $exception) {
-            // в HTTP-ответ трейс не попадает: там он раскрывает устройство сервера
-            if (!isCli()) {
-                error_log((string)$exception);
-                continue;
-            }
-
-            dump($exception::class . ': ' . $exception->getMessage());
-            dump($exception->getFile() . ':' . $exception->getLine());
-            dump($exception->getTraceAsString());
+            error_log((string)$exception);
         }
     }
 }

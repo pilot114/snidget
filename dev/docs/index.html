@@ -1,102 +1,874 @@
 <!doctype html>
-<html>
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="./assets/tailwindcss.com_3.2.6.js"></script>
-  <link rel="stylesheet" href="./assets/github-markdown-light.css">
+  <title>Snidget — документация</title>
   <style>
-    [v-cloak] {
-      display: none;
-    }
-    menu, ol, ul {
-      list-style: inside !important;
+    * { box-sizing: border-box; }
+    body { margin: 0; font: 16px/1.6 system-ui, sans-serif; color: #1e293b; background: #fff; }
+    ::selection { background: #2563eb; color: #fff; }
+
+    #menu { position: fixed; inset: 0 auto 0 0; width: 18rem; overflow-y: auto; background: #111827; color: #cbd5e1; }
+    #menu header { padding: 1rem 1.5rem; }
+    #menu h1 { margin: 0; font-size: 1.5rem; color: #fff; }
+    #menu h1 span { color: #3b82f6; }
+    #menu header p { margin: 0; font-size: .8rem; color: #64748b; }
+    #menu h2 { margin: 0; padding: 1rem 1rem .5rem; font-size: .95rem; font-weight: normal; }
+    #menu a { display: block; padding: .5rem 1.5rem; border-bottom: 1px solid #334155; color: #fff; text-decoration: none; }
+    #menu a:hover { background: #1f2937; }
+    #menu a.active { background: #1e40af; }
+    #menu b { display: block; font-size: .9rem; }
+    #menu small { display: block; font-size: .75rem; color: rgb(255 255 255 / .5); }
+
+    main { margin-left: 18rem; padding: 3rem 2rem; max-width: 60rem; }
+    .page { display: none; scroll-margin-top: 3rem; }
+    .page.active { display: block; }
+    h1, h2, h3 { margin: 1.5em 0 .75em; line-height: 1.25; }
+    h3 { font-size: 1.25rem; padding-bottom: .3em; border-bottom: 1px solid #e2e8f0; }
+    .page > :first-child { margin-top: 0; }
+    a { color: #2563eb; }
+    img { max-width: 100%; }
+    code { padding: .15em .35em; font: .875em/1.5 ui-monospace, monospace; background: #f1f5f9; border-radius: 4px; }
+    pre { padding: 1rem; overflow-x: auto; background: #f1f5f9; border-radius: 6px; }
+    pre code { padding: 0; background: none; }
+    blockquote { margin: 0 0 1rem; padding: 0 1rem; color: #64748b; border-left: 4px solid #e2e8f0; }
+
+    @media (max-width: 50rem) {
+      #menu { position: static; width: auto; }
+      main { margin: 0; padding: 1.5rem 1rem; }
     }
   </style>
-  <script type="module">
-    import { createApp } from './assets/vue.esm-browser_3.2.47.js'
-
-    createApp({
-      data() {
-        return {
-          pages: [{"title":"\u041a\u043e\u043d\u0446\u0435\u043f\u0446\u0438\u044f","overview":"\u0414\u043b\u044f \u0447\u0435\u0433\u043e \u043d\u0443\u0436\u0435\u043d \u044d\u0442\u043e\u0442 \u0444\u0440\u0435\u0439\u043c\u0432\u043e\u0440\u043a","active":true,"content":"<blockquote>\n<p>Snidget - \u044d\u0442\u043e \u0443\u043c\u043d\u044b\u0439 PHP \u0444\u0440\u0435\u0439\u043c\u0432\u043e\u0440\u043a<\/p>\n<\/blockquote>\n<p>\u041e\u0441\u043d\u043e\u0432\u043d\u043e\u0435 \u043e\u0442\u043b\u0438\u0447\u0438\u0435 \u043e\u0442 \u0434\u0440\u0443\u0433\u0438\u0445 \u0444\u0440\u0435\u0439\u043c\u0432\u043e\u0440\u043a\u043e\u0432 \u0441\u043e\u0441\u0442\u043e\u0438\u0442 \u0432 \u044d\u043a\u0441\u0442\u0440e\u043c\u0430\u043b\u044c\u043d\u043e\u0439 \u043b\u0430\u043a\u043e\u043d\u0438\u0447\u043d\u043e\u0441\u0442\u0438 \u043f\u0440\u0438 \u043d\u0430\u043b\u0438\u0447\u0438\u0438 \u0434\u043e\u0441\u0442\u0430\u0442\u043e\u0447\u043d\u043e\u0433\u043e \u043d\u0430\u0431\u043e\u0440\u0430\n\u0432\u043e\u0437\u043c\u043e\u0436\u043d\u043e\u0441\u0442\u0435\u0439, \u043a\u043e\u0442\u043e\u0440\u044b\u043c\u0438 \u0434\u043e\u043b\u0436\u0435\u043d \u043e\u0431\u043b\u0430\u0434\u0430\u0442\u044c \u0441\u043e\u0432\u0440\u0435\u043c\u0435\u043d\u043d\u044b\u0439 web-\u0444\u0440\u0435\u0439\u043c\u0432\u043e\u0440\u043a. \u041a\u043e\u0434 \u044f\u0434\u0440\u0430 \u0437\u0430\u043d\u0438\u043c\u0430\u0435\u0442 \u0447\u0443\u0442\u044c \u0431\u043e\u043b\u044c\u0448\u0435 500 \u0441\u0442\u0440\u043e\u0447\u0435\u043a \u043a\u043e\u0434\u0430\n(Logical Lines of Code), \u0432\u043d\u0435\u0448\u043d\u0438\u0435 \u0437\u0430\u0432\u0438\u0441\u0438\u043c\u043e\u0441\u0442\u0438 \u043e\u0433\u0440\u0430\u043d\u0438\u0447\u0435\u043d\u044b \u0442\u043e\u043b\u044c\u043a\u043e PSR \u043a\u043e\u043d\u0442\u0440\u0430\u043a\u0442\u0430\u043c\u0438 \u0438 dev \u0431\u0438\u0431\u043b\u0438\u043e\u0442\u0435\u043a\u0430\u043c\u0438 \u0434\u043b\u044f \u043a\u043e\u043d\u0442\u0440\u043e\u043b\u044f\n\u043a\u0430\u0447\u0435\u0441\u0442\u0432\u0430 \u043a\u043e\u0434\u0430<\/p>\n<p>\u0418\u0437 \u044d\u0442\u043e\u0433\u043e \u0441\u043b\u0435\u0434\u0443\u044e\u0442 \u043d\u0435\u043a\u043e\u0442\u043e\u0440\u044b\u0435 \u043f\u043e\u043b\u043e\u0436\u0438\u0442\u0435\u043b\u044c\u043d\u044b\u0435 \u0438 \u043e\u0442\u0440\u0438\u0446\u0430\u0442\u0435\u043b\u044c\u043d\u044b\u0435 \u043e\u0441\u043e\u0431\u0435\u043d\u043d\u043e\u0441\u0442\u0438:<\/p>\n<ul>\n<li>\u041b\u0435\u0433\u043a\u043e\u0441\u0442\u044c \u043f\u043e\u0434\u0434\u0435\u0440\u0436\u043a\u0438. \u0412 \u0434\u0430\u043d\u043d\u044b\u0439 \u043c\u043e\u043c\u0435\u043d\u0442, \u0440\u0430\u0437\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u0432\u0435\u0434\u0435\u0442\u0441\u044f \u0432 \u0440\u0435\u0436\u0438\u043c\u0435 &quot;\u0432\u044b\u0445\u043e\u0434\u043d\u043e\u0433\u043e \u0434\u043d\u044f&quot;, \u0438 \u043d\u0430\u0432\u0440\u044f\u0442\u043b\u0438\n\u043f\u0440\u043e\u0435\u043a\u0442\u0443 \u043f\u043e\u0442\u0440\u0435\u0431\u0443\u0435\u0442\u0441\u044f \u0431\u043e\u043b\u044c\u0448\u0435 \u0440\u0435\u0441\u0443\u0440\u0441\u043e\u0432 \ud83d\ude05<\/li>\n<li>\u0421\u043e\u0432\u0440\u0435\u043c\u0435\u043d\u043d\u043e\u0441\u0442\u044c. \u0418\u0441\u043f\u043e\u043b\u044c\u0437\u0443\u044e\u0442\u0441\u044f \u0432\u043e\u0437\u043c\u043e\u0436\u043d\u043e\u0441\u0442\u0438 PHP 8.2, \u043d\u043e\u0432\u044b\u0435 \u0444\u0438\u0447\u0438 \u044f\u0437\u044b\u043a\u0430 \u043f\u043b\u0430\u043d\u0438\u0440\u0443\u0435\u0442\u0441\u044f \u0432\u043d\u0435\u0434\u0440\u044f\u0442\u044c \u0441\u0440\u0430\u0437\u0443 \u043f\u043e\u0441\u043b\u0435 \u0438\u0445 \u043f\u043e\u044f\u0432\u043b\u0435\u043d\u0438\u044f\n\u0432 \u0441\u0442\u0430\u0431\u0438\u043b\u044c\u043d\u043e\u0439 \u0432\u0435\u0440\u0441\u0438\u0438 PHP<\/li>\n<li>\u041f\u0440\u043e\u0441\u0442\u043e\u0442\u0430 \u043f\u043e\u043d\u0438\u043c\u0430\u043d\u0438\u044f. \u041f\u0440\u043e\u0435\u043a\u0442 \u0445\u043e\u0440\u043e\u0448\u043e \u0437\u0430\u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0438\u0440\u043e\u0432\u0430\u043d - \u0441\u0440\u0435\u0434\u043d\u0438\u0439 PHP \u0440\u0430\u0437\u0440\u0430\u0431\u043e\u0442\u0447\u0438\u043a \u043c\u043e\u0436\u0435\u0442 \u0438\u0437\u0443\u0447\u0438\u0442\u044c \u0432\u0441\u0435 \u0432\u043e\u0437\u043c\u043e\u0436\u043d\u043e\u0441\u0442\u0438\n\u0444\u0440\u0435\u0439\u043c\u0432\u043e\u0440\u043a\u0430 \u0437\u0430 \u043f\u0430\u0440\u0443 \u0447\u0430\u0441\u043e\u0432<\/li>\n<li>\u041e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\u043d\u0430\u044f \u043d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u043d\u043e\u0441\u0442\u044c. Snidget \u0440\u0430\u0437\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u0435\u0442\u0441\u044f \u0441 \u0446\u0435\u043b\u044c\u044e \u043f\u043e\u043d\u044f\u0442\u044c, \u043e\u0442\u0442\u043e\u0447\u0438\u0442\u044c \u0438 \u0440\u0435\u0430\u043b\u0438\u0437\u043e\u0432\u0430\u0442\u044c \u043d\u0430 \u043f\u0440\u0430\u043a\u0442\u0438\u043a\u0435\n\u043f\u0435\u0440\u0435\u0434\u043e\u0432\u044b\u0435 \u043a\u043e\u043d\u0446\u0435\u043f\u0446\u0438\u0438 \u0440\u0430\u0437\u0440\u0430\u0431\u043e\u0442\u043a\u0438 \u041f\u041e<\/li>\n<li>\u041c\u0435\u0441\u0442\u0430\u043c\u0438 \u0434\u043e\u043f\u0443\u0441\u043a\u0430\u044e\u0442\u0441\u044f \u0445\u0430\u043a\u0438 \u0432 \u0443\u0433\u043e\u0434\u0443 \u043b\u0430\u043a\u043e\u043d\u0438\u0447\u043d\u043e\u0441\u0442\u0438 \u0438 \u043b\u0438\u0447\u043d\u044b\u0445 \u043f\u0440\u0435\u0434\u043f\u043e\u0447\u0442\u0435\u043d\u0438\u0439 \u0430\u0432\u0442\u043e\u0440\u0430<\/li>\n<li>\u041d\u0430 \u0434\u0430\u043d\u043d\u044b\u0439 \u043c\u043e\u043c\u0435\u043d\u0442 \u043e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u0435\u0442 \u043e\u0431\u0440\u0430\u0442\u043d\u0430\u044f \u0441\u043e\u0432\u043c\u0435\u0441\u0442\u0438\u043c\u043e\u0441\u0442\u044c, <strong>\u043d\u0435 \u0440\u0435\u043a\u043e\u043c\u0435\u043d\u0434\u0443\u0435\u0442\u0441\u044f<\/strong> \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u043d\u0438\u0435 \u0432 production \u043e\u043a\u0440\u0443\u0436\u0435\u043d\u0438\u0438\n(\u0441\u043c. &quot;\u0433\u0430\u0439\u0434 \u043f\u043e \u043e\u0441\u0442\u043e\u0440\u043e\u0436\u043d\u043e\u043c\u0443 \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u043d\u0438\u044e&quot;)<\/li>\n<li>\u041c\u0438\u043d\u0438\u043c\u0443\u043c \u0430\u0431\u0441\u0442\u0440\u0430\u043a\u0446\u0438\u0439 \u0438 \u043a\u0430\u043a \u0441\u043b\u0435\u0434\u0441\u0442\u0432\u0438\u0435 - \u043d\u0438\u0437\u043a\u0430\u044f \u0433\u0438\u0431\u043a\u043e\u0441\u0442\u044c \u043a\u043e\u0434\u0430. \u041f\u0440\u043e\u0435\u043a\u0442 \u0440\u0430\u0437\u0432\u0438\u0432\u0430\u0435\u0442\u0441\u044f \u043f\u043e \u0443\u0442\u0438\u043b\u0438\u0442\u0430\u0440\u043d\u043e\u043c\u0443 \u043f\u0440\u0438\u043d\u0446\u0438\u043f\u0443 - \u0444\u0438\u0447\u0438\n\u0434\u043e\u0431\u0430\u0432\u043b\u044f\u044e\u0442\u0441\u044f &quot;\u043f\u043e \u0442\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u044e&quot;, \u0430 \u043d\u0435 \u0437\u0430\u0440\u0430\u043d\u0435\u0435, \u043d\u0430 \u043a\u0430\u043a\u0438\u0435-\u0442\u043e \u0442\u0435\u043e\u0440\u0435\u0442\u0438\u0447\u0435\u0441\u043a\u0438\u0435 \u0441\u043b\u0443\u0447\u0430\u0438. \u0418\u0441\u043a\u043b\u044e\u0447\u0435\u043d\u0438\u0435 \u0441\u043e\u0441\u0442\u0430\u0432\u043b\u044f\u044e\u0442 PSR \u043a\u043e\u043d\u0442\u0440\u0430\u043a\u0442\u044b\n\u0432 \u0441\u0438\u043b\u0443 \u0438\u0445 \u043f\u0440\u0438\u0437\u043d\u0430\u043d\u0438\u044f \u043a\u0430\u043a best practices \u0432 \u044d\u043a\u043e\u0441\u0438\u0441\u0442\u0435\u043c\u0435 PHP<\/li>\n<li>\u0424\u0440\u0435\u0439\u043c\u0432\u043e\u0440\u043a \u043f\u0438\u0448\u0435\u0442\u0441\u044f \u043f\u043e\u0434 \u043a\u043e\u043d\u043a\u0440\u0435\u0442\u043d\u043e\u0435, \u0441\u043f\u0435\u0446\u0438\u0430\u043b\u044c\u043d\u043e \u043f\u043e\u0434\u0433\u043e\u0442\u043e\u0432\u043b\u0435\u043d\u043d\u043e\u0435 \u0434\u043b\u044f \u043d\u0435\u0433\u043e \u043e\u043a\u0440\u0443\u0436\u0435\u043d\u0438\u0435, \u043f\u043e\u0441\u0442\u0430\u0432\u043b\u044f\u0435\u043c\u043e\u0435 \u043a\u0430\u043a docker-\u043a\u043e\u043d\u0442\u0435\u0439\u043d\u0435\u0440.\n\u041e\u0434\u043d\u0430\u043a\u043e, \u0432 \u043d\u0435\u043c \u043d\u0435\u0442 \u043d\u0438\u0447\u0435\u0433\u043e \u0441\u043f\u0435\u0446\u0438\u0444\u0438\u0447\u043d\u043e\u0433\u043e - \u043e\u043d \u043e\u0441\u043d\u043e\u0432\u0430\u043d \u043d\u0430 \u043e\u0444\u0438\u0446\u0438\u0430\u043b\u044c\u043d\u043e\u043c alpine \u043e\u0431\u0440\u0430\u0437\u0435 PHP<\/li>\n<\/ul>\n<p><strong>\u0418\u0442\u043e\u0433\u043e, \u044d\u0442\u043e\u0442 \u0444\u0440\u0435\u0439\u043c\u0432\u043e\u0440\u043a \u043e\u0442\u043b\u0438\u0447\u043d\u043e \u043f\u043e\u0434\u0445\u043e\u0434\u0438\u0442 \u0434\u043b\u044f \u043d\u0430\u043f\u0438\u0441\u0430\u043d\u0438\u044f pet-\u043f\u0440\u043e\u0435\u043a\u0442\u043e\u0432 \u0438\u043b\u0438 \u043e\u0431\u0443\u0447\u0435\u043d\u0438\u044f web-\u0440\u0430\u0437\u0440\u0430\u0431\u043e\u0442\u043a\u0435, \u0435\u0441\u043b\u0438\n\u043f\u043e\u043f\u0443\u043b\u044f\u0440\u043d\u044b\u0435 \u0444\u0440\u0435\u0439\u0432\u043e\u0440\u043a\u0438 \u043c\u043e\u0433\u0443\u0442 \u0431\u044b\u0442\u044c \u0438\u0437\u043b\u0438\u0448\u043d\u0435 \u0441\u043b\u043e\u0436\u043d\u044b\u043c\u0438 \u0434\u043b\u044f \u0432\u0430\u0448\u0435\u0439 \u0437\u0430\u0434\u0430\u0447\u0438<\/strong><\/p>\n<h3>\u041f\u043e\u0435\u0445\u0430\u043b\u0438?<\/h3>\n<p>\u0414\u043b\u044f \u043e\u043f\u0442\u0438\u043c\u0430\u043b\u044c\u043d\u043e\u0433\u043e \u0438\u0437\u0443\u0447\u0435\u043d\u0438\u044f \u0440\u0435\u043a\u043e\u043c\u0435\u043d\u0434\u0443\u0435\u0442\u0441\u044f \u0440\u0430\u0437\u0432\u0435\u0440\u043d\u0443\u0442\u044c \u043f\u0443\u0441\u0442\u043e\u0439 \u043f\u0440\u043e\u0435\u043a\u0442. \u0414\u043b\u044f \u044d\u0442\u043e\u0433\u043e \u0434\u043e\u0441\u0442\u0430\u0442\u043e\u0447\u043d\u043e \u0432\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u043a\u043e\u043c\u0430\u043d\u0434\u0443 (linux \/ iOS):<\/p>\n<pre><code>wget domain.com\/setup?name=example ...\n<\/code><\/pre>\n<p>\u0438\u043b\u0438, \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u0443\u044f composer:<\/p>\n<pre><code>composer create-project pilot114\/snidget example\ncd example\/docker &amp;&amp; make serve\n<\/code><\/pre>\n<p>\u041f\u0420\u0418\u041c\u0415\u0420<br \/>\nInstall Context Generator<br \/>\nDownload and install the tool using our installation script:<\/p>\n<pre><code>curl -sSL https:\/\/raw.githubusercontent.com\/context-hub\/generator\/main\/download-latest.sh | sh\n<\/code><\/pre>\n<p>This installs the ctx command to your system (typically in \/usr\/local\/bin).<\/p>\n","type":"part"},{"title":"\u041e\u0441\u043d\u043e\u0432\u044b","overview":"\u0411\u0430\u0437\u043e\u0432\u044b\u0435 \u043f\u043e\u043d\u044f\u0442\u0438\u044f","active":false,"content":"<h3>\u0424\u0430\u0439\u043b\u043e\u0432\u0430\u044f \u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u0430 \u043f\u0440\u0438\u043b\u043e\u0436\u0435\u043d\u0438\u044f<\/h3>\n<pre><code>public - \u043f\u0443\u0431\u043b\u0438\u0447\u043d\u044b\u0435 \u0441\u043a\u0440\u0438\u043f\u0442\u044b\nbin    - \u043a\u043e\u043d\u0441\u043e\u043b\u044c\u043d\u044b\u0435 \u0441\u043a\u0440\u0438\u043f\u0442\u044b\ndata   - \u0434\u0430\u043d\u043d\u044b\u0435 (\u0444\u0430\u0439\u043b\u043e\u0432\u043e\u0435 \u0445\u0440\u0430\u043d\u0438\u043b\u0438\u0449\u0435)\ndev    - \u0432\u0441\u0451, \u0447\u0442\u043e \u043d\u0435 \u043d\u0443\u0436\u043d\u043e \u043d\u0435\u043f\u043e\u0441\u0440\u0435\u0434\u0441\u0442\u0432\u0435\u043d\u043d\u043e \u0434\u043b\u044f \u0440\u0430\u0431\u043e\u0442\u044b \u043f\u0440\u043e\u0435\u043a\u0442\u0430\nsrc - \u043a\u043e\u0434 \u043f\u0440\u043e\u0435\u043a\u0442\u0430\n \u2523\u2501\u2501 HTTP - HTTP \u0445\u044d\u043d\u0434\u043b\u0435\u0440\u044b (Controllers \u0438 Middlewares)\n \u2523\u2501\u2501 CLI - CLI \u0445\u044d\u043d\u0434\u043b\u0435\u0440\u044b\n \u2523\u2501\u2501 Module - \u043f\u043e\u0441\u0442\u0430\u0432\u043b\u044f\u0435\u043c\u044b\u0435 \u043c\u043e\u0434\u0443\u043b\u0438 \u0444\u0440\u0435\u0439\u043c\u0432\u043e\u0440\u043a\u0430\n \u2523\u2501\u2501 Schema - \u043e\u0431\u044a\u0435\u043a\u0442\u044b \u0434\u043b\u044f \u043f\u0435\u0440\u0435\u0434\u0430\u0447\u0438 \u0434\u0430\u043d\u043d\u044b\u0445\n \u2523\u2501\u2501 Domain - \u0441\u043e\u0431\u0441\u0442\u0432\u0435\u043d\u043d\u0430\u044f \u0434\u043e\u043c\u0435\u043d\u043d\u0430\u044f \u043b\u043e\u0433\u0438\u043a\u0430 \u043f\u0440\u043e\u0435\u043a\u0442\u0430\n \u2517\u2501\u2501 container.php - \u043a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u044f \u043a\u043e\u043d\u0442\u0435\u0439\u043d\u0435\u0440\u0430 \u0437\u0430\u0432\u0438\u0441\u0438\u043c\u043e\u0441\u0442\u0435\u0439\n<\/code><\/pre>\n<p>\u041f\u043e \u043c\u0435\u0440\u0435 \u0440\u043e\u0441\u0442\u0430 \u043f\u0440\u043e\u0435\u043a\u0442\u0430, \u0440\u0435\u043a\u043e\u043c\u0435\u043d\u0434\u0443\u0435\u0442\u0441\u044f \u0432\u044b\u0441\u043e\u043a\u043e\u0441\u0432\u044f\u0437\u043d\u044b\u0435 \u0447\u0430\u0441\u0442\u0438 \u043f\u0440\u043e\u0435\u043a\u0442\u0430 \u0432\u044b\u043d\u043e\u0441\u0438\u0442\u044c \u0432 \u043c\u043e\u0434\u0443\u043b\u0438.\n\u0421\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u0430 \u043c\u043e\u0434\u0443\u043b\u044f \u043f\u043e\u043b\u043d\u043e\u0441\u0442\u044c\u044e \u043a\u043e\u043f\u0438\u0440\u0443\u0435\u0442 \u043a\u043e\u0434 \u0432 src<\/p>\n<p><em>bin<\/em> \u0438 <em>public<\/em> \u043f\u043e \u0443\u043c\u043e\u043b\u0447\u0430\u043d\u0438\u044e \u0441\u043e\u0434\u0435\u0440\u0436\u0430\u0442 \u0442\u043e\u0447\u043a\u0438 \u0432\u0445\u043e\u0434\u0430 \u0432 \u043f\u0440\u0438\u043b\u043e\u0436\u0435\u043d\u0438\u0435 (<em>bin\/app<\/em> \u0438 <em>public\/index.php<\/em> \u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u043e),\n\u043e\u0434\u043d\u0430\u043a\u043e \u0434\u043e\u043f\u0443\u0441\u043a\u0430\u0435\u0442\u0441\u044f \u0440\u0430\u0437\u043c\u0435\u0449\u0430\u0442\u044c \u0432 \u043d\u0438\u0445 \u0434\u043e\u043f\u043e\u043b\u043d\u0438\u0442\u0435\u043b\u044c\u043d\u044b\u0435 \u0441\u043a\u0440\u0438\u043f\u0442\u044b, \u043a\u043e\u0442\u043e\u0440\u044b\u043c \u043d\u0435 \u0442\u0440\u0435\u0431\u0443\u0435\u0442\u0441\u044f bootstrap \u0444\u0440\u0435\u0439\u043c\u0432\u043e\u0440\u043a\u0430<\/p>\n<h3>\u041b\u043e\u0433\u0438\u0447\u0435\u0441\u043a\u0430\u044f \u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u0430 \u043f\u0440\u0438\u043b\u043e\u0436\u0435\u043d\u0438\u044f<\/h3>\n<p><img src=\".\/assets\/schema.png\" alt=\"3 \u0441\u043b\u043e\u0439\u043d\u0430\u044f \u0430\u0440\u0445\u0438\u0442\u0435\u043a\u0442\u0443\u0440\u0430\" \/><\/p>\n<p>\u0424\u0440\u0435\u0439\u043c\u0432\u043e\u0440\u043a \u043f\u043e\u0434\u0433\u043e\u0442\u0430\u0432\u043b\u0438\u0432\u0430\u0435\u0442 \u043d\u0430\u0434\u0435\u0436\u043d\u0443\u044e \u043e\u0441\u043d\u043e\u0432\u0443 \u0434\u043b\u044f \u0443\u0440\u043e\u0432\u043d\u044f \u043f\u0440\u0438\u043b\u043e\u0436\u0435\u043d\u0438\u044f \u0438\n\u0443\u0440\u043e\u0432\u043d\u044f \u0434\u043e\u0441\u0442\u0443\u043f\u0430 \u043a \u0434\u0430\u043d\u043d\u044b\u043c, \u043e\u0441\u0442\u0430\u0432\u043b\u044f\u044f \u0443\u0440\u043e\u0432\u0435\u043d\u044c \u043b\u043e\u0433\u0438\u043a\u0438 (Domain) \u043f\u043e\u0434 \u043f\u043e\u043b\u043d\u044b\u043c \u043a\u043e\u043d\u0442\u0440\u043e\u043b\u0435\u043c \u0440\u0430\u0437\u0440\u0430\u0431\u043e\u0442\u0447\u0438\u043a\u0430.\n\u0415\u0441\u043b\u0438 \u043a\u043e\u043d\u0441\u043e\u043b\u044c \u0438\u043b\u0438 \u043d\u0430\u043e\u0431\u043e\u0440\u043e\u0442, \u0432\u0435\u0431 \u0447\u0430\u0441\u0442\u044c \u043d\u0435 \u043d\u0443\u0436\u043d\u0430 - \u0434\u043e\u0441\u0442\u0430\u0442\u043e\u0447\u043d\u043e \u043f\u0440\u043e\u0441\u0442\u043e \u0443\u0434\u0430\u043b\u0438\u0442\u044c \u0441\u043e\u043e\u0442\u0432\u0435\u0441\u0442\u0432\u0443\u044e\u0449\u0438\u0435 \u0434\u0438\u0440\u0435\u043a\u0442\u043e\u0440\u0438\u0438.\nPresentation layer (aka UI) - \u043f\u043e\u043b\u043d\u043e\u0441\u0442\u044c\u044e \u043e\u0442\u0434\u0435\u043b\u0435\u043d \u043e\u0442 \u0444\u0440\u0435\u0439\u043c\u0432\u043e\u0440\u043a\u0430 \u0438 \u0434\u043e\u043b\u0436\u0435\u043d \u0431\u044b\u0442\u044c \u0440\u0435\u0430\u043b\u0438\u0437\u043e\u0432\u0430\u043d \u043d\u0430 \u043a\u043b\u0438\u0435\u043d\u0442\u0435<\/p>\n<p>\u041e\u0431\u0440\u0430\u0442\u0438\u0442\u0435 \u0432\u043d\u0438\u043c\u0430\u043d\u0438\u0435, \u043f\u0443\u043d\u043a\u0442\u0438\u0440\u043d\u044b\u043c\u0438 \u0441\u0442\u0440\u0435\u043b\u043a\u0430\u043c\u0438 \u043e\u0431\u043e\u0437\u043d\u0430\u0447\u0435\u043d\u044b \u0432\u0437\u0430\u0438\u043c\u043e\u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044f \u0441 \u043f\u043e\u043c\u043e\u0449\u044c\u044e \u043e\u0431\u044a\u0435\u043a\u0442\u043e\u0432 \u043f\u0435\u0440\u0435\u0434\u0430\u0447\u0438\n\u0434\u0430\u043d\u043d\u044b\u0445 - DTO (\u0440\u0430\u0441\u043f\u043e\u043b\u0430\u0433\u0430\u044e\u0442\u0441\u044f \u0432 \u0434\u0438\u0440\u0435\u043a\u0442\u043e\u0440\u0438\u0438 <em>Schema<\/em>)<\/p>\n<p>\u041f\u043e\u043b\u0435\u0437\u043d\u044b\u0435 \u0441\u0441\u044b\u043b\u043a\u0438:<\/p>\n<ul>\n<li><a href=\"https:\/\/en.wikipedia.org\/wiki\/Multitier_architecture\">\u041c\u043d\u043e\u0433\u043e\u0441\u043b\u043e\u0439\u043d\u0430\u044f \u0430\u0440\u0445\u0438\u0442\u0435\u043a\u0442\u0443\u0440\u0430<\/a><\/li>\n<li><a href=\"https:\/\/en.wikipedia.org\/wiki\/Command%E2%80%93query_separation\">CQRS<\/a><\/li>\n<\/ul>\n<h3>\u0410\u0434\u043c\u0438\u043d.\u043f\u0430\u043d\u0435\u043b\u044c<\/h3>\n<p>\u041e\u0434\u0438\u043d \u0438\u0437 \u0432\u0441\u0442\u0440\u043e\u0435\u043d\u043d\u044b\u0445 \u043c\u043e\u0434\u0443\u043b\u0435\u0439 - Admin - \u043f\u043e\u0437\u0432\u043e\u043b\u044f\u0435\u0442 \u043f\u0440\u043e\u0441\u043c\u0430\u0442\u0440\u0438\u0432\u0430\u0442\u044c \u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u0443 \u043f\u0440\u043e\u0435\u043a\u0442\u0430 &quot;\u043d\u0430 \u043b\u0435\u0442\u0443&quot;<\/p>\n<p><img src=\".\/assets\/admin.png\" alt=\"\u0430\u0434\u043c\u0438\u043d\u043a\u0430\" \/><\/p>\n","type":"part"},{"title":"HTTP","overview":"\u0420\u043e\u0443\u0442\u0438\u043d\u0433, \u043a\u043e\u043d\u0442\u0440\u043e\u043b\u043b\u0435\u0440\u044b, \u043f\u043e\u0441\u0440\u0435\u0434\u043d\u0438\u043a\u0438","active":false,"content":"","type":"part"},{"title":"CLI","overview":"\u041a\u043e\u043d\u0441\u043e\u043b\u044c\u043d\u044b\u0435 \u043a\u043e\u043c\u0430\u043d\u0434\u044b","active":false,"content":"","type":"part"},{"title":"\u0411\u0430\u0437\u044b \u0434\u0430\u043d\u043d\u044b\u0445","overview":"\u0420\u0430\u0431\u043e\u0442\u0430 \u0441 \u043f\u0435\u0440\u0441\u0438\u0441\u0442\u0435\u043d\u0442\u043d\u044b\u043c\u0438 \u0434\u0430\u043d\u043d\u044b\u043c\u0438","active":false,"content":"","type":"part"},{"title":"\u0420\u0430\u0441\u0448\u0438\u0440\u0435\u043d\u0438\u0435 \u0444\u0443\u043d\u043a\u0446\u0438\u043e\u043d\u0430\u043b\u0430","overview":"PSR, \u0441\u043e\u0431\u044b\u0442\u0438\u044f, \u043c\u043e\u0434\u0443\u043b\u0438, \u0438\u043d\u0444\u0440\u0430\u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u0430","active":false,"content":"","type":"part"},{"title":"\u0424\u0440\u043e\u043d\u0442","overview":"\u041d\u0435\u043c\u043d\u043e\u0433\u043e \u043e \u0443\u0440\u043e\u0432\u043d\u0435 \u043f\u0440\u0435\u0434\u0441\u0442\u0430\u0432\u043b\u0435\u043d\u0438\u044f","active":false,"content":"","type":"part"},{"title":"PSR \u0438\u043c\u043f\u043b\u0435\u043c\u0435\u043d\u0442\u0430\u0446\u0438\u0438","active":false,"content":"","type":"addition"},{"title":"\u0421\u043f\u0438\u0441\u043e\u043a \u0430\u0442\u0440\u0438\u0431\u0443\u0442\u043e\u0432","active":false,"content":"","type":"addition"},{"title":"\u0421\u043f\u0438\u0441\u043e\u043a \u0441\u043e\u0431\u044b\u0442\u0438\u0439","active":false,"content":"","type":"addition"},{"title":"Admin","active":false,"content":"","type":"module"},{"title":"Async","active":false,"content":"<p>\u0410\u0441\u0438\u043d\u0445\u0440\u043e\u043d\u043d\u043e\u0441\u0442\u044c \u0432 PHP: \u043c\u0438\u043d\u0438\u043c\u0430\u043b\u044c\u043d\u044b\u0439 \u043f\u0440\u0430\u043a\u0442\u0438\u0447\u0435\u0441\u043a\u0438\u0439 \u043f\u0440\u0438\u043c\u0435\u0440<\/p>\n<blockquote>\n<p>\u041f\u0440\u0435\u0434\u043f\u043e\u0441\u044b\u043b\u043a\u0438<\/p>\n<\/blockquote>\n<p>\u0414\u043b\u044f \u043d\u0430\u0447\u0430\u043b\u0430 \u043d\u0443\u0436\u043d\u043e \u043f\u043e\u043d\u044f\u0442\u044c \u043a\u043e\u043d\u0435\u0447\u043d\u0443\u044e \u0446\u0435\u043b\u044c - \u0437\u0430\u0447\u0435\u043c \u0432\u043e\u043e\u0431\u0449\u0435 \u043d\u0443\u0436\u043d\u0430 \u0430\u0441\u0438\u043d\u0445\u0440\u043e\u043d\u043d\u043e\u0441\u0442\u044c, \u0447\u0442\u043e \u043e\u043d\u0430 \u043d\u0430\u043c \u0434\u0430\u0451\u0442?\n\u0414\u0430\u0451\u0442 \u043e\u043d\u0430 \u043e\u0447\u0435\u043d\u044c \u043f\u0440\u043e\u0441\u0442\u0443\u044e \u0432\u0435\u0449\u044c - \u0432\u043e\u0437\u043c\u043e\u0436\u043d\u043e\u0441\u0442\u044c \u043d\u0435 \u043f\u0440\u043e\u0441\u0442\u0430\u0438\u0432\u0430\u0442\u044c \u0432 \u043e\u0436\u0438\u0434\u0430\u043d\u0438\u0438 \u043e\u043a\u043e\u043d\u0447\u0430\u043d\u0438\u044f \u043c\u0435\u0434\u043b\u0435\u043d\u043d\u044b\u0445 \u043e\u043f\u0435\u0440\u0430\u0446\u0438\u0439\n(\u043a\u0430\u043a \u043f\u043e\u043a\u0430\u0437\u0430\u0442\u0435\u043b\u044c\u043d\u044b\u0435 \u043f\u0440\u0438\u043c\u0435\u0440\u044b: \u0441\u0435\u0442\u0435\u0432\u044b\u0435 \u0437\u0430\u043f\u0440\u043e\u0441\u044b, \u043e\u0431\u0440\u0430\u0449\u0435\u043d\u0438\u044f \u043a \u0444\u0430\u0439\u043b\u043e\u0432\u043e\u0439 \u0441\u0438\u0441\u0442\u0435\u043c\u0435), \u0430 \u0434\u0435\u043b\u0430\u0442\u044c \u0447\u0442\u043e-\u0442\u043e \u043f\u043e\u043b\u0435\u0437\u043d\u043e\u0435.\n\u0414\u0440\u0443\u0433\u0438\u043c\u0438 \u0441\u043b\u043e\u0432\u0430\u043c\u0438, \u0430c\u0438\u043d\u0445\u0440\u043e\u043d\u043d\u043e\u0441\u0442\u044c \u043f\u043e\u043b\u0435\u0437\u043d\u0430 \u0432 \u0443\u0441\u043b\u043e\u0432\u0438\u044f\u0445 \u0431\u043e\u043b\u044c\u0448\u043e\u0433\u043e \u043a\u043e\u043b\u0438\u0447\u0435\u0441\u0442\u0432\u0430 \u043e\u043f\u0435\u0440\u0430\u0446\u0438\u0439 \u0432\u0432\u043e\u0434\u0430\/\u0432\u044b\u0432\u043e\u0434\u0430 \u043f\u0440\u0438 \u0432\u044b\u0441\u043e\u043a\u0438\u0445\n\u0442\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u044f\u0445 \u043f\u043e \u0443\u0442\u0438\u043b\u0438\u0437\u0430\u0446\u0438\u0438 CPU.<\/p>\n<p>\u0421\u0435\u0439\u0447\u0430\u0441 \u044d\u0442\u0430 \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u0430 \u043d\u0438\u0432\u0435\u043b\u0438\u0440\u0443\u0435\u0442\u0441\u044f \u043d\u0430 \u0430\u0440\u0445\u0438\u0442\u0435\u043a\u0442\u0443\u0440\u043d\u043e\u043c \u0443\u0440\u043e\u0432\u043d\u0435, \u0430 \u0438\u043c\u0435\u043d\u043d\u043e \u0437\u0430\u043f\u0443\u0441\u043a\u043e\u043c php \u0432 \u0432\u0438\u0434\u0435 \u043c\u043e\u0434\u0443\u043b\u044f\n\u043a \u0441\u0442\u043e\u0440\u043e\u043d\u043d\u0435\u043c\u0443 http-\u0441\u0435\u0440\u0432\u0435\u0440\u0443 \u0432 \u0440\u0435\u0436\u0438\u043c\u0435 \u043c\u0435\u043d\u0435\u0434\u0436\u0435\u0440\u0430 \u043f\u0440\u043e\u0446\u0435\u0441\u0441\u043e\u0432. \u041f\u0440\u043e\u0446\u0435\u0441\u0441\u044b \u043d\u0435\u0437\u0430\u0432\u0438\u0441\u0438\u043c\u044b, \u043e\u0434\u0438\u043d \u043f\u0440\u043e\u0446\u0435\u0441\u0441 \u043d\u0435 \u043c\u043e\u0436\u0435\u0442\n\u0437\u0430\u043c\u0435\u0434\u043b\u0438\u0442\u044c \u0432\u044b\u043f\u043e\u043b\u043d\u0435\u043d\u0438\u0435 \u0434\u0440\u0443\u0433\u043e\u0433\u043e \u0438\u043b\u0438 \u043a\u0430\u043a-\u0442\u043e \u043d\u0430\u043f\u0440\u044f\u043c\u0443\u044e \u043d\u0430\u0440\u0443\u0448\u0438\u0442\u044c \u0435\u0433\u043e \u0440\u0430\u0431\u043e\u0442\u0443. \u0422\u0430\u043a\u0436\u0435 \u043f\u0440\u0438\u044f\u0442\u043d\u044b\u043c \u0431\u043e\u043d\u0443\u0441\u043e\u043c \u0434\u0430\u0435\u0442\u0441\u044f\n&quot;\u0431\u0435\u0441\u043f\u043b\u0430\u0442\u043d\u0430\u044f&quot; \u043f\u0430\u0440\u0430\u043b\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u044c - \u043f\u0440\u043e\u0446\u0435\u0441\u0441\u044b \u043c\u043e\u0433\u0443\u0442 \u0431\u044b\u0442\u044c \u0440\u0430\u0441\u043a\u0438\u0434\u0430\u043d\u044b \u0441\u0438\u0441\u0442\u0435\u043c\u043e\u0439 \u043d\u0430 \u0440\u0430\u0437\u043d\u044b\u0435 \u044f\u0434\u0440\u0430 \u043f\u0440\u043e\u0446\u0435\u0441\u0441\u043e\u0440\u0430.<\/p>\n<p>\u042d\u0442\u043e \u043f\u0440\u043e\u0441\u0442\u043e\u0435 \u0440\u0435\u0448\u0435\u043d\u0438\u0435, \u043e\u043d\u043e \u0440\u0430\u0431\u043e\u0442\u0430\u0435\u0442 \u0432\u043f\u043e\u043b\u043d\u0435 \u043f\u0440\u0438\u0435\u043c\u043b\u0435\u043c\u043e, \u043e\u0434\u043d\u0430\u043a\u043e \u0432 \u0440\u0430\u043c\u043a\u0430\u0445 \u043a\u0430\u0436\u0434\u043e\u0433\u043e \u043e\u0442\u0434\u0435\u043b\u044c\u043d\u043e\u0433\u043e \u043f\u0440\u043e\u0446\u0435\u0441\u0441\u0430\n\u043c\u044b \u0432\u0441\u0435 \u0440\u0430\u0432\u043d\u043e \u0436\u0434\u0451\u043c. \u0411\u0435\u0437\u043f\u043e\u043b\u0435\u0437\u043d\u044b\u0435 \u043d\u0430\u043a\u043b\u0430\u0434\u043d\u044b\u0435 \u0440\u0430\u0441\u0445\u043e\u0434\u044b \u043d\u0430 \u043f\u0435\u0440\u0435\u043a\u043b\u044e\u0447\u0435\u043d\u0438\u0435 \u043c\u0435\u0436\u0434\u0443 \u043f\u0440\u043e\u0446\u0435\u0441\u0441\u0430\u043c\u0438 \u0438 \u043e\u0442\u0441\u0442\u0443\u0442\u0441\u0432\u0438\u0435\n\u0432\u043e\u0437\u043c\u043e\u0436\u043d\u043e\u0441\u0442\u0438 \u043e\u0440\u0433\u0430\u043d\u0438\u0437\u0430\u0446\u0438\u0438 [\u043a\u043e\u043e\u043f\u0435\u0440\u0430\u0442\u0438\u0432\u043d\u043e\u0439 \u043c\u043d\u043e\u0433\u043e\u0437\u0430\u0434\u0430\u0447\u043d\u043e\u0441\u0442\u0438] \u0432 \u0441\u043e\u0432\u043e\u043a\u0443\u043f\u043d\u043e\u0441\u0442\u0438 \u0434\u0430\u044e\u0442 \u0440\u044f\u0434 \u043e\u0433\u0440\u0430\u043d\u0438\u0447\u0435\u043d\u0438\u0439,\n\u043a\u043e\u0442\u043e\u0440\u044b\u0435 \u043d\u0435 \u043f\u043e\u0437\u0432\u043e\u043b\u044f\u044e\u0442 \u043f\u0438\u0441\u0430\u0442\u044c \u043d\u0430 PHP \u043f\u043e\u043b\u043d\u043e\u0446\u0435\u043d\u043d\u044b\u0435 \u043f\u0440\u0438\u043b\u043e\u0436\u0435\u043d\u0438\u044f \u0440\u0435\u0430\u043b\u044c\u043d\u043e\u0433\u043e \u0432\u0440\u0435\u043c\u0435\u043d\u0438.<\/p>\n<blockquote>\n<p>\u0410 \u0447\u0442\u043e \u043c\u0435\u0448\u0430\u0435\u0442?<\/p>\n<\/blockquote>\n<p>\u0412 \u0442\u0435\u0445\u043d\u0438\u0447\u0435\u0441\u043a\u043e\u043c \u0441\u043c\u044b\u0441\u043b\u0435 - \u043d\u0438\u0447\u0435\u0433\u043e. \u041c\u0435\u0448\u0430\u0435\u0442 \u0442\u043e\u043b\u044c\u043a\u043e \u043d\u0435\u043f\u043e\u043d\u0438\u043c\u0430\u043d\u0438\u0435 \u043a\u0430\u043a \u0441\u043e\u0431\u0441\u0442\u0432\u0435\u043d\u043d\u043e \u043d\u0430\u0447\u0430\u0442\u044c \u043f\u0438\u0441\u0430\u0442\u044c \u0442\u0430\u043a\u043e\u0439 \u043a\u043e\u0434.\n\u0427\u0442\u043e\u0436, \u0434\u0430\u0432\u0430\u0439\u0442\u0435 \u0440\u0430\u0437\u0431\u0438\u0440\u0430\u0442\u044c\u0441\u044f. \u041a \u043a\u043e\u043d\u0446\u0443 \u044d\u0442\u043e\u0439 \u0441\u0442\u0430\u0442\u044c\u0438 \u0443 \u043d\u0430\u0441 \u0431\u0443\u0434\u0435\u0442 \u043f\u043e\u043b\u043d\u043e\u0441\u0442\u044c\u044e \u0440\u0430\u0431\u043e\u0442\u043e\u0441\u043f\u043e\u0441\u043e\u0431\u043d\u044b\u0439 \u043f\u0440\u0438\u043c\u0435\u0440 \u043a\u043e\u0434\u0430 \u0434\u043b\u044f \u043e\u0440\u0433\u0430\u043d\u0438\u0437\u0430\u0446\u0438\u0438\n\u043a\u043e\u043e\u043f\u0435\u0440\u0430\u0442\u0438\u0432\u043d\u043e\u0439 \u043c\u043d\u043e\u0433\u043e\u0437\u0430\u0434\u0430\u0447\u043d\u043e\u0441\u0442\u0438 \u0441 event-loop, \u0442\u0430\u0439\u043c\u0435\u0440\u0430\u043c\u0438, \u0430\u0441\u0438\u043d\u0445\u0440\u043e\u043d\u043d\u043e\u0441\u0442\u044c\u044e \u0438 \u0442.\u0434.<\/p>\n<p>\u0427\u0442\u043e\u0431\u044b \u0432 \u043e\u0447\u0435\u0440\u0435\u0434\u043d\u043e\u0439 \u0440\u0430\u0437 \u043d\u0435 \u0440\u0430\u0437\u0436\u0435\u0432\u044b\u0432\u0430\u0442\u044c \u0432\u0441\u0435 \u0442\u0435\u0440\u043c\u0438\u043d\u044b - \u0432\u043e\u0442 \u0441\u0441\u044b\u043b\u043a\u0438 \u043d\u0430 \u0441\u0442\u0430\u0442\u044c\u0438 \u043f\u043e \u0442\u0435\u043c\u0435:\n[...]<\/p>\n<blockquote>\n<p>\u043f\u0438\u0448\u0435\u043c \u0448\u0435\u0434\u0443\u043b\u0435\u0440<\/p>\n<\/blockquote>\n<p>\u0418\u0442\u0430\u043a, \u043f\u0440\u0435\u0434\u0441\u0442\u0430\u0432\u0438\u043c \u0447\u0442\u043e \u0443 \u043d\u0430\u0441 \u0435\u0441\u0442\u044c \u0437\u0430\u0434\u0430\u0447\u0430 \u0441\u0445\u043e\u0434\u0438\u0442\u044c \u043f\u043e \u0441\u0435\u0442\u0438, \u043f\u043e\u0441\u0447\u0438\u0442\u0430\u0442\u044c \u0447\u0442\u043e-\u0442\u043e \u043d\u0430 \u043e\u0441\u043d\u043e\u0432\u0435\n\u043f\u043e\u043b\u0443\u0447\u0435\u043d\u043d\u044b\u0445 \u0434\u0430\u043d\u043d\u044b\u0445 \u0438 \u0437\u0430\u043f\u0438\u0441\u0430\u0442\u044c \u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442 \u043d\u0430 \u0434\u0438\u0441\u043a, \u043e\u0447\u0435\u043d\u044c \u0442\u0430\u043a\u043e\u0439 \u0442\u0438\u043f\u0438\u0447\u043d\u044b\u0439 \u043d\u0430\u0431\u043e\u0440 \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0439.\n\u0414\u043b\u044f \u0443\u0434\u043e\u0431\u0441\u0442\u0432\u0430, \u0437\u0430\u043f\u0438\u0448\u0435\u043c \u0432 \u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442 \u0440\u0430\u0431\u043e\u0442\u044b \u0442\u0430\u043a\u0436\u0435 \u0432\u0440\u0435\u043c\u0435\u043d\u043d\u044b\u0435 \u043e\u0442\u043c\u0435\u0442\u043a\u0438 \u043d\u0430\u0448\u0438\u0445 \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0439.<\/p>\n<p>$data = file_get_contents('');\n$prepared = prepare($data);\nfile_put_contents(data, 'name');\necho 'done';<\/p>\n<p>\u0422\u0430\u043a \u043a\u0430\u043a \u043a\u0430\u0436\u0434\u044b\u0439 \u0441\u043b\u0435\u0434\u0443\u044e\u0449\u0438\u0439 \u044d\u0442\u0430\u043f \u044f\u0432\u043b\u044f\u0435\u0442\u0441\u044f \u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442\u043e\u043c \u0440\u0430\u0431\u043e\u0442\u044b \u043f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0435\u0433\u043e, \u0432\u043e\u0437\u043d\u0438\u043a\u0430\u0435\u0442 \u043c\u044b\u0441\u043b\u044c\n\u0447\u0442\u043e \u043d\u0438\u0447\u0435\u0433\u043e \u0443\u0441\u043a\u043e\u0440\u0438\u0442\u044c \u043d\u0435\u043b\u044c\u0437\u044f \u0447\u0438\u0441\u0442\u043e \u043b\u043e\u0433\u0438\u0447\u0435\u0441\u043a\u0438. \u041e\u0434\u043d\u0430\u043a\u043e, \u0442\u0443\u0442 \u043f\u0440\u0438\u043b\u0435\u0442\u0430\u0435\u0442 \u0442\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u0435\n&quot;\u0430 \u0434\u0430\u0432\u0430\u0439\u0442\u0435 \u0441\u043a\u0430\u0447\u0438\u0432\u0430\u0442\u044c \u043d\u0435 1 \u0440\u0435\u0441\u0443\u0440\u0441, \u0430 \u043f\u0440\u043e\u0438\u0437\u0432\u043e\u043b\u044c\u043d\u043e\u0435 \u043a\u043e\u043b-\u0432\u043e, \u0430 \u0435\u0449\u0435\n\u0431\u044b \u0432 \u0440\u0435\u0430\u043b\u044c\u043d\u043e\u043c \u0432\u0440\u0435\u043c\u0435\u043d\u0438 \u043f\u0440\u043e\u0433\u0440\u0435\u0441\u0441 \u0432\u0438\u0434\u0435\u0442\u044c. \u0410 \u0435\u0449\u0435 \u0431\u044b \u043e\u0442\u043c\u0435\u043d\u044f\u0442\u044c \u0447\u0442\u043e \u043f\u043e\u0434\u0432\u0438\u0441\u043b\u043e...&quot;<\/p>\n<p>\u0414\u043b\u044f \u043d\u0430\u0447\u0430\u043b\u0430 \u043f\u0440\u043e\u0431\u0443\u0435\u043c \u0434\u043e\u043f\u0438\u043b\u0438\u0442\u044c \u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0443\u044e\u0449\u0438\u0439 \u043a\u043e\u0434:<\/p>\n<p>function job() {\n$data = file_get_contents('');\n$prepared = prepare($data);\nfile_put_contents(data, 'name');\n}<\/p>\n<p>$urls = [];\nforeach($urls as $url) {\njob($url);\n}<\/p>\n<blockquote>\n<p>\u0432 \u0447\u0435\u043c \u043e\u0442\u043b\u0438\u0447\u0438\u044f \u043e\u0442 \u0441\u0438\u043d\u0445\u0440\u043e\u043d\u043d\u043e\u0433\u043e \u043a\u043e\u0434\u0430\n\u0432\u043d\u0443\u0442\u0440\u0438 \u0438 \u0441\u043d\u0430\u0440\u0443\u0436\u0438, \u0434\u0435\u0431\u0430\u0433, \u0441\u0435\u0440\u0432\u0435\u0440 \u0438 \u043a\u0440\u043e\u043d\n\u0431\u043e\u043d\u0443\u0441\n\u043d\u0435\u0441\u043a\u043e\u043b\u044c\u043a\u043e \u044f\u0434\u0435\u0440 \u0438 \u0437\u0430\u043c\u0435\u0440\u044b<\/p>\n<\/blockquote>\n","type":"module"}]
-        }
-      },
-      methods: {
-        changeActive(page) {
-          this.pages.forEach(page => page.active = false);
-          page.active = true;
-        },
-        filterByType(type) {
-          return this.pages.filter(page => page.type === type);
-        },
-      },
-      computed: {
-        getActive() {
-          return this.pages.find(page => page.active === true);
-        },
-      },
-    }).mount('#app')
-  </script>
 </head>
 <body>
-<div id="app" v-cloak class="w-screen h-screen antialiased text-slate-800 selection:bg-blue-600 selection:text-white">
-  <div class="flex flex-col relative w-screen">
-    <div id="menu" class="bg-gray-900 min-h-screen z-10 text-slate-300 w-76 fixed left-0 h-screen">
+<nav id="menu">
+  <header>
+    <h1>Snidget <span>(alpha)</span></h1>
+    <p>Документация [RU]</p>
+  </header>
+  <h2>🪄 Основные разделы</h2>
+  <a href="#intro"><b>Концепция</b><small>Для чего нужен этот фреймворк</small></a>
+<a href="#base"><b>Основы</b><small>Базовые понятия</small></a>
+<a href="#http"><b>HTTP</b><small>Роутинг, контроллеры, посредники</small></a>
+<a href="#cli"><b>CLI</b><small>Консольные команды</small></a>
+<a href="#database"><b>Базы данных</b><small>Работа с персистентными данными</small></a>
+<a href="#extra"><b>Расширение функционала</b><small>PSR, события, модули, инфраструктура</small></a>
+<a href="#front"><b>Фронт</b><small>Немного о уровне представления</small></a>
 
-      <div id="logo" class="my-4 px-6">
-        <h1 class="text-lg md:text-2xl font-bold text-white">Snidget <span class="text-blue-500">(alpha)</span></h1>
-        <p class="text-slate-500 text-sm">Документация [RU]</p>
-      </div>
+  <h2>🧐 Справочная информация</h2>
+  <a href="#psr"><b>PSR имплементации</b><small></small></a>
+<a href="#attributes"><b>Список атрибутов</b><small></small></a>
+<a href="#events"><b>Список событий</b><small></small></a>
 
-      <div class="p-4 text-xl">🪄 Основные разделы</div>
-      <div class="w-full" v-for="page in filterByType('part')">
-        <a
-                href="#"
-                class="w-full px-2 inline-flex space-x-2 items-center border-b border-slate-700 py-3 transition ease-linear duration-50"
-                :class="{[`bg-blue-800`]: page.active}"
-                @click="changeActive(page)"
-        >
-          <div class="flex flex-col px-4">
-            <span class="text-lg font-bold leading-5 text-white">{{ page.title }}</span>
-            <span class="text-sm text-white/50 hidden md:block">{{ page.overview }}</span>
-          </div>
-        </a>
-      </div>
+  <h2>🎁 Модули</h2>
+  <a href="#admin"><b>Admin</b><small></small></a>
+<a href="#async"><b>Async</b><small></small></a>
 
-      <div class="p-4 text-xl">🧐 Справочная информация</div>
-      <div class="w-full" v-for="page in filterByType('addition')">
-        <a
-                href="#"
-                class="w-full px-2 inline-flex space-x-2 items-center border-b border-slate-700 py-3 transition ease-linear duration-50"
-                :class="{[`bg-blue-800`]: page.active}"
-                @click="changeActive(page)"
-        >
-          <div class="flex flex-col px-4">
-            <span class="text-lg font-bold leading-5 text-white">{{ page.title }}</span>
-            <span class="text-sm text-white/50 hidden md:block">{{ page.overview }}</span>
-          </div>
-        </a>
-      </div>
+</nav>
+<main>
+  <section id="intro" class="page">
+<blockquote>
+<p>Snidget - это умный PHP фреймворк</p>
+</blockquote>
+<p>Основное отличие от других фреймворков состоит в экстрeмальной лаконичности при наличии достаточного набора
+возможностей, которыми должен обладать современный web-фреймворк. Код ядра занимает чуть больше 500 строчек кода
+(Logical Lines of Code), внешние зависимости ограничены только PSR контрактами и dev библиотеками для контроля
+качества кода.</p>
+<p>Из этого следуют некоторые положительные и отрицательные особенности:</p>
+<ul>
+<li>Легкость поддержки. В данный момент, разработка ведется в режиме &quot;выходного дня&quot;, и наврятли
+проекту потребуется больше ресурсов 😅</li>
+<li>Современность. Используются возможности включая PHP 8.6, не поддерживаются старые подходы,
+которые имеют более качественные аналоги (например, match вместо switch).</li>
+<li>Простота понимания. Проект хорошо задокументирован - средний PHP разработчик может изучить все возможности
+фреймворка за пару часов.</li>
+<li>Образовательная направленность. Snidget разрабатывается с целью понять, отточить и реализовать на практике
+передовые концепции разработки ПО.</li>
+<li>Местами допускаются хаки в угоду лаконичности и личных предпочтений автора.</li>
+<li>На данный момент отсутствует обратная совместимость, <strong>не рекомендуется</strong> использование в production окружении
+(см. &quot;гайд по осторожному использованию&quot;).</li>
+<li>Минимум абстракций и как следствие - низкая гибкость кода. Проект развивается по утилитарному принципу - фичи
+добавляются &quot;по требованию&quot;, а не заранее, на какие-то теоретические случаи.</li>
+<li>Фреймворк пишется под конкретное, специально подготовленное для него окружение, поставляемое как docker-контейнер.
+Однако, в нем нет ничего специфичного - он основан на официальном alpine образе PHP.</li>
+</ul>
+<p><strong>Итого, этот фреймворк отлично подходит для написания pet-проектов или обучения web-разработке, если
+популярные фрейворки могут быть излишне сложными для вашей задачи</strong></p>
+<h3>Поехали?</h3>
+<p>Для оптимального изучения рекомендуется развернуть пустой проект. Для этого достаточно выполнить команду (linux / iOS):</p>
+<pre><code>wget domain.com/setup?name=example ...
+</code></pre>
+<p>или, используя composer:</p>
+<pre><code>composer create-project pilot114/snidget example
+cd example/docker &amp;&amp; make serve
+</code></pre>
+<p>ПРИМЕР<br />
+Install Context Generator<br />
+Download and install the tool using our installation script:</p>
+<pre><code>curl -sSL https://raw.githubusercontent.com/context-hub/generator/main/download-latest.sh | sh
+</code></pre>
+<p>This installs the ctx command to your system (typically in /usr/local/bin).</p>
+</section>
+<section id="base" class="page">
+<h3>Файловая структура приложения</h3>
+<pre><code>public - публичные скрипты
+bin    - консольные скрипты
+data   - данные (файловое хранилище)
+dev    - всё, что не нужно непосредственно для работы проекта
+src - код проекта
+ ┣━━ HTTP - HTTP хэндлеры (Controllers и Middlewares)
+ ┣━━ CLI - CLI хэндлеры
+ ┣━━ Module - поставляемые модули фреймворка
+ ┣━━ Schema - объекты для передачи данных
+ ┣━━ Domain - собственная доменная логика проекта
+ ┗━━ container.php - конфигурация контейнера зависимостей
+</code></pre>
+<p>По мере роста проекта, рекомендуется высокосвязные части проекта выносить в модули.
+Структура модуля полностью копирует код в src</p>
+<p><em>bin</em> и <em>public</em> по умолчанию содержат точки входа в приложение (<em>bin/app</em> и <em>public/index.php</em> соответственно),
+однако допускается размещать в них дополнительные скрипты, которым не требуется bootstrap фреймворка</p>
+<h3>Логическая структура приложения</h3>
+<p><img src="./assets/schema.png" alt="3 слойная архитектура" /></p>
+<p>Фреймворк подготавливает надежную основу для уровня приложения и
+уровня доступа к данным, оставляя уровень логики (Domain) под полным контролем разработчика.
+Если консоль или наоборот, веб часть не нужна - достаточно просто удалить соотвествующие директории.
+Presentation layer (aka UI) - полностью отделен от фреймворка и должен быть реализован на клиенте</p>
+<p>Обратите внимание, пунктирными стрелками обозначены взаимодействия с помощью объектов передачи
+данных - DTO (располагаются в директории <em>Schema</em>)</p>
+<p>Полезные ссылки:</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Multitier_architecture">Многослойная архитектура</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Command%E2%80%93query_separation">CQRS</a></li>
+</ul>
+<h3>Админ.панель</h3>
+<p>Один из встроенных модулей - Admin - позволяет просматривать структуру проекта &quot;на лету&quot;</p>
+<p><img src="./assets/admin.png" alt="админка" /></p>
+</section>
+<section id="http" class="page">
+<h3>Путь запроса</h3>
+<p>Все запросы, кроме статики из <em>public</em>, nginx передаёт в <em>public/index.php</em>, где запускается ядро:</p>
+<pre><code>Kernel → Router → посредники (луковица) → действие контроллера → Response
+</code></pre>
+<p>Ядро не знает, что вернёт действие: строку, массив или готовый Response - нужный ответ оно соберёт само.
+По пути отправляются события REQUEST, RESPONSE и, при ошибке, ERROR (см. &quot;Список событий&quot;).</p>
+<h3>Роутинг</h3>
+<p>Роут - это атрибут <code>Route</code> на публичном методе контроллера. Контроллеры ищутся в <em>App/HTTP/Controller</em>
+и в <em>App/Module/*/HTTP/Controller</em>, никакой ручной регистрации не нужно.</p>
+<pre><code>#[Route(prefix: 'api/v1')]
+class Api
+{
+    #[Route(regex: 'post')]
+    public function list(): array { ... }
 
-      <div class="p-4 text-xl">🎁 Модули</div>
-      <div class="w-full" v-for="page in filterByType('module')">
-        <a
-                href="#"
-                class="w-full px-2 inline-flex space-x-2 items-center border-b border-slate-700 py-3 transition  ease-linear duration-50"
-                :class="{[`bg-blue-800`]: page.active}"
-                @click="changeActive(page)"
-        >
-          <div class="flex flex-col px-4">
-            <span class="text-lg font-bold leading-5 text-white">{{ page.title }}</span>
-            <span class="text-sm text-white/50 hidden md:block">{{ page.overview }}</span>
-          </div>
-        </a>
-      </div>
-    </div>
+    #[Route(regex: 'post/(?&lt;id&gt;\d+)')]
+    public function get(int $id): array { ... }
 
-    <div class="markdown-body col-span-12 py-12 ml-96 max-w-4xl" v-html="getActive.content"></div>
-  </div>
-</div>
+    #[Route(regex: 'post', method: 'POST')]
+    public function create(Request $request): Response { ... }
+}
+</code></pre>
+<p>Правила простые:</p>
+<ul>
+<li><code>regex</code> - регулярное выражение для URI без слэшей по краям. Сравнивается со всем URI целиком и без учета
+регистра (<code>#^regex$#i</code>), query-строка в сравнении не участвует</li>
+<li><code>prefix</code> задается на классе и приклеивается ко всем роутам класса через <code>/</code>. Задать на одном атрибуте
+и <code>prefix</code>, и <code>regex</code> нельзя</li>
+<li><code>method</code> - HTTP метод, по умолчанию <code>GET</code></li>
+<li>именованные группы регулярки (<code>(?&lt;id&gt;\d+)</code>) передаются в действие одноименными параметрами</li>
+</ul>
+<p>Роуты проверяются в порядке загрузки: сначала <em>App/HTTP/Controller</em>, затем модули по алфавиту.
+Побеждает первый совпавший. Если URI совпал, а метод - нет, клиент получит 405, если не совпало ничего - 404.</p>
+<p>Обратите внимание: в модуле Core есть роут <code>.*</code> (контроллер <code>Main</code>), который ловит все GET запросы.
+GET роуты модулей, которые идут по алфавиту после Core, до него не доберутся - такие модули стоит
+называть раньше по алфавиту или убрать &quot;ловушку&quot; из Core. По этой же причине на неизвестный URI с методом,
+отличным от GET, ответ будет 405, а не 404.</p>
+<p>Полный список зарегистрированных роутов в порядке проверки показывает админка: <em>/admin/routes</em>.</p>
+<h3>Контроллеры</h3>
+<p>Контроллер - обычный класс без базового класса. Параметры действия заполняет контейнер зависимостей:</p>
+<ul>
+<li>именованные группы из URI - по имени параметра (<code>int $id</code>)</li>
+<li>классы - автовайрингом: <code>Request</code>, <code>Container</code>, <code>Router</code>, ваши сервисы и DTO</li>
+<li>остальное - значениями по умолчанию</li>
+</ul>
+<p>Например:</p>
+<pre><code>#[Route(regex: 'hello/(?&lt;name&gt;\w+)')]
+public function hello(string $name, Request $request): string
+{
+    return &quot;Привет, $name! Ты пришел с &quot; . ($request-&gt;getHeader('user-agent') ?? 'неизвестно чего');
+}
+</code></pre>
+<p>Что можно вернуть из действия:</p>
+<ul>
+<li><code>Response</code> - отправляется как есть</li>
+<li>строку - станет телом ответа. Если строка - валидный JSON, заголовок <code>Content-Type: application/json</code>
+выставится сам</li>
+<li>всё остальное (массивы, DTO, коллекции) - будет сериализовано в JSON через <code>Response::json()</code></li>
+</ul>
+<p><code>Response</code> неизменяемый: <code>withStatus()</code> и <code>withHeader()</code> возвращают копию, а результат, который забыли
+присвоить, PHP предупредит благодаря атрибуту <code>#[\NoDiscard]</code>.</p>
+<pre><code>return Response::json(['id' =&gt; $id], 201);
+return Response::redirect('/admin');
+return new Response('Нет доступа', 403)-&gt;withHeader('X-Reason', 'auth');
+</code></pre>
+<p><code>Request</code> - простой объект с публичными полями: <code>uri</code>, <code>method</code>, <code>headers</code>, <code>payload</code> (тело запроса,
+разобранное как JSON), <code>query</code>, <code>cookies</code>, <code>requestTimeMs</code>. Имена заголовков хранятся в верхнем регистре
+(<code>USER-AGENT</code>), а <code>getHeader()</code> принимает имя в любом регистре.</p>
+<h3>Посредники (middleware)</h3>
+<p>Посредники лежат в <em>HTTP/Middleware</em> (приложения или модуля) и оборачивают вызов действия как слои луковицы.
+Каждый слой - метод вида:</p>
+<pre><code>public function auth(Request $request, Closure $next, Logger $logger): mixed
+{
+    if ($request-&gt;getHeader('authorization') === null) {
+        return new Response('Unauthorized', 401);
+    }
+
+    return $next($request);
+}
+</code></pre>
+<p><code>$request</code> и <code>$next</code> передает ядро, остальные параметры - контейнер. Слой может вернуть свой ответ, не вызывая
+<code>$next</code> (как в примере выше), или изменить результат следующих слоев.</p>
+<p>К чему привязан посредник, определяет атрибут <code>Bind</code>:</p>
+<pre><code>#[Bind]                                                  // ко всем действиям
+#[Bind(class: Api::class)]                               // ко всем действиям контроллера Api
+#[Bind(class: Api::class, method: 'create')]             // только к Api::create
+#[Bind(priority: 100)]                                   // чем больше приоритет, тем раньше выполняется
+</code></pre>
+<p><code>Bind</code> можно повесить на класс посредника - тогда слоями станут <strong>все</strong> его методы (поэтому служебные методы
+в такой класс лучше не добавлять), или на отдельный метод - тогда слоем будет только он.</p>
+<p>Работает и обратная привязка - со стороны контроллера. В этом случае <code>class</code> и <code>method</code> указывают
+на посредника (без <code>method</code> подключаются все методы посредника):</p>
+<pre><code>#[Bind(class: BuiltIn::class, method: 'auth', priority: 10)]
+public function create(Request $request): Response { ... }
+</code></pre>
+<p>Список посредников каждого роута, уже отсортированный по приоритету, тоже есть в <em>/admin/routes</em>.</p>
+<h3>Валидация входных данных</h3>
+<p>Встроенный посредник <code>BuiltIn::duckValidate</code> (модуль Core) работает по принципу утиной типизации:
+если тело запроса - JSON-объект, он ищет в <em>Schema/API</em> DTO с <strong>точно таким же</strong> набором полей
+(порядок не важен) и проверяет значения по атрибутам <code>Assert</code>.</p>
+<pre><code>class UserLogin extends Type
+{
+    #[Assert(minLength: 4, maxLength: 24)]
+    public string $login = '';
+
+    #[Assert(minLength: 8, maxLength: 24)]
+    public string $password = '';
+}
+</code></pre>
+<p>Если схема не найдена или проверки не прошли - действие не вызывается, клиент получает 422 со списком ошибок:</p>
+<pre><code>{&quot;errors&quot;: [&quot;Поле App\\Schema\\API\\UserLogin::login не прошло валидацию: Значение короче 4 символов&quot;]}
+</code></pre>
+<p>Проверенные данные пока не превращаются в DTO автоматически: в действии они доступны как массив
+<code>$request-&gt;payload</code>, а DTO при необходимости собирается вручную - <code>new UserLogin($request-&gt;payload)</code>.</p>
+<p>Две схемы с одинаковым набором полей - ошибка: утка не сможет понять, какая из них имелась в виду.
+Доступные проверки перечислены в &quot;Списке атрибутов&quot;.</p>
+<h3>Ошибки</h3>
+<p>Любое исключение из действия или посредника превращается в ответ 500 <code>Internal Server Error</code>, а подробности
+с трейсом уходят в лог PHP (<code>error_log</code>) - наружу устройство сервера не раскрывается.
+Чтобы ответить 404 или 405, достаточно бросить <code>SnidgetException</code> с соответствующим кодом:</p>
+<pre><code>$post = $table-&gt;read($id) ?: throw new SnidgetException(&quot;Пост $id не найден&quot;, 404);
+</code></pre>
+<p>Полезные ссылки:</p>
+<ul>
+<li><a href="https://github.com/esbenp/onion">Луковичная архитектура посредников</a></li>
+<li><a href="https://ru.wikipedia.org/wiki/%D0%A3%D1%82%D0%B8%D0%BD%D0%B0%D1%8F_%D1%82%D0%B8%D0%BF%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F">Утиная типизация</a></li>
+</ul>
+</section>
+<section id="cli" class="page">
+<h3>Запуск команд</h3>
+<p>Точка входа консоли - <em>bin/app</em>. Команда задается в формате <code>Класс:метод</code>:</p>
+<pre><code>bin/app Test:run -a hello -a world -b=test -de one --gamma test2 two three1 three2
+</code></pre>
+<p>Запуск без аргументов выводит список всех команд с описаниями:</p>
+<pre><code>$ bin/app
+AutoComplete
+    run	auto-complete for commands and options
+Database
+    run	Test database
+Test
+    run	Creates a new user
+</code></pre>
+<p>Команды запускаются внутри docker-контейнера: <code>make enter</code> открывает в нем shell (zsh) в директории <em>/app</em>.</p>
+<h3>Команды</h3>
+<p>Команда - публичный метод с атрибутом <code>Command</code> в классе из директории <em>Command</em> (приложения или модуля).
+Имя команды - короткое имя класса и имя метода, описание берется из атрибута:</p>
+<pre><code>class Test
+{
+    #[Command('Creates a new user')]
+    public function run(TestInput $data, Logger $logger): void
+    {
+        echo &quot;success!\n&quot;;
+        dump($data);
+    }
+}
+</code></pre>
+<p>Параметры метода заполняет контейнер зависимостей, как и в HTTP контроллерах. Если среди параметров
+есть DTO (наследник <code>Snidget\Kernel\Schema\Type</code>), он будет заполнен аргументами командной строки.</p>
+<p>Модульный префикс у команд пока не поддерживается, поэтому имена классов команд должны быть уникальны
+во всем приложении.</p>
+<h3>Опции и аргументы</h3>
+<p>Описание входных данных команды - это DTO, публичные свойства которого размечены атрибутом <code>Arg</code>:</p>
+<pre><code>class TestInput extends Type
+{
+    /** @var list&lt;string&gt; */
+    #[Arg('alpha option', short: 'a')]
+    public array $alpha = [];
+
+    #[Arg('beta option', short: 'b')]
+    public ?string $beta = null;
+
+    #[Arg('delta option', short: 'd')]
+    public bool $delta = false;
+
+    #[Arg('first arg', isOption: false)]
+    public string $first = '';
+
+    /** @var list&lt;string&gt; */
+    #[Arg('third arg', isOption: false)]
+    public array $third = [];
+}
+</code></pre>
+<p>По умолчанию <code>Arg</code> описывает <strong>опцию</strong>, с <code>isOption: false</code> - позиционный <strong>аргумент</strong>.</p>
+<p>Опции:</p>
+<ul>
+<li>длинное имя совпадает с именем свойства: <code>--beta=test</code> или <code>--beta test</code></li>
+<li>короткое задается через <code>short</code>: <code>-b test</code>, <code>-btest</code> или <code>-b=test</code></li>
+<li><code>bool</code> - флаг без значения, короткие флаги можно склеивать: <code>-de</code> = <code>-d -e</code></li>
+<li><code>array</code> - опцию можно повторять, значения накапливаются: <code>-a hello -a world</code></li>
+<li>остальные опции необязательны по своей природе, поэтому их тип должен допускать <code>null</code> (<code>?string</code>),
+иначе команда завершится ошибкой</li>
+<li><code>int</code> и <code>float</code> значения приводятся к нужному типу</li>
+</ul>
+<p>Аргументы заполняются по порядку объявления свойств. Аргумент-массив забирает все оставшиеся значения,
+поэтому он должен быть последним. Всё, что идет после <code>--</code>, считается аргументами, даже если начинается с <code>-</code>.</p>
+<p>Неизвестная опция или опция без значения - это исключение с понятным сообщением:</p>
+<pre><code>Fatal error: Uncaught Snidget\Kernel\SnidgetException: Не указано значение опции --beta
+</code></pre>
+<h3>Автодополнение</h3>
+<p>Для zsh в контейнере подключается функция автодополнения команд и их опций (<em>dev/docker/php/completion.zsh</em>).
+Под капотом оно вызывает обычную команду <code>AutoComplete:run</code> модуля Core, которая читает те же атрибуты
+<code>Command</code> и <code>Arg</code> - так что новые команды и опции появляются в подсказках сами.</p>
+<h3>Вывод</h3>
+<p>Для отладочного вывода есть глобальная функция <code>dump()</code> - в консоли она печатает <code>print_r</code> значения,
+в браузере оборачивает его в <code>&lt;pre&gt;</code>. Для цветного вывода заготовлены перечисления <code>CLIColor</code> и <code>CLIStyle</code> (функции, которая их использует, пока нет).</p>
+<p>Полезные ссылки:</p>
+<ul>
+<li><a href="https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap12.html">Соглашения об аргументах командной строки (POSIX)</a></li>
+</ul>
+</section>
+<section id="database" class="page">
+<h3>Подключение</h3>
+<p>Из коробки поддерживается SQLite - база, которой не нужен отдельный сервер, а значит и лишний контейнер.
+Работа с ней построена на PDO и состоит из трех частей:</p>
+<pre><code>ConnectConfig - параметры подключения (dsn, user, password)
+Driver        - соединение и выполнение запросов
+Table         - операции с одной таблицей, схема которой описана DTO
+</code></pre>
+<p>По умолчанию <code>ConnectConfig</code> указывает на базу в памяти (<code>sqlite::memory:</code>): такая база живет ровно один
+HTTP запрос или один запуск команды - удобно для тестов и экспериментов, но не для хранения данных.
+Для файловой базы драйвер создается явно, а файлы удобно хранить в директории <em>data</em> (она не попадает в git):</p>
+<pre><code>$driver = new Driver(new ConnectConfig(dsn: 'sqlite:/app/data/app.db'));
+</code></pre>
+<p>Если файла еще нет, драйвер создаст его сам.</p>
+<p>Контейнер хранит созданные объекты, поэтому достаточно один раз положить в него драйвер с нужной базой -
+дальше автовайринг будет отдавать именно его (подробнее в &quot;Расширении функционала&quot;):</p>
+<pre><code>$container-&gt;get(Driver::class, ['config' =&gt; new ConnectConfig(dsn: 'sqlite:/app/data/app.db')]);
+</code></pre>
+<h3>Запросы</h3>
+<p><code>Driver</code> - тонкая обертка над PDO: только подготовленные запросы, исключения при ошибках,
+строки в виде ассоциативных массивов.</p>
+<pre><code>$driver-&gt;execute('UPDATE people SET age = :age WHERE id = :id', ['age' =&gt; 30, 'id' =&gt; 1]); // bool
+$rows = $driver-&gt;query('SELECT * FROM people WHERE age &gt; :age', ['age' =&gt; 18]);         // list&lt;array&gt;
+$total = $driver-&gt;count('SELECT count(*) FROM people');                                  // int
+</code></pre>
+<p>Транзакции - через замыкание: при любом исключении изменения откатываются, а наружу выбрасывается
+<code>SnidgetException</code> с исходной ошибкой внутри.</p>
+<pre><code>$driver-&gt;transaction(function (Driver $db) {
+    $db-&gt;execute(...);
+    $db-&gt;execute(...);
+});
+</code></pre>
+<p>Для ручного управления есть <code>beginTransaction()</code>, <code>commit()</code> и <code>rollback()</code>.</p>
+<h3>Схема таблицы</h3>
+<p>Схема описывается тем же DTO, которым данные передаются по приложению. Колонки размечаются атрибутом <code>Column</code>,
+DTO для базы принято складывать в <em>Schema/Database</em>:</p>
+<pre><code>class People extends Type
+{
+    #[Column(name: 'id', type: Type::INTEGER, autoincrement: true)]
+    public ?int $id = null;
+
+    #[Column(name: 'name')]
+    public ?string $name = 'test';
+
+    #[Column(name: 'age', isNull: true, default: 18)]
+    public int $age = 18;
+}
+</code></pre>
+<p>Здесь два разных <code>Type</code>: базовый класс DTO (<code>Snidget\Kernel\Schema\Type</code>) и перечисление типов SQLite
+(<code>Snidget\Database\SQLite\Type</code>: <code>NULL</code>, <code>INTEGER</code>, <code>REAL</code>, <code>TEXT</code>, <code>BLOB</code>). Тип колонки берется только
+из атрибута, тип PHP свойства на него не влияет: по умолчанию колонка - <code>TEXT</code>, поэтому <code>age</code> из примера
+вернется из базы строкой <code>&quot;18&quot;</code>. Для чисел тип нужно указать явно.</p>
+<p>Параметры <code>Column</code>: <code>name</code>, <code>type</code>, <code>isNull</code> (по умолчанию колонка <code>NOT NULL</code>), <code>autoincrement</code>
+(делает колонку <code>PRIMARY KEY AUTOINCREMENT</code>), <code>default</code>.</p>
+<h3>Работа с таблицей</h3>
+<p><code>Table</code> связывает драйвер, имя таблицы и DTO-схему:</p>
+<pre><code>$table = $container-&gt;get(Table::class, [
+    'name' =&gt; 'people',
+    'type' =&gt; $container-&gt;get(People::class),
+]);
+
+if (!$table-&gt;exist()) {
+    $table-&gt;create();              // CREATE TABLE по атрибутам Column
+}
+
+$table-&gt;insert(new People(['name' =&gt; 'Bob', 'age' =&gt; 25]));
+$table-&gt;count();                   // int
+$table-&gt;find();                    // все строки
+$table-&gt;read(1);                   // строка по id (или по другому полю: read(25, 'age')), [] если не найдена
+$table-&gt;like('bo', 'name');        // поиск подстроки без учета регистра (только латиница - так устроен LIKE в SQLite)
+</code></pre>
+<p><code>insert()</code> пропускает свойства со значением <code>null</code> - так автоинкрементный <code>id</code> заполняет сама база.
+<code>create('other')</code> создает таблицу копированием другой (<code>CREATE TABLE ... AS SELECT</code>).</p>
+<p>Имена таблиц и полей подставляются в SQL напрямую, поэтому <code>Table</code> проверяет их и выбрасывает исключение
+на всё, что не похоже на идентификатор - имя поля из запроса клиента не превратится в SQL-инъекцию.
+Значения же всегда передаются через параметры.</p>
+<p>Пример работы с таблицей целиком - контроллер <code>App\HTTP\Controller\Api</code> (<em>/api/v1/post</em>).</p>
+<h3>Структура базы</h3>
+<p><code>Meta</code> разбирает схему существующей базы: таблицы, колонки и внешние ключи. Посмотреть на нее можно командой:</p>
+<pre><code>bin/app Database:run
+</code></pre>
+<p>Полезные ссылки:</p>
+<ul>
+<li><a href="https://www.sqlite.org/datatype3.html">Типы данных SQLite</a></li>
+<li><a href="https://www.php.net/manual/ru/book.pdo.php">PDO</a></li>
+</ul>
+</section>
+<section id="extra" class="page">
+<h3>Контейнер зависимостей</h3>
+<p><code>Container</code> - сердце фреймворка: через него создаются контроллеры, посредники, команды и слушатели событий,
+и он же заполняет параметры их методов. Поэтому в большинстве случаев достаточно просто указать
+нужный класс в параметрах - контейнер создаст его вместе со всеми зависимостями.</p>
+<p>Правила разрешения параметров (конструктора или метода), по порядку:</p>
+<ol>
+<li>значение, явно переданное по имени параметра</li>
+<li>объект из контейнера, если тип параметра - класс</li>
+<li>значение по умолчанию</li>
+<li><code>null</code>, если тип его допускает, иначе - исключение</li>
+</ol>
+<p>Каждый созданный объект запоминается, поэтому повторный <code>get()</code> вернет тот же экземпляр -
+по сути, все сервисы являются синглтонами.</p>
+<pre><code>$container-&gt;get(Table::class, ['name' =&gt; 'people', 'type' =&gt; new People()]); // драйвер - автовайрингом
+$container-&gt;get(Table::class, ['name' =&gt; 'other']);   // вернет ту же Table, параметры уже не важны!
+$container-&gt;make(Table::class, ['name' =&gt; 'other', 'type' =&gt; new People()]); // всегда новый объект, он же заменит запомненный
+</code></pre>
+<p>Вызвать метод с автоматически заполненными параметрами можно через <code>call()</code> - именно так ядро вызывает
+действия контроллеров:</p>
+<pre><code>$container-&gt;call(Api::class, 'get', ['id' =&gt; 1]);
+</code></pre>
+<p>Связать абстракцию с реализацией - через <code>link()</code>. Реализацию можно указать классом или замыканием,
+которое выберет класс в момент запроса:</p>
+<pre><code>$container-&gt;link(CacheInterface::class, MemoryCache::class);
+$container-&gt;link(Storage::class, fn(Container $c) =&gt; isCli() ? FileStorage::class : MemoryStorage::class);
+$container-&gt;link(Storage::class);  // убрать связь
+</code></pre>
+<p>Ограничение: автовайринг смотрит только на классы, в том числе абстрактные. Параметр с типом-интерфейсом
+сам не заполнится даже при наличии <code>link()</code> - такой объект нужно запросить явно, <code>get(CacheInterface::class)</code>.</p>
+<p>Циклические зависимости (A → B → A) обнаруживаются сразу, с цепочкой классов в сообщении об ошибке.</p>
+<p>Где настраивать контейнер? Ядро создает его само, а файл <em>App/container.php</em> пока остается примером и
+не подключается. Удобное место - слушатель события START: контейнер можно получить параметром
+(он лежит в самом себе). Консольные команды запускаются без ядра, там настройку придется вызвать явно.</p>
+<pre><code>class Services
+{
+    #[Listen(KernelEvent::START)]
+    public function configure(Container $container): void
+    {
+        $container-&gt;link(Storage::class, FileStorage::class);
+        $container-&gt;get(Driver::class, ['config' =&gt; new ConnectConfig(dsn: 'sqlite:/app/data/app.db')]);
+    }
+}
+</code></pre>
+<h3>Модули</h3>
+<p>Модуль - директория в <em>App/Module</em>, которая повторяет структуру приложения:</p>
+<pre><code>App/Module/Shop
+ ┣━━ Command         - консольные команды
+ ┣━━ HTTP
+ ┃    ┣━━ Controller - контроллеры
+ ┃    ┗━━ Middleware - посредники
+ ┣━━ Schema
+ ┃    ┗━━ API        - DTO для валидации запросов
+ ┗━━ Domain          - логика модуля
+</code></pre>
+<p>Регистрировать модуль не нужно: фреймворк находит директории по шаблону <em>App/Module/*/...</em>
+(класс <code>AppPaths</code>), а слушателей событий ищет во всем <em>App</em>. Удалить модуль - значит удалить его директорию.
+Неймспейс - <code>App\Module\Shop\...</code>, по PSR-4.</p>
+<p>Из коробки есть два модуля:</p>
+<ul>
+<li>Core - главная страница, админка (см. &quot;Admin&quot;), встроенные посредники и служебные команды</li>
+<li>Async - асинхронный HTTP сервер на файберах (см. &quot;Async&quot;)</li>
+</ul>
+<p>Важно помнить про порядок загрузки: сначала код приложения, затем модули по алфавиту.
+От него зависит порядок проверки роутов (см. &quot;HTTP&quot;).</p>
+<h3>События</h3>
+<p>Ядро сообщает о ключевых моментах жизненного цикла событиями, а подписаться на них - значит добавить метод
+с атрибутом <code>#[Listen]</code> в любой класс приложения. Так подключаются логирование, метрики, настройка
+сервисов и прочие сквозные задачи, не трогая ядро. Подробнее - в &quot;Списке событий&quot;.</p>
+<h3>Инфраструктура</h3>
+<p>Проект поставляется вместе с окружением: docker-контейнеры с PHP 8.6 (php-fpm, xdebug) и nginx.
+На машине разработчика нужны только docker и make.</p>
+<pre><code>make build     - собрать образы
+make install   - поставить зависимости (composer install)
+make dev       - запустить nginx + php-fpm, порт задан в dev/docker/.env
+make docs      - собрать эту документацию
+make enter     - shell внутри php-контейнера
+make audit     - уязвимости в зависимостях
+make outdated  - устаревшие зависимости
+</code></pre>
+<p>Внутри контейнера доступны команды контроля качества:</p>
+<pre><code>composer test  - тесты PHPUnit с отчетом о покрытии (dev/tests/coverage)
+composer check - PHPStan на максимальном уровне, Rector и PHPCS - ничего не меняет
+composer fix   - автоматические исправления Rector и PHPCBF
+</code></pre>
+<p><code>composer hook-install</code> подключает git-хуки из <em>dev/git-hooks</em>: перед коммитом прогоняются проверки и тесты.</p>
+<p>Всё, что не нужно для работы самого приложения - docker, тесты, конфиги анализаторов, документация -
+лежит в <em>dev</em>.</p>
+<p>Полезные ссылки:</p>
+<ul>
+<li><a href="https://ru.wikipedia.org/wiki/%D0%92%D0%BD%D0%B5%D0%B4%D1%80%D0%B5%D0%BD%D0%B8%D0%B5_%D0%B7%D0%B0%D0%B2%D0%B8%D1%81%D0%B8%D0%BC%D0%BE%D1%81%D1%82%D0%B8">Внедрение зависимостей</a></li>
+<li><a href="https://www.php-fig.org/psr/psr-11/">PSR-11</a></li>
+</ul>
+</section>
+<section id="front" class="page">
+<h3>Где живет представление</h3>
+<p>В Snidget нет шаблонизатора и нет сборки фронтенда - и это осознанное решение. Уровень представления
+(см. &quot;Основы&quot;) отделен от фреймворка и реализуется на клиенте, а бэкенд отдает данные: обычно JSON,
+который получается сам, если вернуть из действия массив или DTO.</p>
+<p>Получается привычная схема: статическая страница + API.</p>
+<h3>Статика</h3>
+<p>Всё, что лежит в <em>public</em>, nginx отдает напрямую, минуя PHP. Остальные запросы уходят в <em>public/index.php</em>.</p>
+<pre><code>public
+ ┣━━ index.php       - точка входа, трогать не нужно
+ ┗━━ test
+      ┗━━ index.html - доступна по адресу /test/index.html
+</code></pre>
+<p>Индексный файл директории для nginx - только <em>index.php</em>, поэтому HTML страницы открываются по полному имени.
+Если страница и API отдаются с одного адреса, никаких настроек CORS не требуется.</p>
+<h3>Страница без сборки</h3>
+<p>Современному браузеру не нужны ни сборщик, ни фреймворк: <code>fetch</code>, <code>async/await</code> и DOM API работают из коробки.
+Минимальная страница, которая берет данные из API, может выглядеть так:</p>
+<pre><code>&lt;p id=&quot;total&quot;&gt;&lt;/p&gt;
+&lt;ul id=&quot;items&quot;&gt;&lt;/ul&gt;
+
+&lt;script type=&quot;module&quot;&gt;
+    const { total, items } = await (await fetch('/api/v1/post')).json()
+    document.querySelector('#total').textContent = `Всего: ${total}`
+    for (const item of items) {
+        document.querySelector('#items').append(Object.assign(document.createElement('li'), {
+            textContent: `${item.name} (${item.age})`,
+        }))
+    }
+&lt;/script&gt;
+</code></pre>
+<p><code>textContent</code> вставляет данные как текст, а не как разметку, поэтому экранировать их вручную не нужно.</p>
+<p>Так же сделан и этот сайт документации: без внешних библиотек, только HTML, немного CSS и несколько строк JS.
+<code>make docs</code> собирает страницы из markdown файлов в <em>dev/docs/md</em> в один <em>dev/docs/index.html</em>.</p>
+<h3>HTML с сервера</h3>
+<p>Если нужна страница, сформированная на сервере, действие может вернуть строку с HTML - так устроена
+админка (см. &quot;Admin&quot;). Для пары служебных страниц этого достаточно. Данные пользователя перед вставкой
+в разметку нужно экранировать через <code>htmlspecialchars()</code>, а для чего-то большего стоит
+подключить шаблонизатор - например, Twig, через composer и контейнер.</p>
+<p>Полезные ссылки:</p>
+<ul>
+<li><a href="https://developer.mozilla.org/ru/docs/Web/JavaScript/Guide/Modules">JavaScript модули</a></li>
+<li><a href="https://developer.mozilla.org/ru/docs/Web/API/Fetch_API">Fetch API</a></li>
+</ul>
+</section>
+<section id="psr" class="page">
+<p>Snidget не тянет внешних реализаций: из зависимостей - только интерфейсы PSR, а реализации свои и короткие.
+Это значит, что любую из них можно заменить на &quot;взрослую&quot; библиотеку с тем же интерфейсом.</p>
+<h3>PSR-11: контейнер зависимостей</h3>
+<p><code>Snidget\Kernel\PSR\Container</code> - контейнер с автовайрингом. Разбирается подробно в &quot;Расширении функционала&quot;.</p>
+<pre><code>$container-&gt;get(Router::class);                    // создать или взять уже созданный
+$container-&gt;has(Router::class);                    // создан ли объект
+</code></pre>
+<p>Отличия от буквы стандарта:</p>
+<ul>
+<li><code>get()</code> принимает второй аргумент - параметры конструктора</li>
+<li><code>has()</code> возвращает <code>true</code> только для уже созданных объектов, а не для всех, которые можно создать</li>
+<li>ошибки - это <code>SnidgetException</code>, интерфейсы исключений PSR-11 не реализованы</li>
+</ul>
+<h3>PSR-14: события</h3>
+<p><code>Snidget\Kernel\PSR\Event\EventManager</code> - диспетчер событий. Слушатели регистрируются атрибутом <code>#[Listen]</code>,
+события - варианты перечислений. Кроме стандартного <code>dispatch()</code> есть короткий <code>emit($event, $data)</code>,
+которым пользуется ядро. Подробнее - в &quot;Списке событий&quot;.</p>
+<h3>PSR-3: логгер</h3>
+<p><code>Snidget\Kernel\PSR\Log\Logger</code> копит записи в памяти: время, уровень, сообщение и контекст в JSON.</p>
+<pre><code>$logger-&gt;info('Пользователь вошел', ['id' =&gt; 42]);
+$logger-&gt;log('warning', 'Медленный запрос');        // уровень - строка или LogLevel
+$logger-&gt;getLog();                                   // все записи
+echo $logger;                                        // записи построчно
+</code></pre>
+<p>Записи живут до конца запроса, в файл или куда-то еще логгер ничего не пишет - это задача для своего
+слушателя события FINISH. Плейсхолдеры вида <code>{id}</code> в сообщении не подставляются. Ядро само пишет в лог
+уровня NOTICE каждый вызов слушателя событий.</p>
+<p>Логгер берется из контейнера, поэтому в рамках запроса он один на всё приложение.</p>
+<h3>PSR-16: кэш</h3>
+<p><code>Snidget\Kernel\PSR\Cache\MemoryCache</code> - кэш в памяти процесса с поддержкой времени жизни (TTL)
+в секундах или <code>DateInterval</code>.</p>
+<pre><code>$cache-&gt;set('user:42', $user, 60);
+$cache-&gt;get('user:42', 'default');
+$cache-&gt;setMultiple(['a' =&gt; 1, 'b' =&gt; 2], new DateInterval('PT1M'));
+</code></pre>
+<p>Ключ - до 255 символов из латиницы, цифр, <code>_</code> и <code>:</code>, иначе <code>InvalidCacheKeyException</code>.
+При обычном запуске через php-fpm кэш живет один запрос, а в асинхронном режиме - пока работает сервер.</p>
+<h3>PSR-4 и PSR-12</h3>
+<p>Автозагрузка классов - по PSR-4 (<code>Snidget\</code> → <em>src</em>, <code>App\</code> → <em>App</em>). На этом же соглашении построен поиск
+контроллеров, команд и посредников: имя класса вычисляется из пути к файлу, поэтому файлы должны
+называться так же, как классы. Стиль кода - PSR-12, его проверяет <code>composer check</code>.</p>
+<h3>Чего нет</h3>
+<p>HTTP сообщения (PSR-7) и посредники (PSR-15) свои, упрощенные: <code>Request</code> и <code>Response</code> намеренно сделаны
+проще стандартных интерфейсов.</p>
+<p>Полезные ссылки:</p>
+<ul>
+<li><a href="https://www.php-fig.org/psr/">Список PSR</a></li>
+</ul>
+</section>
+<section id="attributes" class="page">
+<p>Конфигурация в Snidget - это атрибуты PHP 8 прямо в коде: никаких YAML, XML и отдельных файлов роутинга.
+Фреймворк находит размеченные классы сам, по директориям приложения и модулей.</p>
+<h3>Route</h3>
+<p><code>Snidget\HTTP\Route</code> - HTTP роут. Цель: метод контроллера или класс контроллера (для префикса).</p>
+<pre><code>#[Route(prefix: 'api/v1')]                          // на классе
+#[Route(regex: 'post/(?&lt;id&gt;\d+)', method: 'GET')]  // на методе
+</code></pre>
+<ul>
+<li><code>regex</code> - регулярное выражение URI без слэшей по краям, именованные группы становятся параметрами действия</li>
+<li><code>prefix</code> - общий префикс роутов класса, вместе с <code>regex</code> не задается</li>
+<li><code>method</code> - HTTP метод, по умолчанию <code>GET</code></li>
+</ul>
+<p>Ищется в: <em>HTTP/Controller</em>. Подробнее - в разделе &quot;HTTP&quot;.</p>
+<h3>Bind</h3>
+<p><code>Snidget\HTTP\Bind</code> - привязка посредника. Цель: класс или метод, атрибут повторяемый.</p>
+<pre><code>#[Bind(class: Api::class, method: 'create', priority: 10)]
+</code></pre>
+<ul>
+<li><code>class</code>, <code>method</code> - на посреднике: контроллер и действие, к которым он привязан (без них - ко всем).
+На контроллере: класс и метод посредника, которого нужно подключить</li>
+<li><code>priority</code> - чем больше, тем раньше выполняется слой, по умолчанию <code>0</code></li>
+</ul>
+<p>Ищется в: <em>HTTP/Middleware</em> и на контроллерах. Подробнее - в разделе &quot;HTTP&quot;.</p>
+<h3>Assert</h3>
+<p><code>Snidget\Kernel\Assert</code> - правило валидации. Цель: публичное свойство DTO, атрибут повторяемый.</p>
+<pre><code>#[Assert(minLength: 4, maxLength: 24, pattern: '/^\w+$/')]
+public string $login = '';
+</code></pre>
+<ul>
+<li><code>min</code>, <code>max</code> - границы числа</li>
+<li><code>minLength</code>, <code>maxLength</code> - границы длины строки (в символах, а не байтах)</li>
+<li><code>pattern</code> - регулярное выражение, которому должна соответствовать строка</li>
+<li><code>notBlank</code> - значение не может быть <code>null</code> или пустой строкой</li>
+</ul>
+<p>Если задано строковое правило, а пришло не строка - это тоже ошибка: число не проскочит мимо проверки длины.
+Проверяет DTO целиком <code>Assert::validateType($dto)</code>, возвращая ошибки по полям, а для JSON запросов
+проверка выполняется автоматически (см. &quot;Валидация входных данных&quot;).</p>
+<h3>Column</h3>
+<p><code>Snidget\Database\SQLite\Column</code> - колонка таблицы. Цель: публичное свойство DTO.</p>
+<pre><code>#[Column(name: 'id', type: Type::INTEGER, autoincrement: true)]
+public ?int $id = null;
+</code></pre>
+<ul>
+<li><code>name</code> - имя колонки</li>
+<li><code>type</code> - тип SQLite (<code>Snidget\Database\SQLite\Type</code>), по умолчанию <code>TEXT</code></li>
+<li><code>isNull</code> - разрешить <code>NULL</code>, по умолчанию колонка <code>NOT NULL</code></li>
+<li><code>autoincrement</code> - <code>PRIMARY KEY AUTOINCREMENT</code></li>
+<li><code>default</code> - значение по умолчанию</li>
+</ul>
+<p>Подробнее - в разделе &quot;Базы данных&quot;.</p>
+<h3>Command</h3>
+<p><code>Snidget\CLI\Command</code> - консольная команда. Цель: публичный метод класса.</p>
+<pre><code>#[Command('Creates a new user')]
+public function run(TestInput $data): void
+</code></pre>
+<ul>
+<li><code>description</code> - описание для списка команд и автодополнения</li>
+</ul>
+<p>Ищется в: <em>Command</em>. Подробнее - в разделе &quot;CLI&quot;.</p>
+<h3>Arg</h3>
+<p><code>Snidget\CLI\Arg</code> - опция или аргумент команды. Цель: публичное свойство DTO команды.</p>
+<pre><code>#[Arg('beta option', short: 'b')]
+public ?string $beta = null;
+</code></pre>
+<ul>
+<li><code>description</code> - описание для автодополнения</li>
+<li><code>isOption</code> - <code>true</code> (по умолчанию) для опции, <code>false</code> для позиционного аргумента</li>
+<li><code>short</code> - короткое имя опции из одной буквы</li>
+</ul>
+<p>Подробнее - в разделе &quot;CLI&quot;.</p>
+<h3>Listen</h3>
+<p><code>Snidget\Kernel\PSR\Event\Listen</code> - подписка на событие. Цель: метод класса, атрибут повторяемый.</p>
+<pre><code>#[Listen(KernelEvent::ERROR)]
+public function onError(Throwable $data): void
+</code></pre>
+<ul>
+<li><code>event</code> - вариант любого перечисления (enum)</li>
+</ul>
+<p>Ищется во всем <em>App</em>. Подробнее - в &quot;Списке событий&quot;.</p>
+<h3>Атрибуты PHP</h3>
+<p>Кроме своих, фреймворк использует встроенные атрибуты языка - их стоит взять на вооружение и в приложении:</p>
+<ul>
+<li><code>#[\Override]</code> - метод обязан переопределять метод родителя, иначе ошибка компиляции</li>
+<li><code>#[\NoDiscard]</code> - предупреждение, если результат вызова не использован. Им помечены методы неизменяемых
+объектов (<code>Response::withHeader()</code>, <code>Collection::map()</code>), где потерянный результат - почти всегда ошибка</li>
+</ul>
+</section>
+<section id="events" class="page">
+<h3>События ядра</h3>
+<p>Все системные события отправляет <code>Kernel</code>, их список - перечисление <code>Snidget\Kernel\PSR\Event\KernelEvent</code>.</p>
+<ul>
+<li><code>START</code> - создание ядра, еще до регистрации обработчиков ошибок. Данных нет</li>
+<li><code>REQUEST</code> - запрос получен, роутинг еще не выполнялся. Данные - <code>Request</code></li>
+<li><code>RESPONSE</code> - ответ готов и сейчас будет отправлен. Данные - <code>Response</code></li>
+<li><code>ERROR</code> - необработанное исключение (ответ 500), warning или notice PHP, исключение вне обработки запроса.
+Данные - <code>Throwable</code></li>
+<li><code>FINISH</code> - завершение скрипта (shutdown), как можно позже. Данных нет</li>
+</ul>
+<p>Порядок для обычного запроса: START → REQUEST → RESPONSE → FINISH, при ошибке между REQUEST и RESPONSE
+добавляется ERROR. Ответы 404 и 405 ошибкой не считаются и ERROR не вызывают.</p>
+<p>В асинхронном режиме (модуль Async) START и FINISH случаются один раз на весь процесс сервера,
+а REQUEST и RESPONSE - на каждый запрос.</p>
+<p>Консольные команды запускаются без ядра, поэтому в CLI события ядра не отправляются.</p>
+<h3>Подписка</h3>
+<p>Слушатель - метод любого класса из <em>App</em> (или из ядра фреймворка) с атрибутом <code>Listen</code>:</p>
+<pre><code>class RequestLogger
+{
+    #[Listen(KernelEvent::REQUEST)]
+    public function onRequest(Request $data, Logger $logger): void
+    {
+        $logger-&gt;info(&quot;{$data-&gt;method} /{$data-&gt;uri}&quot;);
+    }
+
+    #[Listen(KernelEvent::START)]
+    #[Listen(KernelEvent::FINISH)]
+    public function onBoundary(): void { ... }
+}
+</code></pre>
+<ul>
+<li>данные события приходят в параметр с именем <strong><code>$data</code></strong> - имя важно, тип можно указывать любой подходящий</li>
+<li>остальные параметры, как обычно, заполняет контейнер</li>
+<li>атрибут повторяемый: один метод может слушать несколько событий</li>
+<li>директория не важна: слушатели ищутся во всем <em>App</em>, включая модули</li>
+</ul>
+<p>Пример из самого фреймворка - <code>Snidget\Kernel\ErrorHandler</code>: он копит ошибки по событию ERROR, а по FINISH
+пишет их в лог PHP (под php-fpm) или выводит в консоль (асинхронный сервер работает как CLI процесс).</p>
+<h3>Свои события</h3>
+<p>Событием может быть любое перечисление (enum). Отправляется оно через <code>EventManager</code>:</p>
+<pre><code>enum OrderEvent
+{
+    case CREATED;
+    case PAID;
+}
+
+$eventManager-&gt;emit(OrderEvent::CREATED, $order);
+</code></pre>
+<p>Слушатели различают события только по имени варианта, без имени перечисления. Поэтому <code>OrderEvent::START</code>
+сработает вместе с <code>KernelEvent::START</code> - давайте своим событиям уникальные имена.</p>
+<p><code>EventManager</code> реализует PSR-14, и его <code>dispatch()</code> принимает в том числе объекты-события
+(с поддержкой <code>StoppableEventInterface</code>), но подписаться на них через <code>#[Listen]</code> пока нельзя - атрибут
+принимает только варианты перечислений.</p>
+</section>
+<section id="admin" class="page">
+<p>Админка - часть модуля Core (контроллер <code>App\Module\Core\HTTP\Controller\Admin</code>), которая показывает
+структуру проекта &quot;на лету&quot;, прямо из атрибутов кода. Открывается по адресу <em>/admin</em>.</p>
+<p><img src="./assets/admin.png" alt="админка" /></p>
+<h3>Разделы</h3>
+<ul>
+<li><strong>Dashboard</strong> (<em>/admin</em>) - заготовка под сводку: счетчики из других разделов, метрики качества кода,
+информация о проекте и репозитории</li>
+<li><strong>Endpoints</strong> (<em>/admin/routes</em>) - все роуты в порядке проверки: URI, действие контроллера и цепочка
+посредников, уже отсортированная по приоритету. Лучший способ понять, почему запрос попал не туда,
+куда ожидалось. Таблица команд CLI пока пустая</li>
+<li><strong>Domain</strong> (<em>/admin/domain</em>) и <strong>Database</strong> (<em>/admin/database</em>) - заготовки под обзор доменных классов
+и сущностей базы</li>
+<li><strong>Profiler</strong> - ссылка на веб-интерфейс профилировщика SPX. Сейчас SPX не поддерживает PHP 8.6
+и в docker-образ не входит, поэтому ссылка не работает</li>
+</ul>
+<p>Имена классов в таблицах сокращены: <code>Core:BuiltIn::auth</code> вместо <code>App\Module\Core\HTTP\Middleware\BuiltIn::auth</code>.</p>
+<h3>Как устроена</h3>
+<p>Админка - обычный контроллер, без шаблонизатора и сборки фронта: HTML собирается строками,
+оформление - десяток строк встроенного CSS, без внешних библиотек. Данные берутся из тех же объектов,
+что использует ядро: <code>Router</code> отдает роуты, <code>MiddlewareManager</code> - посредников для каждого из них.
+Новый раздел - это новый метод с <code>#[Route]</code> и строка в списке ссылок <code>$links</code>.</p>
+<h3>Безопасность</h3>
+<p>Доступ в админку пока никак не ограничен: встроенный посредник <code>BuiltIn::auth</code> - заготовка, которая
+пропускает все запросы. Админка не показывает секретов, но раскрывает устройство приложения,
+поэтому за пределами локальной разработки ее нужно закрыть - своим посредником с <code>#[Bind(class: Admin::class)]</code>
+или убрав контроллер из модуля.</p>
+</section>
+<section id="async" class="page">
+<p>Асинхронность в PHP: минимальный практический пример</p>
+<blockquote>
+<p>Предпосылки</p>
+</blockquote>
+<p>Для начала нужно понять конечную цель - зачем вообще нужна асинхронность, что она нам даёт?
+Даёт она очень простую вещь - возможность не простаивать в ожидании окончания медленных операций
+(как показательные примеры: сетевые запросы, обращения к файловой системе), а делать что-то полезное.
+Другими словами, аcинхронность полезна в условиях большого количества операций ввода/вывода при высоких
+требованиях по утилизации CPU.</p>
+<p>Сейчас эта проблема нивелируется на архитектурном уровне, а именно запуском php в виде модуля
+к стороннему http-серверу в режиме менеджера процессов. Процессы независимы, один процесс не может
+замедлить выполнение другого или как-то напрямую нарушить его работу. Также приятным бонусом дается
+&quot;бесплатная&quot; паралельность - процессы могут быть раскиданы системой на разные ядра процессора.</p>
+<p>Это простое решение, оно работает вполне приемлемо, однако в рамках каждого отдельного процесса
+мы все равно ждём. Безполезные накладные расходы на переключение между процессами и отстутсвие
+возможности организации [кооперативной многозадачности] в совокупности дают ряд ограничений,
+которые не позволяют писать на PHP полноценные приложения реального времени.</p>
+<blockquote>
+<p>А что мешает?</p>
+</blockquote>
+<p>В техническом смысле - ничего. Мешает только непонимание как собственно начать писать такой код.
+Чтож, давайте разбираться. К концу этой статьи у нас будет полностью работоспособный пример кода для организации
+кооперативной многозадачности с event-loop, таймерами, асинхронностью и т.д.</p>
+<p>Чтобы в очередной раз не разжевывать все термины - вот ссылки на статьи по теме:
+[...]</p>
+<blockquote>
+<p>пишем шедулер</p>
+</blockquote>
+<p>Итак, представим что у нас есть задача сходить по сети, посчитать что-то на основе
+полученных данных и записать результат на диск, очень такой типичный набор действий.
+Для удобства, запишем в результат работы также временные отметки наших действий.</p>
+<p>$data = file_get_contents('');
+$prepared = prepare($data);
+file_put_contents(data, 'name');
+echo 'done';</p>
+<p>Так как каждый следующий этап является результатом работы предыдущего, возникает мысль
+что ничего ускорить нельзя чисто логически. Однако, тут прилетает требование
+&quot;а давайте скачивать не 1 ресурс, а произвольное кол-во, а еще
+бы в реальном времени прогресс видеть. А еще бы отменять что подвисло...&quot;</p>
+<p>Для начала пробуем допилить существующий код:</p>
+<p>function job() {
+$data = file_get_contents('');
+$prepared = prepare($data);
+file_put_contents(data, 'name');
+}</p>
+<p>$urls = [];
+foreach($urls as $url) {
+job($url);
+}</p>
+<blockquote>
+<p>в чем отличия от синхронного кода
+внутри и снаружи, дебаг, сервер и крон
+бонус
+несколько ядер и замеры</p>
+</blockquote>
+</section>
+
+</main>
+<script>
+  // show the page from #hash, the first one by default
+  function show() {
+    const id = document.getElementById(location.hash.slice(1))?.id ?? document.querySelector('.page').id
+    document.querySelectorAll('.page, #menu a').forEach(el => el.classList.toggle('active', el.id === id || el.hash === '#' + id))
+  }
+  addEventListener('hashchange', () => { show(); document.querySelector('main').scrollIntoView() })
+  show()
+</script>
 </body>
 </html>

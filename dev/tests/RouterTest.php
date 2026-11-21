@@ -4,6 +4,7 @@ use PHPUnit\Framework\TestCase;
 use Snidget\HTTP\Request;
 use Snidget\HTTP\Router;
 use Snidget\Kernel\SnidgetException;
+use Snidget\HTTP\Route;
 
 class RouterTest extends TestCase
 {
@@ -65,5 +66,11 @@ class RouterTest extends TestCase
 
         $postResult = $router->match($this->makeRequest('users', 'POST'));
         self::assertEquals('create', $postResult[1]);
+    }
+
+    public function testRouteWithPrefixAndRegexThrows(): void
+    {
+        $this->expectException(SnidgetException::class);
+        new Route(regex: 'post', prefix: 'api');
     }
 }

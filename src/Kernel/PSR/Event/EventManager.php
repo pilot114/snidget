@@ -13,7 +13,7 @@ class EventManager implements EventDispatcherInterface
 {
     public function __construct(
         protected Container $container,
-        /** @var array<string, list<string>> имя события => [Класс::метод] */
+        /** @var array<string, list<string>> event name => [Class::method] */
         protected array $listeners = [],
     ) {
     }

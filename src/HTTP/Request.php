@@ -34,7 +34,7 @@ class Request
         $this->query = $_GET;
         $this->cookies = $_COOKIE;
 
-        // имена как в fromString: USER-AGENT; CONTENT_* приходят без префикса HTTP_
+        // names as in fromString (USER-AGENT); CONTENT_* come without HTTP_
         foreach ($_SERVER as $key => $value) {
             $key = (string)$key;
             if (!is_string($value)) {

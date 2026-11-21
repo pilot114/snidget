@@ -3,6 +3,7 @@
 use PHPUnit\Framework\TestCase;
 use Snidget\Kernel\PSR\Log\Logger;
 use Snidget\Kernel\PSR\Log\LogLevel;
+use Psr\Log\InvalidArgumentException;
 
 class LoggerTest extends TestCase
 {
@@ -72,5 +73,11 @@ class LoggerTest extends TestCase
         $output = (string) $logger;
         self::assertStringContainsString('INFO', $output);
         self::assertStringContainsString('test message', $output);
+    }
+
+    public function testLogWithInvalidLevelThrows(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        new Logger()->log(1, 'message');
     }
 }

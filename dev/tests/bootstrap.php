@@ -10,3 +10,5 @@ ini_set('log_errors_max_len', 0);
 // ini_set('zend.assertions', 1);
 ini_set('assert.exception', 1);
 ini_set('xdebug.show_exception_trace', 0);
+// tests raise errors on purpose, ErrorHandler would log them
+ini_set('error_log', '/dev/null');

@@ -4,6 +4,7 @@ use PHPUnit\Framework\TestCase;
 use Snidget\Tests\Fixtures\SimpleType;
 use Snidget\Tests\Fixtures\NestedType;
 use Snidget\Tests\Fixtures\CollectionType;
+use Snidget\Tests\Fixtures\ListType;
 
 class TypeTest extends TestCase
 {
@@ -72,5 +73,18 @@ class TypeTest extends TestCase
     {
         $this->expectException(TypeError::class);
         new SimpleType(['name' => 'Alice', 'age' => 'not_a_number']);
+    }
+
+    public function testCollectionFromDocDateAndUninitializedArray(): void
+    {
+        $type = new ListType(['addresses' => [['city' => 'Omsk']], 'date' => '2024-01-02']);
+
+        self::assertSame([
+            'addresses' => [['city' => 'Omsk', 'street' => '']],
+            'date' => '02.01.2024 00:00:00',
+            'tags' => [],
+        ], $type->toArray());
+        self::assertStringContainsString('Omsk', serialize($type));
+        self::assertNull(new ListType()->date);
     }
 }

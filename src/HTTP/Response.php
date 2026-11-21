@@ -63,7 +63,7 @@ class Response
             header("$name: $value");
         }
 
-        if ($this->headers === [] && $this->isJson($this->body)) {
+        if ($this->headers === [] && json_validate($this->body)) {
             header('Content-Type: application/json; charset=utf-8');
         }
 
@@ -71,15 +71,5 @@ class Response
         if (function_exists('fastcgi_finish_request')) {
             fastcgi_finish_request();
         }
-    }
-
-    protected function isJson(string $data): bool
-    {
-        if ($data === '') {
-            return false;
-        }
-
-        json_decode($data);
-        return json_last_error() === JSON_ERROR_NONE;
     }
 }

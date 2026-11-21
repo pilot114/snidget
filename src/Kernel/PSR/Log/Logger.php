@@ -7,7 +7,7 @@ use Psr\Log\LoggerInterface;
 
 class Logger implements LoggerInterface, \Stringable
 {
-    /** @var list<array{float, string, string, string}> время, уровень, сообщение, контекст в JSON */
+    /** @var list<array{float, string, string, string}> time, level, message, JSON context */
     protected array $log = [];
 
     public function __toString(): string

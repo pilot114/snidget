@@ -72,28 +72,22 @@ class Admin
         return "<!DOCTYPE html>
 <html>
 <head>
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css'/>
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css'/>
+    <meta charset='UTF-8'>
     <style>
-        body {
-            font-size: 14px;
-            padding-top: 1em !important;
-        }
-        td,th {
-            padding: 0.5rem;
-        }
-        .menu {
-            padding-top: 0.5em !important;
-        }
+        body { display: flex; gap: 2rem; margin: 0; padding: 1rem 2rem; }
+        body { font: 14px/1.6 system-ui, sans-serif; color: #1e293b; }
+        ul { margin: 0; padding: 0; list-style: none; }
+        li { margin: .5rem 0; }
+        a { color: #2563eb; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        main { flex: 1; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: .5rem; text-align: left; border-bottom: 1px solid #e2e8f0; }
     </style>
 </head>
 <body>
-    <div class='container'>
-        <div class='row'>
-            <div class='column column-10 menu'>$links</div>
-            <div class='column column-offset-0'>$content</div>
-        </div>
-    </div>
+    <nav>$links</nav>
+    <main>$content</main>
 </body>
 </html>";
     }

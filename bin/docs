@@ -1,65 +1,42 @@
 #!/usr/local/bin/php
 <?php
 
-use League\CommonMark\CommonMarkConverter as CommonMarkConverterAlias;
+use League\CommonMark\CommonMarkConverter;
 
 include_once '/app/vendor/autoload.php';
 
-$converter = new CommonMarkConverterAlias([
+$converter = new CommonMarkConverter([
     'html_input' => 'allow',
     'allow_unsafe_links' => false,
 ]);
 
-function load(string $filename): string {
-    global $converter;
-    $md = file_get_contents('/app/dev/docs/md/' . $filename);
-    return $converter->convert($md);
-}
-
+// file => [title, overview, menu group]
 $pages = [
-    [
-        'title' => 'Концепция', 'overview' => 'Для чего нужен этот фреймворк', 'active' => true,
-        'content' => load('intro.md'), 'type' => 'part'
-    ], [
-        'title' => 'Основы', 'overview' => 'Базовые понятия', 'active' => false,
-        'content' => load('base.md'), 'type' => 'part'
-    ], [
-        'title' => 'HTTP', 'overview' => 'Роутинг, контроллеры, посредники', 'active' => false,
-        'content' => load('http.md'), 'type' => 'part'
-    ], [
-        'title' => 'CLI', 'overview' => 'Консольные команды', 'active' => false,
-        'content' => load('cli.md'), 'type' => 'part'
-    ], [
-        'title' => 'Базы данных', 'overview' => 'Работа с персистентными данными', 'active' => false,
-        'content' => load('database.md'), 'type' => 'part'
-    ], [
-        'title' => 'Расширение функционала', 'overview' => 'PSR, события, модули, инфраструктура', 'active' => false,
-        'content' => load('extra.md'), 'type' => 'part'
-    ], [
-        'title' => 'Фронт', 'overview' => 'Немного о уровне представления', 'active' => false,
-        'content' => load('front.md'), 'type' => 'part'
-    ],
-
-    [
-        'title' => 'PSR имплементации', 'active' => false,
-        'content' => load('psr.md'), 'type' => 'addition'
-    ], [
-        'title' => 'Список атрибутов', 'active' => false,
-        'content' => load('attributes.md'), 'type' => 'addition'
-    ], [
-        'title' => 'Список событий', 'active' => false,
-        'content' => load('events.md'), 'type' => 'addition'
-    ],
-
-    [
-        'title' => 'Admin', 'active' => false,
-        'content' => load('admin.md'), 'type' => 'module'
-    ], [
-        'title' => 'Async', 'active' => false,
-        'content' => load('async.md'), 'type' => 'module'
-    ],
+    'intro'      => ['Концепция', 'Для чего нужен этот фреймворк', 'part'],
+    'base'       => ['Основы', 'Базовые понятия', 'part'],
+    'http'       => ['HTTP', 'Роутинг, контроллеры, посредники', 'part'],
+    'cli'        => ['CLI', 'Консольные команды', 'part'],
+    'database'   => ['Базы данных', 'Работа с персистентными данными', 'part'],
+    'extra'      => ['Расширение функционала', 'PSR, события, модули, инфраструктура', 'part'],
+    'front'      => ['Фронт', 'Немного о уровне представления', 'part'],
+    'psr'        => ['PSR имплементации', '', 'addition'],
+    'attributes' => ['Список атрибутов', '', 'addition'],
+    'events'     => ['Список событий', '', 'addition'],
+    'admin'      => ['Admin', '', 'module'],
+    'async'      => ['Async', '', 'module'],
 ];
 
+$html = ['%part%' => '', '%addition%' => '', '%module%' => '', '%pages%' => ''];
+foreach ($pages as $file => [$title, $overview, $group]) {
+    $path = "/app/dev/docs/md/$file.md";
+    // a section that is not written yet is not shown
+    if (!is_file($path)) {
+        continue;
+    }
+
+    $html["%$group%"] .= "<a href=\"#$file\"><b>$title</b><small>$overview</small></a>\n";
+    $html['%pages%'] .= "<section id=\"$file\" class=\"page\">\n" . $converter->convert(file_get_contents($path)) . "</section>\n";
+}
+
 $template = file_get_contents('/app/dev/docs/index.template.html');
-$content = str_replace('%pages%', json_encode($pages), $template);
-file_put_contents('/app/dev/docs/index.html', $content);
+file_put_contents('/app/dev/docs/index.html', strtr($template, $html));
